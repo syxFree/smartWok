@@ -1,0 +1,872 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding: 0 .2rem;
+      align-items: center;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding: 0.2rem 0;
+    }
+
+    .cover {
+      width: 6.9rem;
+      height: 3rem;
+      background: #FAFAFA;
+      border: 1px dashed #999999;
+      border-radius: 8px;
+      border-radius: 8px;
+      margin: .3rem;
+      text-align: center;
+    }
+
+    .cover .title {
+      margin-top: 1rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #333333;
+    }
+
+    .cover .title img {
+      width: .33rem;
+      height: .33rem;
+    }
+
+    .cover .subtitle {
+      margin-top: .3rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #FF8C46;
+    }
+
+    .menu-name {
+      margin: 0 .3rem;
+    }
+
+
+    .menu-name1 .title {
+      width: 1.36rem;
+      height: .48rem;
+      font-family: PingFang-SC-Bold;
+      font-size: .34rem;
+      color: #333333;
+      position: relative;
+      margin: 0 .3rem;
+    }
+
+    .menu-name1 .title span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+
+    .menu-name1 .title:after {
+      content: "";
+      display: block;
+      height: 100%;
+      border-bottom: .1rem solid #FA844A;
+      position: absolute;
+      top: -0.13rem;
+      left: 0;
+      width: 100%;
+    }
+
+    .menu-name .title {
+      width: 1.36rem;
+      height: .48rem;
+      font-family: PingFang-SC-Bold;
+      font-size: .34rem;
+      color: #333333;
+      position: relative;
+    }
+
+    .menu-name .title span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+
+    .menu-name .title:after {
+      content: "";
+      display: block;
+      height: 100%;
+      border-bottom: .1rem solid #FA844A;
+      position: absolute;
+      top: -0.13rem;
+      left: 0;
+      width: 100%;
+    }
+
+    .menu-name .name {
+      border-bottom: 1px solid #e0e0e0;
+      font-size: .28rem;
+      margin: .3rem 0;
+    }
+
+    .menu-name .name input:focus {
+      border: none;
+      outline: none;
+    }
+
+    .menu-name .name input {
+      padding-bottom: .2rem;
+      width: 100%;
+    }
+
+    .hrs {
+      width: 100%;
+      height: .2rem;
+      background-color: #F7F7F7;
+    }
+
+    .menu-magazine .name {
+      display: flex;
+    }
+
+    .menu-magazine .name span {
+      display: block;
+      width: 15%;
+      padding-bottom: .2rem;
+    }
+
+    .menu-magazine .name input {
+      width: 84%;
+    }
+
+    .cover-box {
+      width: 6.9rem;
+      height: 1rem;
+      border: 1px dashed #999999;
+      border-radius: 8px;
+      border-radius: 8px;
+      text-align: center;
+      margin: .3rem 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .cover-box .num {
+      width: .42rem;
+      height: .42rem;
+      background: #FF8C46;
+      border-radius: 6px;
+      border-radius: 6px;
+      color: #ffffff;
+      text-align: center;
+      line-height: .42rem;
+      margin: 0 .1rem 0 .2rem;
+    }
+
+    .cover-box .ncontent {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      width: 80%;
+      text-align: left;
+    }
+
+    .menu-name .add-box {
+      height: .4rem;
+      width: 100%;
+      text-align: center;
+      font-family: PingFang-SC-Bold;
+      font-size: .28rem;
+      color: #FF8C46;
+      margin: .3rem 0 .4rem 0;
+    }
+
+    .add-box img {
+      height: .3rem;
+      width: .3rem;
+      vertical-align: middle;
+      margin-bottom: .05rem;
+    }
+
+    .transfer {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 .66rem;
+      height: .98rem;
+      align-items: center;
+    }
+
+    .transfer .del {
+      font-family: PingFang-SC-Bold;
+      font-size: .32rem;
+      color: #999999;
+    }
+
+    .transfer .save {
+      font-family: PingFang-SC-Bold;
+      font-size: .32rem;
+      color: #333333;
+    }
+
+    .transfer .fer {
+      width: 3.6rem;
+      height: .78rem;
+      background: #FF8C46;
+      border-radius: .44rem;
+      border-radius: .44rem;
+      text-align: center;
+      line-height: .78rem;
+      font-family: PingFang-SC-Bold;
+      font-size: .32rem;
+      color: #ffffff;
+    }
+
+    .move {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 12;
+    }
+
+    .move-box {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70vh;
+      background-color: #fff;
+      border-radius: 20px 20px 0 0;
+      overflow: auto;
+    }
+
+    .close-box {
+      padding: .3rem;
+      font-family: PingFang-SC-Bold;
+      font-size: .34rem;
+      color: #333333;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .close-box img {
+      width: .3rem;
+      height: .3rem;
+    }
+
+    .move .move-content {
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #333333;
+      margin-top: .4rem;
+      margin-left: .75rem;
+    }
+
+    .cross-box {
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .cross {
+      display: flex;
+      overflow: auto;
+      padding-bottom: .4rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #333333;
+      margin-top: .3rem;
+
+    }
+
+    ::-webkit-scrollbar {
+      /*隐藏滚轮*/
+      display: none;
+    }
+
+    .cross-child {
+      font-family: PingFang-SC-Medium;
+      font-size: .30rem;
+      color: #999999;
+      margin: 0 0.5rem;
+    }
+
+    .temperature,
+    .timeouth {
+      margin-top: 0.5rem;
+    }
+
+    .chekcolor {
+      color: #FF8C46;
+    }
+
+    .openblue {
+      width: 4rem;
+      height: .8rem;
+      margin: 0 auto;
+      text-align: center;
+      line-height: .8rem;
+      color: #ffffff;
+      font-size: 16px;
+      background: #FF8C46;
+      border-radius: 44px;
+      border-radius: 44px;
+      margin-top: .5rem;
+      margin-bottom: .3rem;
+    }
+
+    .cross-box p {
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #333333;
+      margin-left: .3rem;
+    }
+
+    /* 返回保存 */
+    .move1 {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: rgba(0, 0, 0, .6);
+      z-index: 12;
+    }
+
+    .move-box1 {
+      position: fixed;
+      top: 3rem;
+      left: 1.25rem;
+      width: 5rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      border-radius: 12px;
+    }
+
+    .close-box1 {
+      text-align: right;
+    }
+
+    .move-box1 .close {
+      width: .3rem;
+      height: .3rem;
+      text-align: right;
+      padding: .2rem .2rem 0 0;
+    }
+
+    .move-box1 .bluetooth {
+      width: 2rem;
+      height: 2.2rem;
+      margin: .25rem 0;
+    }
+
+    .bluetooth-box {
+      text-align: center;
+    }
+
+    .move-title {
+      text-align: center;
+    }
+
+    .move-title b {
+      display: block;
+      font-size: 22px;
+      margin: .2rem 0;
+    }
+
+    .move-title p {
+      font-size: .24rem;
+      color: #666666;
+    }
+
+    .move1 .choose-btn {
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #999999;
+      text-align: center;
+      display: flex;
+      margin-top: .55rem;
+      border-top: 1px solid #d8d8d8;
+    }
+
+    .move1 .choose-btn p {
+      width: 51%;
+      border-right: 1px solid #d8d8d8;
+      padding: .25rem 0;
+    }
+
+    .close-boxtype img {
+      width: .4rem;
+      height: .4rem;
+      vertical-align: middle;
+      animation: mymove 3s linear infinite;
+    }
+
+    @keyframes mymove {
+      0% {
+        transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(0deg);
+        /* Firefox */
+        -webkit-transform: rotate(0deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(0deg);
+        /* Opera */
+        transform-origin: center;
+      }
+
+      25% {
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(90deg);
+        /* Firefox */
+        -webkit-transform: rotate(90deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(90deg);
+        /* Opera */
+      }
+
+      50% {
+        transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(180deg);
+        /* Firefox */
+        -webkit-transform: rotate(180deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(180deg);
+        /* Opera */
+      }
+
+      75% {
+        transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(270deg);
+        /* Firefox */
+        -webkit-transform: rotate(270deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(270deg);
+        /* Opera */
+      }
+
+      100% {
+        transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(360deg);
+        /* Firefox */
+        -webkit-transform: rotate(360deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(360deg);
+        /* Opera */
+      }
+    }
+
+    .bluesearch {
+      border: 2px solid #FF8C46;
+      border-radius: 44px;
+      border-radius: 44px;
+      color: '#FF8C46';
+      width: 3rem;
+      height: .66rem;
+      line-height: .66rem;
+      text-align: center;
+      margin: 0 auto;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #FF8C46;
+      text-align: center;
+      margin-top: .8rem;
+      margin-bottom: .6rem;
+    }
+
+    .move-bluetooth {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      border-radius: 20px 20px 0 0;
+      overflow: auto;
+    }
+    .list-box {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0ee;
+      padding: 0 .3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .list-box p {
+      font-family: PingFang-SC-Medium;
+      font-size: .34rem;
+      color: #333333;
+      margin-bottom: .1rem;
+      margin-top: .2rem;
+    }
+
+    .list-box span {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      margin-bottom: .2rem;
+    }
+
+    .list-box .wait {
+      width: .4rem;
+      height: .4rem;
+      vertical-align: middle;
+      animation: mymove 3s linear infinite;
+    }
+
+    .list-box .success {
+      width: .4rem;
+      height: .4rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回" @click="getopenbluetooth1">
+      <h2>首页</h2>
+      <img src="../../image/menu/share.png" alt="分享">
+    </header>
+    <!-- 上传封面 -->
+    <div class="cover">
+      <div class="title">
+        <img src="../../image/menu/upload.png" alt="">
+        上传封面
+      </div>
+      <p class="subtitle">这道菜谱离完美只差一张封面</p>
+    </div>
+    <div class="menu-name">
+      <div class="title">
+        <span>菜谱名称</span>
+      </div>
+      <div class="name"><input type="text" placeholder="请输入菜谱名字"></div>
+    </div>
+    <div class="hrs"></div>
+    <!-- 料盒 -->
+    <div class="menu-name menu-magazine">
+      <div class="title" style="width:.68rem">
+        <span>料盒</span>
+      </div>
+      <div class="name">
+        <span>料盒1</span>
+        <input type="text" placeholder="针对料盒内物品命名，如：盐">
+      </div>
+      <div class="name">
+        <span>料盒2</span>
+        <input type="text">
+      </div>
+      <div class="name">
+        <span>料盒2</span>
+        <input type="text">
+      </div>
+      <div class="name">
+        <span>料盒4</span>
+        <input type="text">
+      </div>
+    </div>
+    <div class="hrs"></div>
+    <!--程序  -->
+    <div class="menu-name">
+      <div class="title" style="width:.68rem">
+        <span>程序</span>
+      </div>
+      <div class="cover-box" v-for="item in stepslist" :key="item.num" @click.prevent="getmove(item.num)">
+        <div class="num">{{item.num}}</div>
+        <div class="ncontent">{{item.content}}</div>
+      </div>
+      <div class="add-box" @click="addbox">
+        <img src="../../image/menu/create-orange.png" alt="添加">
+        <span>添加程序</span>
+      </div>
+    </div>
+    <div class="hrs"></div>
+    <!-- 提交 -->
+    <div class="transfer">
+      <div class="del">删除</div>
+      <div class="fer" @click="handleisbluetooth">传输</div>
+      <div class="save">保存</div>
+    </div>
+    <!-- 返回保存 -->
+    <div class="move1" v-if="openbluetooth">
+      <div class="move-box1">
+        <div class="close-box1"><img src="../../image/home/close.png" alt="" class="close"
+            @click.prevent="getopenbluetooth1"></div>
+        <div class="bluetooth-box"><img src="../../image/menu/save.png" alt="" class="bluetooth"></div>
+        <div class="move-title">
+          <b>提示</b>
+          <p>当前菜谱还未保存，是否需要保存？</p>
+        </div>
+        <div class="choose-btn">
+          <p>暂不</p>
+          <p style="border: none; color:#FF8C46">保存</p>
+        </div>
+      </div>
+    </div>
+    <!-- 点击弹出功能选择 -->
+    <div class="move" v-if="moveshow && movenum !=0">
+      <div class="move-box" v-if="movebox">
+        <div class="close-box">
+          <span>功能选择</span>
+          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
+        </div>
+        <div class="move-content" v-for="(item, index) in contentlist" :key="index" @click.prevent="getcontent(item)">
+          {{item}}</div>
+      </div>
+      <!-- 选择需要功能后在编辑详情 -->
+      <div class="move-box" v-if="!movebox">
+        <div class="close-box">
+          <div @click="handlemovebox">
+            <img src="../../image/register/black.png" alt="返回">
+            <span>{{content}}</span>
+          </div>
+          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
+        </div>
+        <div>
+          <!-- 参数 -->
+          <div class="menu-name1">
+            <div class="title" style="width:.68rem">
+              <span>参数</span>
+            </div>
+            <div class="cross-box">
+              <div class="cross">
+                <div class="cross-child" :class="parameterBox === index ?'chekcolor':''" @click="handleparameter(index)"
+                  v-for="(item, index) in parameter" :key="index">{{item}}</div>
+              </div>
+            </div>
+
+          </div>
+          <!-- 温度 -->
+          <div class="menu-name1 temperature">
+            <div class="title" style="width:1.25rem">
+              <span>温度(℃)</span>
+            </div>
+            <div class="cross-box">
+              <div class="cross">
+                <div class="cross-child" :class="temperatureBox === index ?'chekcolor':''"
+                  @click="handletemperature(index)" v-for="(item, index) in temperature" :key="index">{{item}}</div>
+              </div>
+            </div>
+          </div>
+          <!-- 事件 -->
+          <div class="menu-name1 timeouth">
+            <div class="title" style="width:.68rem">
+              <span>时间</span>
+            </div>
+            <div class="cross-box">
+              <p>时</p>
+              <div class="cross">
+                <div class="cross-child" :class="timeouthBox === index ?'chekcolor':''" @click="handletimeouth(index)"
+                  v-for="(item, index) in timeouth" :key="index">
+                  {{item}}</div>
+              </div>
+            </div>
+            <div class="cross-box">
+              <p>分</p>
+              <div class="cross">
+                <div class="cross-child" :class="timeoutmBox === index ?'chekcolor':''" @click="handletimeoutm(index)"
+                  v-for="(item, index) in timeoutm" :key="index">
+                  {{item}}</div>
+              </div>
+            </div>
+            <div class="cross-box">
+              <p>秒</p>
+              <div class="cross">
+                <div class="cross-child" :class="timeoutsBox === index ?'chekcolor':''" @click="handletimeouts(index)"
+                  v-for="(item, index) in timeouts" :key="index">
+                  {{item}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="openblue" @click="handlestepslist()">
+            确定
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 点击传输判断是否已经连接蓝牙 -->
+    <div class="move" v-if="isbluetooth">
+      <div class="move-bluetooth">
+        <div class="close-box">
+          <div class="close-boxtype">
+            <span>设备状态</span>
+            <img src="../../image/home/frame-0.png" alt="等待">
+          </div>
+          <!-- <span style="margin-right: 1.5rem;color:#DD3333;">未连接</span> -->
+          <span style="margin-right: 1.5rem;color: #13C368;">已连接</span>
+          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="handleisbluetooth">
+        </div>
+        <ul>
+          <li class="list-box">
+            <div>
+              <p>智能灶V1.0</p>
+              <span>LY:4564:da</span>
+            </div>
+            <img src="../../image/home/frame-0.png" class="wait" alt="等待">
+            <!-- <img src="../../image/home/success.png" class="success" alt="成功"> -->
+          </li>
+        </ul>
+        <div class="bluesearch">停止扫描</div>
+        <div class="openblue" @click="handletransfer()">
+            确定
+          </div>
+      </div>
+    </div>
+    <script>
+      var vue = new Vue({
+        el: '.app',
+        data() {
+          return {
+            isbluetooth: false,
+            openbluetooth: false,
+            stepslist: [
+              { num: 1, content: '请选择一个程序' }
+            ],
+            contentlist: ['加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋',],
+            moveshow: false,
+            movenum: 0,
+            movebox: true, //控制显示第几个盒子
+            content: "",
+            temperature: ['30', '40', '50', '60', '70', '80', '90', '100'], //温度
+            parameter: ['30', '40', '50', '60', '70', '80', '90', '100'], //参数
+            timeouth: ['30', '40', '50', '60', '70', '80', '90', '100'], //时
+            timeoutm: ['30', '40', '50', '60', '70', '80', '90', '100'], //分
+            timeouts: ['30', '40', '50', '60', '70', '80', '90', '100'], //秒
+            temperatureBox: 0,
+            parameterBox: 0,
+            timeouthBox: 0,
+            timeoutmBox: 0,
+            timeoutsBox: 0,
+            temperaturecon: '',
+            parametercon: '',
+            timeoutcon: '',
+          }
+        },
+        mounted() {
+          this.temperaturecon = this.temperature[0]
+          this.parametercon = this.parameter[0]
+          this.timeoutcon += this.timeouth[0] * 60 * 60
+          this.timeoutcon += this.timeoutm[0] * 60
+          this.timeoutcon += this.timeouts[0]
+        },
+        methods: {
+          handletransfer(){
+            // 调用ajax
+          },
+          handleisbluetooth(){
+            this.isbluetooth = !this.isbluetooth
+          },
+          getopenbluetooth1() {
+            this.openbluetooth = !this.openbluetooth
+          },
+          addbox() {
+            console.log(this.stepslist.length)
+            this.stepslist.push({ num: this.stepslist.length + 1, content: "请选择一个程序" })
+          },
+          getopenbluetooth() {
+            this.movenum = 0
+            this.moveshow = false
+          },
+          handlemovebox() {
+            this.movebox = true
+          },
+          getmove(num) {
+            this.movenum = num
+            this.movebox = true
+            this.moveshow = true
+          },
+          getcontent(item) {
+            console.log(item)
+            this.movebox = false
+            this.content = item
+          },
+          handleparameter(index) {
+            this.parameterBox = index
+            for (let i = 0; i < this.parameter.length; i++) {
+              if (index === i) {
+                this.parametercon = this.parameter[i]
+              }
+            }
+          },
+          handletemperature(index) {
+            this.temperatureBox = index
+            for (let i = 0; i < this.temperature.length; i++) {
+              if (index === i) {
+                this.temperaturecon = this.temperature[i]
+              }
+            }
+          },
+          handletimeouth(index) {
+            this.timeouthBox = index
+            for (let i = 0; i < this.timeouth.length; i++) {
+              if (index === i) {
+                this.timeoutcon += this.timeouth[i] * 60 * 60
+              }
+            }
+          },
+          handletimeoutm(index) {
+            this.timeoutmBox = index
+            for (let i = 0; i < this.timeoutm.length; i++) {
+              if (index === i) {
+                this.timeoutcon += this.timeoutm[i] * 60
+              }
+            }
+          },
+          handletimeouts(index) {
+            this.timeoutsBox = index
+            for (let i = 0; i < this.timeouts.length; i++) {
+              if (index === i) {
+                this.timeoutcon += this.timeouts[i]
+              }
+            }
+          },
+          handlestepslist() {
+            for (let i = 0; i < this.stepslist.length; i++) {
+              if (this.movenum === this.stepslist[i].num) {
+                // console.log(this.stepslist[i])
+                this.stepslist[i].content = this.content + ':' + this.parametercon
+                // this.stepslist[i].content+=
+              }
+            }
+            console.log(this.stepslist)
+            this.getopenbluetooth()
+          }
+        },
+      })
+    </script>
+</body>
+
+</html>
