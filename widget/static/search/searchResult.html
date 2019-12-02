@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        html,body{
+            height: 100%;
+        }
+        .app{
+            width: 100%;
+            height: 100%;
+            background-color: rgb(247, 247, 247)
+        }
+        header{
+            width: 100%;
+            height: .96rem;
+            display: flex;
+            box-sizing: border-box;
+            padding: 0 .2rem;
+            justify-content: space-around;
+            align-items: center;
+        }
+        header img{
+            width: .4rem;
+            height: .45rem;
+        }
+        header input{
+            width: 6.4rem;
+            height: .6rem;
+            outline: none;
+            box-sizing: border-box;
+            font-size: .28rem;
+            padding-left: .3rem;
+            border-radius: .6rem;
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+        section{
+            height: calc(100% - .96rem);
+        }
+        .content{
+            width: 100%;
+            height: 100%;
+            background-color: rgb(247, 247, 247);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .content img{
+            width: 4.6rem;
+            height: 3.5rem;
+            margin-top: 2rem;
+        }
+        .content p{
+            color: #999;
+            font-size: .28rem;
+        }
+        .goods{
+            width: 100%;
+            box-sizing: border-box;
+            padding: .4rem .3rem 0 .3rem;
+            background-color: white;
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 auto;
+            justify-content: space-between;
+        }
+        .goods-item{
+            width: 3.2rem;
+            height: 4.9rem;
+            background-color: white;
+        }
+        .goods-item img{
+            width: 100%;
+            height: 3.3rem; 
+        }
+        .goods-item .describe{
+            width: 100%;
+            height: .84rem;
+            font-size: .3rem;
+            color: #333;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            display:-webkit-box;
+            -webkit-box-orient:vertical;
+            -webkit-line-clamp:2; 
+        }
+        .goods-item .price{
+            font-size: .36rem;
+            color: #FF8C46;
+        }
+        .item-bottom{
+            width: 100%;
+            height: .8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .item-bottom span{
+            width: 21%;
+            height: 1px;
+            background-color: #DDD;
+        }
+        .item-bottom p{
+            font-size: .28rem;
+            color: #999;
+
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <img src="../../image/information/back.png" alt="返回" @click="goSearch">
+            <input type="text" v-model="searchTxt" @click="goSearch">
+        </header>
+        <section>
+            <div class="content" v-if="flag">
+                <img src="../../image/search/search-img.png" alt="">
+                <p>抱歉，暂时没有搜索到相关产品</p>
+            </div>
+            <div class="goods" v-else>
+                <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails">
+                    <img :src="item.img" alt="图片">
+                    <div class="describe">{{item.describe}}</div>
+                    <div class="price">￥{{item.price}}</div>
+                </div>
+            </div>
+            <div class="item-bottom">
+                <span></span>
+                <p>一不小心到底了</p>
+                <span></span>
+            </div>
+        </section>
+    </div>
+    <script src="../../script/api.js" charset="utf-8"></script>
+    <script src="../../script/flexible.js" charset="utf-8"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                flag:true,   //根据商品有无判断
+                searchTxt:'这是一只皮卡丘', //这里是跳转过来的输入框文本
+                goods:[
+                    {
+                        img:'../../image/store/one.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    },
+                    {
+                        img:'../../image/store/two.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢无油烟不粘锅不锈钢真空锅三层钢无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    },
+                    {
+                        img:'../../image/store/three.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    },
+                    {
+                        img:'../../image/store/four.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    }
+                ]
+            },
+            created() {
+                if(this.goods.length==0){
+                    this.flag=true
+                }else{
+                    this.flag=false
+                }
+            },
+            methods: {
+                //返回搜索页面
+                goSearch:function(){
+
+                },
+                //进入商品详情页
+                goGoodsDetails:function(){
+
+                }
+            },
+        })
+    </script>
+</body>
+</html>
