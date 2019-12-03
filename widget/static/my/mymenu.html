@@ -1,0 +1,147 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding: 0 .2rem;
+      align-items: center;
+      border-bottom: 0.01rem solid #e0e0e0;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding: 0.2rem 0;
+    }
+
+    header div {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #333333;
+    }
+
+    .menu-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 1.9rem;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 0 .3rem;
+    }
+
+    .menu-bleft {
+      display: flex;
+    }
+
+    .menu-bleft img {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+
+    .menu-bleft-box {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #808080;
+      margin-left: .3rem;
+    }
+
+    .menu-bleft-box p {
+      font-family: PingFang-SC-Bold;
+      font-size: .3rem;
+      color: #333333;
+      line-height: .8rem;
+    }
+
+    .menu-bright {
+      margin-top: .6rem;
+      width: .4rem;
+      height: .1rem;
+    }
+
+    .menu-ulright {
+      background: #FFFFFF;
+      box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.20);
+      border-radius: 8px;
+      border-radius: 8px;
+      width: 1.2rem;
+      height: 1.52rem;
+      position: absolute;
+      left: -0.75rem;
+      font-family: PingFang-SC-Medium;
+      font-size: 0.26rem;
+      color: #333333;
+      text-align: center;
+    }
+    .menu-ulright li{
+      margin-top: .26rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+      <h2>我的菜谱</h2>
+      <div style="display:flex; align-items: center;">
+        <img src="../../image/menu/create-orange.png" alt="" style="width:.32rem;height: .32rem;margin-right: .1rem;">
+        <p>添加</p>
+      </div>
+    </header>
+    <div class="menu-boxs">
+      <div class="menu-box">
+        <div class="menu-bleft">
+          <img src="../../image/my/jidan.png" alt="">
+          <div class="menu-bleft-box">
+            <p>番茄鸡蛋汤</p>
+            <div>2019-11-27 12:34:58</div>
+          </div>
+        </div>
+        <div style="position: relative;">
+          <img src="../../image/my/menu-point.png" alt="" class="menu-bright" @click="handledetail">
+          <ul class="menu-ulright" v-if="ulright">
+            <li>分享</li>
+            <li>删除</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          ulright: false,
+        }
+      },
+      methods: {
+        handledetail() {
+          this.ulright = !this.ulright;
+        },
+      },
+    })
+  </script>
+
+</body>
+
+</html>

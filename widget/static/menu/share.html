@@ -6,9 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
-  <script src="../../script/api.js" charset="utf-8"></script>
-  <script src="../../script/flexible.js" charset="utf-8"></script>
-  <script src="../../script/vue.min.js"></script>
   <style>
     header {
       height: 3.6rem;
@@ -39,19 +36,16 @@
     .share-code {
       width: 6.9rem;
       height: 4.5rem;
-      position: fixed;
-      top: 1.48rem;
-      left: .3rem;
+      position: relative;
+      top: -2.48rem;
+      margin: 0 auto;
+      margin-top: .6rem;
       background-color: #fff;
     }
 
     .app {
       background-color: #F7F7F7;
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
+      height: 100vh;
     }
 
     .share-code .title {
@@ -60,7 +54,7 @@
       color: #333333;
       margin: .3rem 0 .1rem .3rem;
       width: 1.02rem;
-      position: relative;
+      position: absolute;
     }
 
     .share-code .title p {
@@ -73,7 +67,6 @@
     .share-code .title::after {
       content: "";
       display: block;
-      height: 100%;
       border-bottom: .1rem solid #FA844A;
       position: absolute;
       top: .3rem;
@@ -83,9 +76,9 @@
 
     .share-code span {
       display: block;
-      margin-top: .8rem;
       margin-left: .3rem;
       font-size: .26rem;
+      padding-top: .88rem;
       color: #999999;
     }
 
@@ -134,22 +127,18 @@
       <div class="btn">复制</div>
     </div>
   </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
   <script>
     var vue = new Vue({
       el: '.app',
       data() {
         return {
-          currentIdx: 0,
-          home: ['../../image/footer/home.png', '../../image/footer/home_true.png'],
-          consult: ['../../image/footer/consult.png', '../../image/footer/consult_true.png'],
-          shop: ['../../image/footer/shop.png', '../../image/footer/shop_true.png'],
-          mineImg: ['../../image/footer/my.png', '../../image/footer/my_true.png'],
+
         }
       },
       methods: {
-        toHomeType(type) {
-          this.currentIdx = type
-        }
       },
     })
   </script>
