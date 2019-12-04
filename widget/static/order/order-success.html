@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>提交订单页</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        html,body,.app{
+            width: 100%;
+            height: 100%;
+            background-color: #f7f7f7;
+        }
+        header{
+            width:100%;
+            height: .88rem;
+            line-height: .88rem;
+            text-align: center;
+            background-color: #f7f7f7;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+        header img{
+            width: .4rem;
+            height: .45rem;
+            position: absolute;
+            left: .2rem;
+            top: .21rem;
+        }
+        header span{
+            font-size: .36rem;
+            color: #333;
+            font-weight: 600;
+        }
+        section{
+            width: 100%;
+            height: 60%;
+        }
+        .img{
+            width: 3rem;
+            height: 3rem;
+            margin: 2rem auto;
+            text-align: center;
+            font-size: .34rem;
+        }
+        .img img{
+            width: 1.8rem;
+            height: 2.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <img src="../../image/register/black.png" alt="返回" @click="back">
+            <span>支付状态</span>
+        </header>
+        <section>
+            <div class="img">
+                <img src="../../image/submitOrder/order-success.png" alt="">
+                <span>订单支付成功</span>
+            </div>
+        </section>
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                
+            },
+            methods: {
+                //返回按钮 这里返回支付界面
+                back:function(){
+
+                },
+            },
+        })
+    </script>
+</body>
+</html>
