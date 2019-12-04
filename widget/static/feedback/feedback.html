@@ -1,0 +1,255 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding: 0 .2rem;
+      align-items: center;
+      border-bottom: 0.01rem solid #e0e0e0;
+      background-color: #ffffff;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding: 0.2rem 0;
+    }
+
+    .content {
+      padding-left: .3rem;
+    }
+
+    .title {
+      width: 1.92rem;
+      height: .45rem;
+      font-family: PingFang-SC-Bold;
+      font-size: .32rem;
+      color: #333333;
+      position: relative;
+      margin: .3rem 0;
+    }
+
+    .title span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+
+    .title:after {
+      content: "";
+      display: block;
+      height: 100%;
+      border-bottom: .1rem solid #FA844A;
+      position: absolute;
+      top: -0.13rem;
+      left: 0;
+      width: 100%;
+    }
+
+    .subtitle-box {
+      display: flex;
+    }
+
+    .subtitle {
+      width: 1.8rem;
+      height: .54rem;
+      border: 1px solid #999999;
+      border-radius: 27px;
+      border-radius: 27px;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: .54rem;
+      margin-right: .24rem;
+    }
+
+    .subtitlecolor {
+      background: #FF8C46;
+      color: #ffffff;
+      border-color: #FF8C46;
+    }
+
+    .opinionbox {
+      width: 6.9rem;
+      height: 2.6rem;
+      margin-top: .3rem;
+      background: #FAFAFA;
+      border: 1px solid #CCCCCC;
+      border-radius: 8px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    #opinion {
+      width: 6.9rem;
+      height: 2.6rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      padding: .24rem .3rem;
+    }
+
+    .t_h {
+      position: absolute;
+      bottom: .15rem;
+      right: .3rem;
+    }
+
+    .warn {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      margin: .1rem 0 .2rem;
+    }
+
+    .content-pic img {
+      width: 1.94rem;
+      height: 1.94rem;
+    }
+
+    .content-phone input {
+      width: 6.9rem;
+      height: .84rem;
+      background: #FAFAFA;
+      border: 1px solid #CCCCCC;
+      border-radius: 8px;
+      border-radius: 8px;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      line-height: 46px;
+      padding: 0 .3rem;
+    }
+
+    .btn {
+      width: 6.9rem;
+      height: .78rem;
+      background: #FF8C46;
+      border-radius: 39px;
+      border-radius: 39px;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #FFFFFF;
+    }
+
+    .btn-box {
+      position: fixed;
+      bottom: .2rem;
+      left: .3rem;
+    }
+
+    .content-pic ul {
+      display: flex;
+      align-items: center;
+    }
+
+    .content-pic li {
+      margin-right: .36rem;
+    }
+
+    .imgsfor {
+      position: relative;
+    }
+
+    .del {
+      position: absolute;
+      right: -.1rem;
+      top: -.1rem;
+      width: .3rem !important;
+      height: .3rem !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+      <h2>意见反馈</h2>
+      <span></span>
+    </header>
+    <div class="content">
+      <div class="title">
+        <span>意见反馈类型</span>
+      </div>
+      <div class="subtitle-box">
+        <div v-for="(item, index) in titlelist" :key="index" class="subtitle"
+          :class="titleindex ===index?'subtitlecolor':''" @click="handleclicksubtitle(index)">{{item}}</div>
+      </div>
+      <div class="opinionbox">
+        <textarea name="" id="opinion" cols="30" rows="10" maxlength="300" placeholder="请输入"
+          v-model="textareavalue"></textarea>
+        <div class="t_h"><i>{{textareavalue.length}}</i>/300</div>
+      </div>
+    </div>
+    <div class="content content-pic">
+      <div class="title" style="width:0.64rem">
+        <span>图片</span>
+      </div>
+      <p class="warn">图片选填，最多不超过3张</p>
+      <img src="../../image/my/upload.png" alt="" v-if="imgs.length===0">
+      <ul v-if="imgs.length>0">
+        <li v-for="(item, index) in imgs" :key="index" class="imgsfor">
+          <img :src="item" alt="">
+          <img src="../../image/my/del-pic.png" alt="" class="del" @click='hanldepicdel(index)'>
+        </li>
+        <li v-if="imgs.length<3"><img src="../../image/my/addpic.png" alt="" ></li>
+      </ul>
+
+    </div>
+    <div class="content content-phone">
+      <div class="title" style="width:0.96rem">
+        <span>手机号</span>
+      </div>
+      <input type="phone" placeholder="我们将及时帮您解决问题" v-model="phonenum">
+    </div>
+    <div class="btn-box">
+      <button class="btn">提交</button>
+    </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          titlelist: ['售后问题', '功能建议'],
+          titleindex: 0,
+          textareavalue: '',
+          phonenum: '',
+          imgs: ['../../image/my/jidan.png', '../../image/my/jidan.png', '../../image/my/jidan.png'],
+        }
+      },
+      methods: {
+        handleclicksubtitle(index) {
+          this.titleindex = index
+        },
+        hanldepicdel(index){
+          this.imgs.splice(index,1)
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

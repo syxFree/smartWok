@@ -1,0 +1,72 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .app{
+      overflow: hidden;
+      width: 100%;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data:{
+        searchTxt:'',  //搜索框文本
+        flag:false,    //搜索框图片的显示与隐藏
+        records:['三层蒸煮锅','不锈钢锅','炒锅','电饭煲','不锈钢锅'],  //这里是从storage里拿的数据
+      },
+      watch: {
+        searchTxt:function(){
+          if(this.searchTxt!=''){
+            this.flag=true
+          }else{
+            this.flag=false
+          }
+        }
+      },
+      methods: {
+        //删除输入框的文本
+        del:function(){
+          this.searchTxt=''
+        },
+
+        //点击取消，回到列表页
+        cancel:function(){
+          console.log("cancel")
+        },
+
+        //点击搜索历史，跳转到搜索页面
+        goSearch:function(value){
+          console.log(value)
+        },
+
+        //清空已搜索内容
+        clearRecords:function(){
+          //这里做的是清空缓存 用api的内置方法
+          var con=confirm("您确认要清空搜索内容吗?")
+          if(con){
+            this.records=''
+          }else{
+            return
+          }
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

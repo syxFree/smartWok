@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        .app{
+            overflow: hidden;
+            background-color: white;
+            min-height: 100vh;
+        }
+        header{
+            width: 100%;
+            height: 0.88rem;
+            line-height: 1.2rem;
+            padding-left: .2rem;
+        }
+        header img{
+            width: .4rem;
+            height: .4rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <img src="../../image/register/返回-black.png" alt="返回">
+        </header>
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var apiready
+        apiready = function(){
+            //考虑手机嵌入式兼容性问题
+            // var header = $api.dom('header');
+            // var headerH = $api.fixStatusBar(header);
+            var vm=new Vue({
+            el:'.app',
+            data:{
+                password:'', //第一遍输入密码
+                passwordAgain:'',  //第二遍输入密码
+                btnFlag:false,   //按钮的状态
+                nextFlag:false   //是否能跳转到下一页
+            },
+            watch: {
+
+            },
+            methods: {
+                //确认密码
+                confirmPwd:function(){
+                    if(this.password==''){
+                        alert("请先输入密码")
+                        this.passwordAgain=''
+                        return
+                    }
+                    if(this.passwordAgain.length>=1){
+                        this.btnFlag=true
+                    }
+                    else{
+                        this.btnFlag=false
+                    }
+                },
+                //确认两次密码是否一致
+                pwdJudge:function(){
+                    if(this.passwordAgain!=this.password){
+                        alert("两次密码填写不一致，请重新输入")
+                        this.passwordAgain=''
+                        this.nextFlag=false
+                    }else if(this.passwordAgain==this.password){
+                        this.nextFlag=true
+                    }
+                },
+                //点击下一步
+                goNext:function(){
+
+                }
+            }
+        })
+        }
+        apiready()
+    </script>
+</body>
+</html>

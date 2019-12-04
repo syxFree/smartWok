@@ -1,0 +1,164 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding: 0 .2rem;
+      align-items: center;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding: 0.2rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回" @click="getopenbluetooth1">
+      <h2>首页</h2>
+      <img src="../../image/menu/share.png" alt="分享">
+    </header>
+    </div>
+    <script src="../../script/api.js" charset="utf-8"></script>
+    <script src="../../script/flexible.js" charset="utf-8"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+      var vue = new Vue({
+        el: '.app',
+        data() {
+          return {
+            imgcover:'1',
+            isbluetooth: false,
+            openbluetooth: false,
+            stepslist: [
+              { num: 1, content: '请选择一个程序' }
+            ],
+            contentlist: ['加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋',],
+            moveshow: false,
+            movenum: 0,
+            movebox: true, //控制显示第几个盒子
+            content: "",
+            temperature: ['30', '40', '50', '60', '70', '80', '90', '100'], //温度
+            parameter: ['30', '40', '50', '60', '70', '80', '90', '100'], //参数
+            timeouth: ['30', '40', '50', '60', '70', '80', '90', '100'], //时
+            timeoutm: ['30', '40', '50', '60', '70', '80', '90', '100'], //分
+            timeouts: ['30', '40', '50', '60', '70', '80', '90', '100'], //秒
+            temperatureBox: 0,
+            parameterBox: 0,
+            timeouthBox: 0,
+            timeoutmBox: 0,
+            timeoutsBox: 0,
+            temperaturecon: '',
+            parametercon: '',
+            timeoutcon: '',
+          }
+        },
+        methods: {
+          // 删除上传封面
+          handledelpic(){},
+          handletransfer(){
+            // 调用ajax
+          },
+          handleisbluetooth(){
+            this.isbluetooth = !this.isbluetooth
+          },
+          getopenbluetooth1() {
+            this.openbluetooth = !this.openbluetooth
+          },
+          addbox() {
+            console.log(this.stepslist.length)
+            this.stepslist.push({ num: this.stepslist.length + 1, content: "请选择一个程序" })
+          },
+          getopenbluetooth() {
+            this.movenum = 0
+            this.moveshow = false
+          },
+          handlemovebox() {
+            this.movebox = true
+          },
+          getmove(num) {
+            this.movenum = num
+            this.movebox = true
+            this.moveshow = true
+          },
+          getcontent(item) {
+            console.log(item)
+            this.movebox = false
+            this.content = item
+          },
+          handleparameter(index) {
+            this.parameterBox = index
+            for (let i = 0; i < this.parameter.length; i++) {
+              if (index === i) {
+                this.parametercon = this.parameter[i]
+              }
+            }
+          },
+          handletemperature(index) {
+            this.temperatureBox = index
+            for (let i = 0; i < this.temperature.length; i++) {
+              if (index === i) {
+                this.temperaturecon = this.temperature[i]
+              }
+            }
+          },
+          handletimeouth(index) {
+            this.timeouthBox = index
+            for (let i = 0; i < this.timeouth.length; i++) {
+              if (index === i) {
+                this.timeoutcon += this.timeouth[i] * 60 * 60
+              }
+            }
+          },
+          handletimeoutm(index) {
+            this.timeoutmBox = index
+            for (let i = 0; i < this.timeoutm.length; i++) {
+              if (index === i) {
+                this.timeoutcon += this.timeoutm[i] * 60
+              }
+            }
+          },
+          handletimeouts(index) {
+            this.timeoutsBox = index
+            for (let i = 0; i < this.timeouts.length; i++) {
+              if (index === i) {
+                this.timeoutcon += this.timeouts[i]
+              }
+            }
+          },
+          handlestepslist() {
+            for (let i = 0; i < this.stepslist.length; i++) {
+              if (this.movenum === this.stepslist[i].num) {
+                // console.log(this.stepslist[i])
+                this.stepslist[i].content = this.content + ':' + this.parametercon
+                // this.stepslist[i].content+=
+              }
+            }
+            console.log(this.stepslist)
+            this.getopenbluetooth()
+          }
+        },
+      })
+    </script>
+</body>
+
+</html>

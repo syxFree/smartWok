@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../css/api.css">
   <style>
     .app {
-      height: 100vh;
+      min-height: 100vh;
       background-color: #F7F7F7;
     }
 
@@ -32,7 +32,7 @@
       font-size: 0.36rem;
       color: #333333;
       text-align: center;
-      padding-right:.5rem;
+      padding-right: .5rem;
     }
 
     .address {
@@ -115,7 +115,24 @@
       border-radius: 39px;
       font-family: PingFang-SC-Medium;
       font-size: .3rem;
-      color: #FFFFFF; 
+      color: #FFFFFF;
+    }
+
+    .empty {
+      text-align: center;
+      /* margin: 0 auto; */
+    }
+    .empty img {
+      width: 4.6rem;
+      height: 3.5rem;
+      margin: 2rem 0 .4rem;
+    }
+
+    .empty p {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      margin-bottom: 1.5rem;
     }
   </style>
 </head>
@@ -127,31 +144,40 @@
       <h2>收货地址管理</h2>
       <span></span>
     </header>
-    <div class="address">
-      <div class="address-person">
-        <span class="name">大脸布丁</span>
-        <span class="phone">15538383833</span>
+    <!-- 当有收获地址的时候 -->
+    <div v-if="hasaddress">
+      <div class="address">
+        <div class="address-person">
+          <span class="name">大脸布丁</span>
+          <span class="phone">15538383833</span>
+        </div>
+        <p class="address-res">上海 上海市 松江区 沪松公路1234号1003室</p>
+        <div class="address-bottom">
+          <div>
+            <img src="../../image/my/de-address.png" alt="">
+            <span>默认地址</span>
+          </div>
+          <div class="address-handle">
+            <div>
+              <img src="../../image/my/editor.png" alt="">
+              编辑
+            </div>
+            <div>
+              <img src="../../image/my/address-del.png" alt="">
+              删除
+            </div>
+          </div>
+        </div>
       </div>
-      <p class="address-res">上海 上海市 松江区 沪松公路1234号1003室</p>
-      <div class="address-bottom">
-        <div>
-          <img src="../../image/my/de-address.png" alt="">
-          <span>默认地址</span>
-        </div>
-        <div class="address-handle">
-          <div>
-            <img src="../../image/my/editor.png" alt="">
-            编辑
-          </div>
-          <div>
-            <img src="../../image/my/address-del.png" alt="">
-            删除
-          </div>
-        </div>
+      <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
+        <button class="btn">新增收货地址</button>
       </div>
     </div>
-    <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
-      <button class="btn">新增收货地址</button>
+    <!-- 当没有收获地址的时候 -->
+    <div v-if="hasaddress ===false" class="empty">
+      <img src="../../image/my/empty-add.png" alt="">
+      <p>当前还没有收货地址</p>
+      <button class="btn" style="width: 3.8rem;height:.8rem">新增收货地址</button>
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
@@ -162,13 +188,10 @@
       el: '.app',
       data() {
         return {
-          openbluetooth: false,
+          hasaddress: true,
         }
       },
       methods: {
-        getopenbluetooth() {
-          this.openbluetooth = !this.openbluetooth;
-        },
       },
     })
   </script>

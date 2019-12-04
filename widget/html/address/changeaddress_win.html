@@ -1,0 +1,69 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .app {
+      min-height: 100vh;
+      background-color: #F7F7F7;
+    }
+
+    header {
+      background: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding-left: .2rem;
+      align-items: center;
+      border-bottom: 0.01rem solid #e0e0e0;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding-right: .5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+      <h2>收货地址管理</h2>
+      <span></span>
+    </header>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          switchcase: false,
+        }
+      },
+      methods: {
+        handleswitchcase() {
+          this.switchcase = !this.switchcase;
+        },
+      },
+    })
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>资讯详情</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        .app{
+            overflow: hidden;
+            width: 100%;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                navIndex:0,  //导航列表索引
+                nav:['全部','炒锅系列','电火锅','电饭煲','火锅'],
+                goods:[
+                    {
+                        img:'../../image/store/one.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    },
+                    {
+                        img:'../../image/store/two.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢无油烟不粘锅不锈钢真空锅三层钢无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    },
+                    {
+                        img:'../../image/store/three.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    },
+                    {
+                        img:'../../image/store/four.jpg',
+                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
+                        price:40
+                    }
+                ]
+            },
+            methods:{
+                //跳转到搜索页面
+                goSearch:function(){
+                    console.log("a")
+                },
+                //切换导航栏状态
+                navChange:function(index){
+                    this.navIndex=index
+                },
+                //跳转到商品详情页
+                goGoodsDetails:function(){
+
+                }
+            }
+        })
+    </script>
+</body>
+</html>

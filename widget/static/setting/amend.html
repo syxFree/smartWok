@@ -1,0 +1,108 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding: 0 .2rem;
+      align-items: center;
+      border-bottom: 0.01rem solid #e0e0e0;
+      background-color: #ffffff;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding: 0.2rem 0;
+    }
+
+    .content {
+      padding: 0 .3rem;
+    }
+
+    .content .line {
+      height: 1.02rem;
+      border-bottom: 1px solid #e6e6e6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #999999;
+    }
+
+
+    .btn {
+      width: 6.9rem;
+      height: .78rem;
+      background: #FF8C46;
+      border-radius: 39px;
+      border-radius: 39px;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+      <h2>修改密码</h2>
+      <span></span>
+    </header>
+    <div class="content">
+      <div class="line">
+        <input type="text" placeholder="请输入手机号" v-model="phonenum">
+      </div>
+      <div class="line">
+        <input type="text" placeholder="请输入验证码" v-model="code">
+        <button class="btn" style="width:1.8rem;height:.56rem;font-size: .24rem;">获取验证码</button>
+      </div>
+      <div class="line">
+        <input type="password" placeholder="请输入密码" v-model="password">
+      </div>
+      <div class="line">
+        <input type="password" placeholder="请确认密码" v-model="password2">
+      </div>
+    </div>
+    <div style="text-align: center;margin-top: 1rem;">
+      <button class="btn">确定</button>
+    </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          phonenum: '',
+          code: '',
+          password: '',
+          password2: ''
+        }
+      },
+      methods: {
+      },
+    })
+  </script>
+</body>
+
+</html>

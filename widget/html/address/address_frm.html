@@ -1,0 +1,172 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .app {
+      min-height: 100vh;
+      background-color: #F7F7F7;
+    }
+    .address {
+      height: 2.3rem;
+      padding-left: .3rem;
+      background: #ffffff;
+      margin-bottom: .2rem;
+    }
+
+    .address-bottom {
+      height: .86rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      line-height: .86rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .24rem;
+      color: #FF8C46;
+      text-align: center;
+    }
+
+    .address-handle {
+      display: flex;
+      justify-content: space-between;
+      padding-right: .3rem;
+    }
+
+    .address-person {
+      padding-top: .3rem;
+    }
+
+    .address-person .name {
+      font-family: PingFang-SC-Bold;
+      font-size: .28rem;
+      color: #333333;
+    }
+
+    .address-person .phone {
+      font-family: PingFang-SC-Medium;
+      font-size: .26rem;
+      color: #666666;
+      margin-left: .3rem;
+    }
+
+    .address-res {
+      font-family: PingFang-SC-Medium;
+      font-size: .26rem;
+      color: #666666;
+      padding: .1rem 0 .25rem 0;
+      border-bottom: .01rem solid #e0e0e0;
+    }
+
+    .address-bottom img {
+      width: .34rem;
+      height: .34rem;
+      margin-right: .15rem;
+      vertical-align: middle;
+      transform: translate(0, -.03rem);
+    }
+
+    .address-bottom .address-handle {
+      color: #999999;
+      font-family: PingFang-SC-Medium;
+      font-size: .24rem;
+    }
+
+    .address-handle img {
+      margin-right: .1rem;
+    }
+
+    .address-handle div:first-child {
+      margin-right: .5rem;
+    }
+
+    .btn {
+      width: 6.9rem;
+      height: .78rem;
+      background: #FF8C46;
+      border-radius: 39px;
+      border-radius: 39px;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #FFFFFF;
+    }
+
+    .empty {
+      text-align: center;
+      /* margin: 0 auto; */
+    }
+    .empty img {
+      width: 4.6rem;
+      height: 3.5rem;
+      margin: 2rem 0 .4rem;
+    }
+
+    .empty p {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- 当有收获地址的时候 -->
+    <div v-if="hasaddress">
+      <div class="address">
+        <div class="address-person">
+          <span class="name">大脸布丁</span>
+          <span class="phone">15538383833</span>
+        </div>
+        <p class="address-res">上海 上海市 松江区 沪松公路1234号1003室</p>
+        <div class="address-bottom">
+          <div>
+            <img src="../../image/my/de-address.png" alt="">
+            <span>默认地址</span>
+          </div>
+          <div class="address-handle">
+            <div>
+              <img src="../../image/my/editor.png" alt="">
+              编辑
+            </div>
+            <div>
+              <img src="../../image/my/address-del.png" alt="">
+              删除
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
+        <button class="btn">新增收货地址</button>
+      </div>
+    </div>
+    <!-- 当没有收获地址的时候 -->
+    <div v-if="hasaddress ===false" class="empty">
+      <img src="../../image/my/empty-add.png" alt="">
+      <p>当前还没有收货地址</p>
+      <button class="btn" style="width: 3.8rem;height:.8rem">新增收货地址</button>
+    </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          hasaddress: true,
+        }
+      },
+      methods: {
+      },
+    })
+  </script>
+
+</body>
+
+</html>

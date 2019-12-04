@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>资讯详情</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        .app{
+            width: 100%;
+            min-height: 100vh;
+            background-color: #F7F7F7;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                //商品信息
+                goods:{
+                    swiper:'../../image/store/five.jpg',
+                    details:'暮厨不锈钢炒锅炒菜过32厘米无涂层少油烟304燃气 国美厨空间（32cm）暮厨不锈钢炒锅炒菜过32厘米无涂层少油烟304燃气 国美厨空间（32cm）',
+                    price:'368.90',
+                    amount:666,
+                    detailImg1:'../../image/store/six.png',
+                    detailImg2:'../../image/store/seven.png'
+                }
+            },
+            methods: {
+                //返回按钮
+                back:function(){
+
+                },
+                //分享按钮
+                share:function(){
+
+                },
+                //联系按钮
+                call:function(){
+
+                },
+                //购买按钮
+                order:function(){
+
+                }
+            },
+        })
+    </script>
+</body>
+</html>
