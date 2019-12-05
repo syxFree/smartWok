@@ -30,7 +30,7 @@
             align-items: center;
             border-bottom: 1px solid #E0E0E0;
             font-size: .26rem;
-            color: #666;            
+            color: #666;
         }
         /* 这里需要根据订单情况显示不同的样式 */
         .activeRed{
@@ -75,7 +75,7 @@
             text-overflow:ellipsis;
             display:-webkit-box;
             -webkit-box-orient:vertical;
-            -webkit-line-clamp:2; 
+            -webkit-line-clamp:2;
         }
         .right .right-flex{
             display: flex;
@@ -234,7 +234,16 @@
                 },
                 //跳转到商品详情页
                 goOrderDetails:function(){
-                    
+                    api.openWin({
+                        name: 'orderDetails',
+                        url: 'orderDetails_win.html',
+                        reload:true,
+                        slidBackEnabled:false,
+                        bounces:false,
+                        pageParam: {
+                        }
+                    });
+
                 },
                 //提醒发货
                 reminder:function(){

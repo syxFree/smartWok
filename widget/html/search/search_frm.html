@@ -38,6 +38,7 @@
     }
     .search input{
       outline: none;
+      width: 90%;
       font-size: .26rem;
     }
     .search-history{
@@ -123,7 +124,17 @@
 
         //点击取消，回到列表页
         cancel:function(){
-          console.log("cancel")
+          api.openWin({
+              name: 'store',
+              url: '../store/store_win.html',
+              reload:true,
+              slidBackEnabled:false,
+              bounces:false,
+              pageParam: {
+                  name: 'test'
+              }
+          });
+
         },
 
         //点击搜索历史，跳转到搜索页面

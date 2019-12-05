@@ -107,7 +107,6 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script>
-        var apiready
         apiready = function(){
             //考虑手机嵌入式兼容性问题
             // var header = $api.dom('header');
@@ -148,14 +147,23 @@
                         this.nextFlag=true
                     }
                 },
-                //点击下一步
+                //完成跳转到首页
                 goNext:function(){
+                    api.openWin({
+                        name: 'home',
+                        url: '../home/home_win.html',
+                        reload:true,
+                        bounces:false,
+                        slidBackEnabled:false,
+                        pageParam: {
+
+                        }
+                    });
 
                 }
             }
         })
         }
-        apiready()
     </script>
 </body>
 </html>

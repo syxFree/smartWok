@@ -140,7 +140,7 @@
             text-overflow:ellipsis;
             display:-webkit-box;
             -webkit-box-orient:vertical;
-            -webkit-line-clamp:2; 
+            -webkit-line-clamp:2;
         }
         .right .right-flex{
             display: flex;
@@ -399,7 +399,7 @@
                 <span>{{goods.status}}</span>
             </div>
             <!-- 物流信息 -->
-            <div class="logistics" v-if="goods.status=='待收货' || goods.status=='已完成'">
+            <div class="logistics" v-if="goods.status=='待收货' || goods.status=='已完成'" @click="goWuliu">
                 <img class="car" src="../../image/orderDetails/logistics.png" alt="运输车">
                 <div class="logisticsInfo">
                     <p>{{logistics.address}}已录入</p>
@@ -516,7 +516,7 @@
                     type:'微信支付',
                     payTime:'2019-12-35 12:10:08'
                 },
-                orderCount:5,   //购买商品数量 
+                orderCount:5,   //购买商品数量
                 shadeFlag:false,  //支付类型
                 payFlag:true
             },
@@ -556,6 +556,19 @@
                         return
                     }
                 },
+                goWuliu:function(){
+                  api.openWin({
+                      name: 'wuliu',
+                      url: '../logistics-information/_win.html',
+                      reload:true,
+                      bounces:false,
+                      slidBackEnabled:false,
+                      pageParam: {
+                        
+                      }
+                  });
+
+                }
                  //购买按钮
                  order:function(){
                     //添加禁止页面滚动
