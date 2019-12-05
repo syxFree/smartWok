@@ -124,9 +124,15 @@
 
         //点击取消，回到列表页
         cancel:function(){
+          api.closeWin()
+
+        },
+
+        //点击搜索历史，跳转到搜索页面
+        goSearch:function(value){
           api.openWin({
-              name: 'store',
-              url: '../store/store_win.html',
+              name: 'goodsDetails',
+              url: '../store/goods-details_win.html',
               reload:true,
               slidBackEnabled:false,
               bounces:false,
@@ -135,11 +141,6 @@
               }
           });
 
-        },
-
-        //点击搜索历史，跳转到搜索页面
-        goSearch:function(value){
-          console.log(value)
         },
 
         //清空已搜索内容

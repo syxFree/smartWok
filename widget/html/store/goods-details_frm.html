@@ -319,7 +319,7 @@
             methods: {
                 //返回按钮
                 back:function(){
-
+                  api.closeWin()
                 },
                 //分享按钮
                 share:function(){
@@ -327,6 +327,10 @@
                 },
                 //联系按钮
                 call:function(){
+                  api.call({
+                      type: 'tel_prompt',
+                      number: '18338514073' //商家电话
+                  });
 
                 },
                 //购买按钮

@@ -92,7 +92,7 @@
       <div class="content-name">
         <span>所在地</span>
         <div>
-          <span class="name">江苏 南京 鼓楼区</span>
+          <span class="name">{{address}}</span>
           <img src="../../image/my/unfold.png" alt="" class="unfold" id="trigger">
         </div>
       </div>
@@ -121,9 +121,11 @@
       data() {
         return {
           openbluetooth: false,
+          address:'',
         }
       },
       mounted() {
+        let vm=this
         var mobileSelect1 = new MobileSelect({
           trigger: '#sex',
           title: '性别',
@@ -149,6 +151,7 @@
           position: [0],
           callback: function (indexArr, data) {
             console.log(data);
+            vm.address=data
           }
         });
 

@@ -237,19 +237,21 @@
         }
         .disActive{
             width: 1.8rem;
-            height: .54rem;
+            height: .6rem;
             border-radius: .54rem;
-            text-align: center;
-            line-height: .54rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             border: 1px solid #999;
             color: #999;
             background-color: white;
         }
         .active{
             width: 1.8rem;
-            height: .54rem;
-            text-align: center;
-            line-height: .54rem;
+            height: .6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: .54rem;
             color: white;
             background-color: #FF8C46;
@@ -260,12 +262,12 @@
             position: fixed;
             left: 0;
             top: 0;
-            z-index: 1000;
+            z-index: 10000;
             background-color: rgba(0, 0, 0, .6);
         }
         .choose{
             width: 100%;
-            height: 4.5rem;
+            height: 5rem;
             background-color: white;
             position: absolute;
             bottom: 0;
@@ -468,17 +470,17 @@
                         </div>
                     </div>
                     <div class="pay-type">
-                        <div class="wx-box box">
+                        <div class="wx-box box" @click="payFlag=false">
                             <img class="pay" src="../../image/orderDetails/wx-pay.png" alt="">
                             <span>微信支付</span>
-                            <img class="payFlag" v-if="payFlag" src="../../image/submitOrder/choose.png" alt="" @click="payFlag=false">
-                            <img class="payFlag" v-else src="../../image/submitOrder/choose-active.png" alt="" @click="payFlag=false">
+                            <img class="payFlag" v-if="payFlag" src="../../image/submitOrder/choose.png" alt="">
+                            <img class="payFlag" v-else src="../../image/submitOrder/choose-active.png" alt="">
                         </div>
-                        <div class="zfb-box box">
+                        <div class="zfb-box box" @click="payFlag=true">
                             <img class="pay" src="../../image/orderDetails/zfb-pay.png" alt="">
                             <span>支付宝支付</span>
-                            <img class="payFlag" v-if="!payFlag" src="../../image/submitOrder/choose.png" alt="" @click="payFlag=true">
-                            <img class="payFlag" v-else src="../../image/submitOrder/choose-active.png" alt="" @click="payFlag=true">
+                            <img class="payFlag" v-if="!payFlag" src="../../image/submitOrder/choose.png" alt="">
+                            <img class="payFlag" v-else src="../../image/submitOrder/choose-active.png" alt="">
                         </div>
                     </div>
                     <div class="order-btn" @click="payOrder">确定</div>
@@ -490,6 +492,9 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script>
+    apiready=function(){
+        var shadeFlag=api.pageParam.shadeFlag
+        var type=api.pageParam.type
         var vm=new Vue({
             el:'.app',
             data:{
@@ -502,7 +507,7 @@
                     swiper:'../../image/store/five.jpg',
                     details:'暮厨不锈钢炒锅炒菜过32厘米无涂层少油烟304燃气',
                     price:'368.90',
-                    status:'已完成',
+                    status:'待付款',
                     amount:666,
                 },
                 //物流信息
@@ -525,6 +530,8 @@
                     document.getElementsByClassName("userInfo")[0].style.height="13%"
                     document.getElementsByClassName("goods-info")[0].style.height="34%"
                 }
+                this.shadeFlag=shadeFlag
+                this.goods.status=type
             },
             computed: {
                 totalCount:function(){
@@ -546,7 +553,17 @@
                     console.log("删除订单")
                 },
                 look:function(){
-                    console.log("查看物流")
+                    api.openWin({
+                        name: 'logistics-information',
+                        url: '../logistics-information/logistics-info_win.html',
+                        reload:true,
+                        slidBackEnabled:false,
+                        bounces:false,
+                        pageParam: {
+                            name: 'test'
+                        }
+                    });
+
                 },
                 cancel:function(){
                     //取消订单
@@ -559,16 +576,15 @@
                 goWuliu:function(){
                   api.openWin({
                       name: 'wuliu',
-                      url: '../logistics-information/_win.html',
+                      url: '../logistics-information/logistics-info_win.html',
                       reload:true,
                       bounces:false,
                       slidBackEnabled:false,
                       pageParam: {
-                        
+
                       }
                   });
-
-                }
+                },
                  //购买按钮
                  order:function(){
                     //添加禁止页面滚动
@@ -592,6 +608,7 @@
                 }
             },
         })
+      }
     </script>
 </body>
 </html>

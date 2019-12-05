@@ -19,7 +19,7 @@
             border-bottom: 1px solid #ccc;
             position: relative;
             display: flex;
-            box-sizing: border-box;
+            /*box-sizing: border-box;*/
             padding-left: .2rem;
             align-items: center;
 
@@ -42,12 +42,13 @@
     </style>
 </head>
 <body>
-    <div class="app">
-        <header>
-            <img src="../../image/register/black.png" alt="返回" @click="back">
-            <span>提交订单</span>
-        </header>
-    </div>
+  <div class="app">
+    <header>
+        <img src="../../image/register/black.png" alt="返回" @click="back">
+        <span>提交订单</span>
+    </header>
+  </div>
+
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
@@ -69,7 +70,7 @@
           },
           methods: {
               back:function(){
-
+                api.closeWin()
              }
           },
       })
