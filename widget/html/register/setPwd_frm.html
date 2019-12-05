@@ -7,21 +7,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
-        .app{
-            overflow: hidden;
-            background-color: white;
-            min-height: 100vh;
-        }
-        header{
-            width: 100%;
-            height: 0.88rem;
-            line-height: 1.2rem;
-            padding-left: .2rem;
-        }
-        header img{
-            width: .4rem;
-            height: .4rem;
-        }
         .top-font{
             color: #333;
             font-size: 0.44rem;
@@ -107,9 +92,9 @@
                     <input type="password" placeholder="请输入密码" v-model='password'>
                 </div>
                 <div class="login-info">
-                    <input type="password" 
+                    <input type="password"
                     @input="confirmPwd"
-                    @blur="pwdJudge" 
+                    @blur="pwdJudge"
                     v-model="passwordAgain" placeholder="请确认密码" >
                 </div>
             </div>
@@ -136,7 +121,7 @@
                 nextFlag:false   //是否能跳转到下一页
             },
             watch: {
-                
+
             },
             methods: {
                 //确认密码
@@ -169,7 +154,7 @@
                 }
             }
         })
-        }   
+        }
         apiready()
     </script>
 </body>

@@ -33,131 +33,50 @@
 <body>
   <div class="app">
     <header>
-      <img src="../../image/register/black.png" alt="返回" @click="getopenbluetooth1">
-      <h2>首页</h2>
-      <img src="../../image/menu/share.png" alt="分享">
+      <img src="../../image/register/black.png" alt="返回" @click="back">
+      <h2>创建菜谱</h2>
+      <img src="../../image/menu/share.png" alt="分享" @click="share">
     </header>
     </div>
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
     <script>
-      var vue = new Vue({
-        el: '.app',
-        data() {
-          return {
-            imgcover:'1',
-            isbluetooth: false,
-            openbluetooth: false,
-            stepslist: [
-              { num: 1, content: '请选择一个程序' }
-            ],
-            contentlist: ['加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋', '加水', '加油', '加盐', '加醋',],
-            moveshow: false,
-            movenum: 0,
-            movebox: true, //控制显示第几个盒子
-            content: "",
-            temperature: ['30', '40', '50', '60', '70', '80', '90', '100'], //温度
-            parameter: ['30', '40', '50', '60', '70', '80', '90', '100'], //参数
-            timeouth: ['30', '40', '50', '60', '70', '80', '90', '100'], //时
-            timeoutm: ['30', '40', '50', '60', '70', '80', '90', '100'], //分
-            timeouts: ['30', '40', '50', '60', '70', '80', '90', '100'], //秒
-            temperatureBox: 0,
-            parameterBox: 0,
-            timeouthBox: 0,
-            timeoutmBox: 0,
-            timeoutsBox: 0,
-            temperaturecon: '',
-            parametercon: '',
-            timeoutcon: '',
-          }
-        },
-        methods: {
-          // 删除上传封面
-          handledelpic(){},
-          handletransfer(){
-            // 调用ajax
-          },
-          handleisbluetooth(){
-            this.isbluetooth = !this.isbluetooth
-          },
-          getopenbluetooth1() {
-            this.openbluetooth = !this.openbluetooth
-          },
-          addbox() {
-            console.log(this.stepslist.length)
-            this.stepslist.push({ num: this.stepslist.length + 1, content: "请选择一个程序" })
-          },
-          getopenbluetooth() {
-            this.movenum = 0
-            this.moveshow = false
-          },
-          handlemovebox() {
-            this.movebox = true
-          },
-          getmove(num) {
-            this.movenum = num
-            this.movebox = true
-            this.moveshow = true
-          },
-          getcontent(item) {
-            console.log(item)
-            this.movebox = false
-            this.content = item
-          },
-          handleparameter(index) {
-            this.parameterBox = index
-            for (let i = 0; i < this.parameter.length; i++) {
-              if (index === i) {
-                this.parametercon = this.parameter[i]
+    apiready = function () {
+        var header = $api.dom('header'); // 获取 header 标签元素
+        var footer = $api.dom('footer'); // 获取 footer 标签元素
+
+        // 1.修复开启沉浸式效果带来的顶部Header与手机状态栏重合的问题，最新api.js方法已支持适配iPhoneX；
+        // 2.默认已开启了沉浸式效果 config.xml中 <preference name="statusBarAppearance" value="true"/>
+        // 3.沉浸式效果适配支持iOS7+，Android4.4+以上版本
+        var headerH = $api.fixStatusBar(header);
+        // 最新api.js为了适配iPhoneX增加的方法，修复底部Footer部分与iPhoneX的底部虚拟横条键重叠的问题；
+        var footerH = $api.fixTabBar(footer);
+        var goodsvue = new Vue({
+            el: '.app',
+            data: {},
+            created: function () {
+            },
+            methods: {
+              back: function () {
+                  api.closeWin()
+              },
+              share:function(){
+                console.log(12314)
               }
             }
-          },
-          handletemperature(index) {
-            this.temperatureBox = index
-            for (let i = 0; i < this.temperature.length; i++) {
-              if (index === i) {
-                this.temperaturecon = this.temperature[i]
-              }
-            }
-          },
-          handletimeouth(index) {
-            this.timeouthBox = index
-            for (let i = 0; i < this.timeouth.length; i++) {
-              if (index === i) {
-                this.timeoutcon += this.timeouth[i] * 60 * 60
-              }
-            }
-          },
-          handletimeoutm(index) {
-            this.timeoutmBox = index
-            for (let i = 0; i < this.timeoutm.length; i++) {
-              if (index === i) {
-                this.timeoutcon += this.timeoutm[i] * 60
-              }
-            }
-          },
-          handletimeouts(index) {
-            this.timeoutsBox = index
-            for (let i = 0; i < this.timeouts.length; i++) {
-              if (index === i) {
-                this.timeoutcon += this.timeouts[i]
-              }
-            }
-          },
-          handlestepslist() {
-            for (let i = 0; i < this.stepslist.length; i++) {
-              if (this.movenum === this.stepslist[i].num) {
-                // console.log(this.stepslist[i])
-                this.stepslist[i].content = this.content + ':' + this.parametercon
-                // this.stepslist[i].content+=
-              }
-            }
-            console.log(this.stepslist)
-            this.getopenbluetooth()
-          }
-        },
-      })
+        });
+        api.openFrame({
+            name: 'menu_frm',
+            url: 'menu_frm.html',
+            rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
+                marginTop: headerH, // main页面距离win顶部的高度
+                marginBottom: footerH, // main页面距离win底部的高度
+                w: 'auto' // main页面的宽度 自适应屏幕宽度
+            },
+            pageParam: api.pageParam
+        });
+    }
     </script>
 </body>
 

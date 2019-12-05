@@ -44,60 +44,46 @@
 <body>
     <div class="app">
         <header>
-            <img src="../../image/information/back.png" alt="返回" @click="goSearch">
-            <input type="text" v-model="searchTxt" @click="goSearch">
+            <img src="../../image/information/back.png" alt="返回" @click="back">
+            <input type="text" v-model="searchTxt" >
         </header>
     </div>
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
     <script>
-        var vm=new Vue({
-            el:'.app',
-            data:{
-                flag:true,   //根据商品有无判断
-                searchTxt:'这是一只皮卡丘', //这里是跳转过来的输入框文本
-                goods:[
-                    {
-                        img:'../../image/store/one.jpg',
-                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
-                        price:40
-                    },
-                    {
-                        img:'../../image/store/two.jpg',
-                        describe:'无油烟不粘锅不锈钢真空锅三层钢无油烟不粘锅不锈钢真空锅三层钢无油烟不粘锅不锈钢真空锅三层钢',
-                        price:40
-                    },
-                    {
-                        img:'../../image/store/three.jpg',
-                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
-                        price:40
-                    },
-                    {
-                        img:'../../image/store/four.jpg',
-                        describe:'无油烟不粘锅不锈钢真空锅三层钢',
-                        price:40
-                    }
-                ]
-            },
-            created() {
-                if(this.goods.length==0){
-                    this.flag=true
-                }else{
-                    this.flag=false
-                }
+    apiready = function () {
+        var header = $api.dom('header'); // 获取 header 标签元素
+        var footer = $api.dom('footer'); // 获取 footer 标签元素
+
+        // 1.修复开启沉浸式效果带来的顶部Header与手机状态栏重合的问题，最新api.js方法已支持适配iPhoneX；
+        // 2.默认已开启了沉浸式效果 config.xml中 <preference name="statusBarAppearance" value="true"/>
+        // 3.沉浸式效果适配支持iOS7+，Android4.4+以上版本
+        var headerH = $api.fixStatusBar(header);
+        // 最新api.js为了适配iPhoneX增加的方法，修复底部Footer部分与iPhoneX的底部虚拟横条键重叠的问题；
+        var footerH = $api.fixTabBar(footer);
+        var goodsvue = new Vue({
+            el: '.app',
+            data: {},
+            created: function () {
             },
             methods: {
-                //返回搜索页面
-                goSearch:function(){
-
-                },
-                //进入商品详情页
-                goGoodsDetails:function(){
-
-                }
+              back: function () {
+                  api.closeWin()
+              },
+            }
+        });
+        api.openFrame({
+            name: 'searchResult_frm',
+            url: 'searchResult_frm.html',
+            rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
+                marginTop: headerH, // main页面距离win顶部的高度
+                marginBottom: footerH, // main页面距离win底部的高度
+                w: 'auto' // main页面的宽度 自适应屏幕宽度
             },
-        })
+            pageParam: api.pageParam
+        });
+    }
     </script>
 </body>
 </html>

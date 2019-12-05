@@ -22,50 +22,35 @@
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script>
-    var vue = new Vue({
-      el: '.app',
-      data:{
-        searchTxt:'',  //搜索框文本
-        flag:false,    //搜索框图片的显示与隐藏
-        records:['三层蒸煮锅','不锈钢锅','炒锅','电饭煲','不锈钢锅'],  //这里是从storage里拿的数据
-      },
-      watch: {
-        searchTxt:function(){
-          if(this.searchTxt!=''){
-            this.flag=true
-          }else{
-            this.flag=false
+  apiready = function () {
+      var header = $api.dom('header'); // 获取 header 标签元素
+      var footer = $api.dom('footer'); // 获取 footer 标签元素
+
+      // 1.修复开启沉浸式效果带来的顶部Header与手机状态栏重合的问题，最新api.js方法已支持适配iPhoneX；
+      // 2.默认已开启了沉浸式效果 config.xml中 <preference name="statusBarAppearance" value="true"/>
+      // 3.沉浸式效果适配支持iOS7+，Android4.4+以上版本
+      var headerH = $api.fixStatusBar(header);
+      // 最新api.js为了适配iPhoneX增加的方法，修复底部Footer部分与iPhoneX的底部虚拟横条键重叠的问题；
+      var footerH = $api.fixTabBar(footer);
+      var goodsvue = new Vue({
+          el: '.app',
+          data: {},
+          created: function () {
+          },
+          methods: {
           }
-        }
-      },
-      methods: {
-        //删除输入框的文本
-        del:function(){
-          this.searchTxt=''
-        },
-
-        //点击取消，回到列表页
-        cancel:function(){
-          console.log("cancel")
-        },
-
-        //点击搜索历史，跳转到搜索页面
-        goSearch:function(value){
-          console.log(value)
-        },
-
-        //清空已搜索内容
-        clearRecords:function(){
-          //这里做的是清空缓存 用api的内置方法
-          var con=confirm("您确认要清空搜索内容吗?")
-          if(con){
-            this.records=''
-          }else{
-            return
-          }
-        }
-      },
-    })
+      });
+      api.openFrame({
+          name: 'search_frm',
+          url: 'search_frm.html',
+          rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
+              marginTop: headerH, // main页面距离win顶部的高度
+              marginBottom: footerH, // main页面距离win底部的高度
+              w: 'auto' // main页面的宽度 自适应屏幕宽度
+          },
+          pageParam: api.pageParam
+      });
+  }
   </script>
 </body>
 

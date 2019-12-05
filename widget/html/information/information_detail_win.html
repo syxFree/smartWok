@@ -4,36 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>资讯详情</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
         .app{
             overflow: hidden;
-            background-color: white;
+            width: 100%;
             min-height: 100vh;
         }
         header{
             width: 100%;
-            height: 0.88rem;
-            line-height: 1.2rem;
-            padding-left: .2rem;
+            height: .88rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 0 .3rem;
+            border-bottom: 1px solid #E0E0E0;
         }
-        header img{
-            width: .4rem;
-            height: .4rem;
+        .back img{
+            width: .3rem;
+            height: .385rem;
+        }
+        .share img{
+            width: .35rem;
+            height: .38rem;
         }
     </style>
 </head>
 <body>
     <div class="app">
         <header>
-            <img src="../../image/register/返回-black.png" alt="返回" @click="back">
+            <div class="back">
+                <img src="../../image/information/back.png" alt="返回" @click="back">
+            </div>
+            <div class="share">
+                <img src="../../image/information/share.png" alt="分享" @click="share">
+            </div>
         </header>
     </div>
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
-    <script>
+    <script type="text/javascript">
     apiready = function () {
         var header = $api.dom('header'); // 获取 header 标签元素
         var footer = $api.dom('footer'); // 获取 footer 标签元素
@@ -50,14 +63,17 @@
             created: function () {
             },
             methods: {
-                back: function () {
-                    api.closeWin()
-                }
+              back: function () {
+                  api.closeWin()
+              },
+              share:function(){
+                console.log(12314)
+              }
             }
         });
         api.openFrame({
-            name: 'findPwdNext_frm',
-            url: 'findPwdNext_frm.html',
+            name: 'information-detail_frm',
+            url: 'information-detail_frm.html',
             rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
                 marginTop: headerH, // main页面距离win顶部的高度
                 marginBottom: footerH, // main页面距离win底部的高度
@@ -66,7 +82,6 @@
             pageParam: api.pageParam
         });
     }
-
     </script>
 </body>
 </html>

@@ -69,6 +69,17 @@
     <script src="../../script/vue.min.js"></script>
     <script>
         apiready = function() {
+          api.addEventListener({
+              name: 'keyback'
+          }, function (ret, err) {
+              api.closeWidget({});
+          });
+
+          setTimeout(function () {
+              api.closeWin({
+                  name: 'login_win'
+              });
+          }, 1000);
 
             var vue = new Vue({
                 el: '.app',
@@ -79,12 +90,84 @@
                         consult: ['../../image/footer/consult.png', '../../image/footer/consult_true.png'],
                         shop: ['../../image/footer/shop.png', '../../image/footer/shop_true.png'],
                         mineImg: ['../../image/footer/my.png', '../../image/footer/my_true.png'],
+                        framesArr: [
+                            {
+                                name: 'home_win',
+                                url: '../home/home_win.html'
+                            }, {
+                                name: 'information_list_win',
+                                url: '../information/information_list_win.html'
+                            }, {
+                                name: 'store_win',
+                                url: '../store/store_win.html'
+                            }, {
+                                name: '/my_win',
+                                url: '../my/my_win.html'
+                            }]
                     }
                 },
+                created: function () {
+                    this.openHomeGroup();
+                },
+                mounted: function () {
+                    this.toHomeType(0)
+                },
                 methods: {
-                    toHomeType(type) {
-                        this.currentIdx = type
-                    }
+                  toHomeType: function (index) {
+                      this.currentIdx = index;
+                      api.sendEvent({
+                          name: 'footerIndexMarket',
+                          extra: {
+                              index: index
+                          }
+                      });
+                      api.setFrameGroupIndex({
+                          name: 'home-group',
+                          index:index
+                      });
+                  },
+
+                  openHomeGroup: function () {
+                      var that = this;
+                      var headerH = '';
+                      var footerH = '';
+                      setTimeout(function () {
+                          var header = $api.dom('header'); // 获取 header 标签元素
+                          var footer = $api.dom('footer'); // 获取 footer 标签元素
+                          headerH = $api.fixStatusBar(header);
+                          footerH = $api.fixTabBar(footer);
+                          for (var i = 0; i < that.framesArr.length; i++) {
+                              if (i != that.framesArr.length) {
+                                  that.framesArr[i].pageParam = {footerH: footerH}
+                              }
+                          }
+                          api.openFrameGroup({
+                              name: 'home-group',
+                              index: 0,
+                              rect: {
+                                  x: 0,
+                                  y: 0,
+                                  w: 'auto',
+                                  h: 'auto',
+                                  marginTop: 0, // main页面距离win顶部的高度
+                                  marginBottom: footerH // main页面距离win底部的高度
+                              },
+                              scrollEnabled: false,
+                              preload: 5,
+                              frames: that.framesArr
+                          }, function (ret, err) {
+                              var index = ret.index;
+                              that.currentIdx = index;
+                              api.sendEvent({
+                                  name: 'footerIndexMarket',
+                                  extra: {
+                                      index: index
+                                  }
+                              })
+                          });
+                      }, 300);
+                  },
+                  
                 },
             })
         }

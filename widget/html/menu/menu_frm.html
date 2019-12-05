@@ -7,27 +7,6 @@
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
   <style>
-    header {
-      display: flex;
-      justify-content: space-between;
-      height: 0.88rem;
-      line-height: 0.88rem;
-      padding: 0 .2rem;
-      align-items: center;
-    }
-
-    header img {
-      width: .4rem;
-      height: .4rem;
-    }
-
-    header h2 {
-      font-size: 0.36rem;
-      color: #333333;
-      text-align: center;
-      padding: 0.2rem 0;
-    }
-
     .cover {
       width: 6.9rem;
       height: 3rem;
@@ -561,7 +540,7 @@
     .covershow img{
       width: 100%;
       height: 100%;
-    } 
+    }
     .del-pic {
       position: absolute;
       right: -.1rem;
@@ -574,11 +553,6 @@
 
 <body>
   <div class="app">
-    <header>
-      <img src="../../image/register/black.png" alt="返回" @click="getopenbluetooth1">
-      <h2>首页</h2>
-      <img src="../../image/menu/share.png" alt="分享">
-    </header>
     <!-- 上传封面 -->
     <div class="cover" v-if="imgcover === '' ">
       <div class="title">
@@ -802,10 +776,10 @@
           }
         },
         mounted() {
-          this.temperaturecon = this.temperature[0]  
-          this.parametercon = this.parameter[0] 
-          this.timeoutcon += this.timeouth[0] * 60 * 60 
-          this.timeoutcon += this.timeoutm[0] * 60  
+          this.temperaturecon = this.temperature[0]
+          this.parametercon = this.parameter[0]
+          this.timeoutcon += this.timeouth[0] * 60 * 60
+          this.timeoutcon += this.timeoutm[0] * 60
           this.timeoutcon += this.timeouts[0]
         },
         methods: {
