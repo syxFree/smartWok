@@ -62,7 +62,13 @@
                   api.closeWin()
               },
               share:function(){
-                console.log(12314)
+                api.openWin({
+                    name: 'share_win',
+                    url: 'share_win.html',
+                    reload: true,
+                    bounces: false,
+                    slidBackEnabled: true,
+                });
               }
             }
         });

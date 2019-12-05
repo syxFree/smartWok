@@ -125,7 +125,7 @@
             <span>默认地址</span>
           </div>
           <div class="address-handle">
-            <div>
+            <div @click="editor">
               <img src="../../image/my/editor.png" alt="">
               编辑
             </div>
@@ -137,14 +137,14 @@
         </div>
       </div>
       <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
-        <button class="btn">新增收货地址</button>
+        <button class="btn" @click="addnew">新增收货地址</button>
       </div>
     </div>
     <!-- 当没有收获地址的时候 -->
     <div v-if="hasaddress ===false" class="empty">
       <img src="../../image/my/empty-add.png" alt="">
       <p>当前还没有收货地址</p>
-      <button class="btn" style="width: 3.8rem;height:.8rem">新增收货地址</button>
+      <button class="btn" style="width: 3.8rem;height:.8rem" @click="addnew">新增收货地址</button>
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
@@ -159,6 +159,24 @@
         }
       },
       methods: {
+        editor(){
+          api.openWin({
+              name: 'changeaddress_win',
+              url: 'changeaddress_win.html',
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+        },
+        addnew(){
+          api.openWin({
+              name: 'newaddress_win',
+              url: 'newaddress_win.html',
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+        },
       },
     })
   </script>

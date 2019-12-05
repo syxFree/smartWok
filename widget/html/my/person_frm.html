@@ -67,12 +67,6 @@
 
 <body>
   <div class="app">
-    <div></div>
-    <header>
-      <img src="../../image/register/black.png" alt="返回">
-      <h2>个人信息</h2>
-      <span></span>
-    </header>
     <div class="content">
       <div class="head-img">
         <span>头像</span>
@@ -81,11 +75,11 @@
           <img src="../../image/my/unfold.png" alt="" class="unfold">
         </div>
       </div>
-      <div class="content-name">
+      <div class="content-name" >
         <span>昵称</span>
         <div>
           <span class="name">用户小白</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold">
+          <img src="../../image/my/unfold.png" alt="" class="unfold" @click="tonickname()">
         </div>
       </div>
       <div class="content-name">
@@ -163,6 +157,15 @@
         getopenbluetooth() {
           this.openbluetooth = !this.openbluetooth;
         },
+        tonickname(){
+          api.openWin({
+              name: 'nick_name_win',
+              url: 'nick_name_win.html',
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+        }
       },
     })
   </script>

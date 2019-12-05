@@ -1,115 +1,120 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <link rel="stylesheet" href="../../css/api.css">
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        .share-code {
+            width: 6.9rem;
+            height: 4.5rem;
+            position: relative;
+            top: -2.48rem;
+            margin: 0 auto;
+            margin-top: .6rem;
+            background-color: #fff;
+        }
 
-    .share-code {
-      width: 6.9rem;
-      height: 4.5rem;
-      position: relative;
-      top: -2.48rem;
-      margin: 0 auto;
-      margin-top: .6rem;
-      background-color: #fff;
-    }
+        .app {
+            background-color: #F7F7F7;
+            min-height: 100vh;
+        }
 
-    .app {
-      background-color: #F7F7F7;
-      min-height: 100vh;
-    }
+        .share-code .title {
+            font-family: PingFang-SC-Bold;
+            font-size: .34rem;
+            color: #333333;
+            margin: .3rem 0 .1rem .3rem;
+            width: 1.02rem;
+            position: absolute;
+        }
 
-    .share-code .title {
-      font-family: PingFang-SC-Bold;
-      font-size: .34rem;
-      color: #333333;
-      margin: .3rem 0 .1rem .3rem;
-      width: 1.02rem;
-      position: absolute;
-    }
+        .share-code .title p {
+            position: absolute;
+            z-index: 10;
+            top: 0;
+            left: 0;
+        }
 
-    .share-code .title p {
-      position: absolute;
-      z-index: 10;
-      top: 0;
-      left: 0;
-    }
+        .share-code .title::after {
+            content: "";
+            display: block;
+            border-bottom: .1rem solid #FA844A;
+            position: absolute;
+            top: .3rem;
+            width: 1.02rem;
+            z-index: 1;
+        }
 
-    .share-code .title::after {
-      content: "";
-      display: block;
-      border-bottom: .1rem solid #FA844A;
-      position: absolute;
-      top: .3rem;
-      width: 1.02rem;
-      z-index: 1;
-    }
+        .share-code span {
+            display: block;
+            margin-left: .3rem;
+            font-size: .26rem;
+            padding-top: .88rem;
+            color: #999999;
+        }
 
-    .share-code span {
-      display: block;
-      margin-left: .3rem;
-      font-size: .26rem;
-      padding-top: .88rem;
-      color: #999999;
-    }
+        .share-code .code {
+            font-family: PingFang-SC-Bold;
+            font-size: .34rem;
+            color: #333333;
+            text-align: center;
+            margin-top: .7rem;
+            margin-bottom: 1.17rem;
+        }
 
-    .share-code .code {
-      font-family: PingFang-SC-Bold;
-      font-size: .34rem;
-      color: #333333;
-      text-align: center;
-      margin-top: .7rem;
-      margin-bottom: 1.17rem;
-    }
+        .share-code .btn {
+            width: 4rem;
+            height: .88rem;
+            line-height: .88rem;
+            background: #FF8C46;
+            border-radius: .44rem;
+            border-radius: .44rem;
+            font-family: PingFang-SC-Bold;
+            font-size: .34rem;
+            color: #FFFFFF;
+            text-align: center;
+            position: absolute;
+            bottom: -.4rem;
+            left: 1.5rem;
+        }
 
-    .share-code .btn {
-      width: 4rem;
-      height: .88rem;
-      line-height: .88rem;
-      background: #FF8C46;
-      border-radius: .44rem;
-      border-radius: .44rem;
-      font-family: PingFang-SC-Bold;
-      font-size: .34rem;
-      color: #FFFFFF;
-      text-align: center;
-      position: absolute;
-      bottom: -.4rem;
-      left: 1.5rem;
-    }
-  </style>
+        .bgColor {
+            height:2.8rem;
+            background-image: linear-gradient(142deg, #FFA975 25%, #FF8C46 84%);
+        }
+    </style>
 </head>
 
 <body>
-  <div class="app">
-    <div class="share-code">
-      <div class="title">
-        <p>分享码</p>
-      </div>
-      <span>点击复制，发送给好友即可</span>
-      <div class="code">GUILFGILAFIEULBFIBEAFBELBFALBB</div>
-      <div class="btn">复制</div>
+    <div class="app">
+        <div class="bgColor">
+        </div>
+        <div class="share-code">
+            <div class="title">
+                <p>分享码</p>
+            </div>
+            <span>点击复制，发送给好友即可</span>
+            <div class="code">GUILFGILAFIEULBFIBEAFBELBFALBB</div>
+            <div class="btn">复制</div>
+        </div>
     </div>
-  </div>
-  <script src="../../script/api.js" charset="utf-8"></script>
-  <script src="../../script/flexible.js" charset="utf-8"></script>
-  <script src="../../script/vue.min.js"></script>
-  <script>
-    var vue = new Vue({
-      el: '.app',
-      data() {
-        return {
+    <script src="../../script/api.js" charset="utf-8"></script>
+    <script src="../../script/flexible.js" charset="utf-8"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vue = new Vue({
+            el: '.app',
+            data() {
+                return {
 
-        }
-      },
-      methods: {
-      },
-    })
-  </script>
+                }
+            },
+            methods: {},
+        })
+    </script>
 </body>
 
 </html>

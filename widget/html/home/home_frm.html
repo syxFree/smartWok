@@ -136,7 +136,7 @@
       <div v-if="link===false">当前尚未添加任何设备，<span @click="getopenbluetooth">点击添加</span></div>
       <div v-if="link===true">当前连接设备：智能灶V1.0，<span>点击断开</span></div>
     </div>
-    <div class="create">
+    <div class="create"  @click="toMenu">
       <img src="../../image/home/create.png" alt="">
       创建菜谱
     </div>
@@ -150,7 +150,7 @@
           <b>提示</b>
           <p>添加设备，需要打开手机蓝牙</p>
         </div>
-        <div class="openblue">
+        <div class="openblue" @click="toopenblue">
           去打开
         </div>
       </div>
@@ -160,6 +160,7 @@
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script>
+    apiready = function () {
     var vue = new Vue({
       el: '.app',
       data() {
@@ -172,8 +173,27 @@
         getopenbluetooth() {
           this.openbluetooth = !this.openbluetooth;
         },
+        toMenu: function() {
+            api.openWin({
+                name: 'menu_win',
+                url: '../menu/menu_win.html',
+                reload: true,
+                bounces: false,
+                slidBackEnabled: true,
+            });
+        },
+        toopenblue:function () {
+          api.openWin({
+              name: 'device_win',
+              url: '../search/device_win.html',
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+        }
       },
     })
+  }
   </script>
 </body>
 

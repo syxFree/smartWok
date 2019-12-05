@@ -62,7 +62,7 @@
       margin-bottom: .3rem;
       transform:translate(0,-1.5rem);
     }
-    
+
     .content img {
       width: .38rem;
       height: .38rem;
@@ -74,35 +74,35 @@
 <body>
   <div class="app">
     <div class="header">
-      <img src="../../image/my/default-head.png" alt="">
-      <p>用户小白</p>
+      <img src="../../image/my/default-head.png" alt=""  @click="tosomewhere('person_win','person_win.html')">
+      <p @click="tosomewhere('person_win','person_win.html')">用户小白</p>
       <span>江苏 南京 鼓楼区</span>
     </div>
     <div class="content-box content-position">
-      <div class="content">
+      <div class="content" @click="tosomewhere()">
         <img src="../../image/my/order.png" alt="">
         <span>我的订单</span>
       </div>
-      <div class="content">
+      <div class="content"  @click="tosomewhere('my_menu_win','my_menu_win.html')">
         <img src="../../image/my/menu.png" alt="">
         <span>我的菜谱</span>
       </div>
     </div>
     <!-- 下面四个 -->
     <div class="content-box content-position">
-      <div class="content">
+      <div class="content"  @click="tosomewhere('address_win','../address/address_win.html')">
         <img src="../../image/my/address.png" alt="">
         <span>收获地址管理</span>
       </div>
-      <div class="content">
+      <div class="content" @click="tosomewhere('about_win','../about/about_win.html')">
         <img src="../../image/my/aboutus.png" alt="">
         <span>关于我们</span>
       </div>
-      <div class="content">
+      <div class="content" @click="tosomewhere('feedback_win','../feedback/feedback_win.html')">
         <img src="../../image/my/feedback.png" alt="">
         <span>意见反馈</span>
       </div>
-      <div class="content">
+      <div class="content"  @click="tosomewhere('setting_win','../setting/setting_win.html')">
         <img src="../../image/my/setting.png" alt="">
         <span>设置</span>
       </div>
@@ -119,6 +119,15 @@
         }
       },
       methods: {
+        tosomewhere:function(name,url){
+          api.openWin({
+              name: name,
+              url: url,
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+        },
       },
     })
   </script>
