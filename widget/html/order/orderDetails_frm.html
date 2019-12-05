@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>订单详情页</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        html,body,.app{
+            width: 100%;
+            height: 100%;
+            background-color: #f7f7f7;
+        }
+        section{
+            width: 100%;
+            height: 90%;
+        }
+        .order-status{
+            width: 100%;
+            height: 1.3rem;
+            box-sizing: border-box;
+            font-size: .34rem;
+            color: #333;
+            padding: 0rem .3rem .1rem .3rem;
+            background-color: white;
+            display: flex;
+            align-items: center;
+        }
+        .order-status img{
+            width: .8rem;
+            height: .8rem;
+        }
+        .order-status span{
+            margin-left: .3rem;
+        }
+        .userInfo{
+            width: 100%;
+            height: 16%;
+            margin-top: .2rem;
+            background-color: white;
+        }
+        .userInfo .user-box{
+            width: 94%;
+            height: 85%;
+            margin: 0 auto;
+            display: flex;
+            /* justify-content: space-around; */
+            align-items: center;
+        }
+        .user-box img{
+            width: .28rem;
+            height: .30rem;
+            position: relative;
+            left: .2rem;
+            top: -.2rem;
+        }
+        .user-box .user-info{
+            width: 75%;
+            margin-left: .3rem;;
+        }
+        .user-info span:nth-of-type(1){
+            font-size: .28rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .user-info span:nth-of-type(2){
+            font-size: .24rem;
+            color: #666;
+        }
+        .user-info p{
+            font-size: .24rem;
+            color: #666;
+            width: 5.3rem;
+            height: .33rem;
+            margin-top: .1rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .user-box .moreAdress{
+            width: .24rem;
+            height: .36rem;
+        }
+        .moreAdress img{
+            width: 100%;
+            height: 100%;
+        }
+        .line{
+            width: 100%;
+            height: 2.7%;
+            position: relative;
+        }
+        .line img{
+            width: 100%;
+            height: 3px;
+            position: absolute;
+            top: 0;
+        }
+        .goods-info{
+            width: 100%;
+            height: 35%;
+            background-color: white;
+            box-sizing: border-box;
+            padding: 4% 4% 0 4%;
+        }
+        .goods-title{
+            font-size: .34rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .good-box{
+            width: 100%;
+            height: 60%;
+            box-sizing: border-box;
+            padding-bottom: 5%;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .good-box img{
+            width: 2rem;
+            height: 2rem
+        }
+        .good-box .right{
+            width: 4.7rem;
+            margin-left: .2rem;
+            height: 100%;
+            display: flex;
+            color: #333;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .good-box .right p{
+            width: 4.6rem;
+            height: .88rem;
+            font-size: .28rem;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            display:-webkit-box;
+            -webkit-box-orient:vertical;
+            -webkit-line-clamp:2; 
+        }
+        .right .right-flex{
+            display: flex;
+            justify-content: space-between;
+        }
+        .good-box .right span{
+            font-size: .3rem;
+        }
+        .order-box{
+            width: 100%;
+            height: 25%;
+            box-sizing: border-box;
+            margin-top: .2rem;
+        }
+        .order-box .item{
+            width: 100%;
+            height: 60%;
+            line-height: .6rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .order-box .item span:nth-of-type(1){
+            color: #666;
+            font-size: .26rem;
+        }
+        .item .needPay{
+            color: #FF8C46!important;
+            font-size: .3rem!important;
+        }
+        .order-box .item span:nth-of-type(2){
+            color: #333;
+            font-size: .26rem;
+        }
+        .order-box input{
+            width: 5rem;
+            size: 30;
+            text-align: right;
+            color: #999!important;
+            font-size: .26rem;
+        }
+       .order-info{
+           width: 100%;
+           height: 30.1%;
+           margin-top: .2rem;
+           background-color: white;
+           padding: 4%;
+           box-sizing: border-box;
+           border-bottom: 1px solid #E0E0E0;
+       }
+       .order-info p{
+           font-size: .28rem;
+           color: #333;
+           margin-bottom: .1rem;
+       }
+       .order-info .item{
+            width: 90%;
+            height:.4rem;
+            line-height: .4rem;
+            color: #999;
+            font-size: .24rem;
+       }
+       .remiber{
+           width: 100%;
+           height: 1rem;
+           background-color: white;
+           position: fixed;
+           bottom: 0;
+           display: flex;
+           align-items: center;
+       }
+       .remiber .btn{
+           width: 1.8rem;
+           height: .6rem;
+           background-color: #FF8C46;
+           border-radius: .6rem;
+           color: white;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           position: absolute;
+           font-size: .28rem;
+           /* right: .4rem; */
+       }
+       .list-btn{
+            width: 3.8rem;
+            height: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: .28rem;
+            position: relative;
+            left: 3.3rem;
+            flex-direction: row-reverse;
+        }
+        .disActive{
+            width: 1.8rem;
+            height: .54rem;
+            border-radius: .54rem;
+            text-align: center;
+            line-height: .54rem;
+            border: 1px solid #999;
+            color: #999;
+            background-color: white;
+        }
+        .active{
+            width: 1.8rem;
+            height: .54rem;
+            text-align: center;
+            line-height: .54rem;
+            border-radius: .54rem;
+            color: white;
+            background-color: #FF8C46;
+        }
+        .shade{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, .6);
+        }
+        .choose{
+            width: 100%;
+            height: 4.5rem;
+            background-color: white;
+            position: absolute;
+            bottom: 0;
+            border-radius: .2rem .2rem 0 0;
+        }
+        .choose .close-img{
+            width: .3rem;
+            height: .3rem;
+            position: absolute;
+            right: .3rem;
+            top: 0.3rem;
+        }
+        .close-img img{
+            width: 100%;
+            height: 100%;
+        }
+        .choose .goods-info{
+            width: 100%;
+            height: 2rem;
+            margin-top: .6rem;
+            box-sizing: border-box;
+            padding: 0 .3rem;
+            display: flex;
+        }
+        .choose .top{
+            width: 100%;
+            height: 1rem;
+            border-bottom: 1px solid #E0E0E0;
+            font-size: .34rem;
+            color: #333;
+            font-weight: 600;
+            position: relative;
+        }
+        .choose .top span{
+            position: relative;
+            left: .3rem;
+            top: .3rem;
+        }
+        .order-btn{
+            width: 6.9rem;
+            height: .78rem;
+            background-color: #FF8C46;
+            border-radius: .78rem;
+            color: white;
+            font-size: .32rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: .3rem;
+            left: 4%;
+        }
+        .shade .pay-type{
+            width: 100%;
+            height: 2rem;
+            box-sizing: border-box;
+            padding: .3rem;
+        }
+        .pay-type .box{
+            width: 100%;
+            height: .7rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .pay-type .box .pay{
+            width: .34rem;
+            height: .34rem;
+        }
+        .pay-type .box img{
+            width: .42rem;
+            height: .42rem;
+        }
+        .pay-type .box span{
+            margin-left: .3rem;
+            font-size: .3rem;
+            color: #333;
+        }
+        .pay-type .box .payFlag{
+            position: absolute;
+            right: .3rem;
+        }
+        .logistics{
+            width: 100%;
+            height: 1.2rem;
+            background-color: white;
+            margin-top: .2rem;
+            box-sizing: border-box;
+            padding: .3rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .logistics .car{
+            width: .31rem;
+            height: .25rem;
+            position: absolute;
+            left: .3rem;
+            top: .3rem;
+        }
+        .logistics .right{
+            width: .17rem;
+            height: .32rem;
+            position: absolute;
+            right: .3rem;
+            top: .4rem;
+        }
+        .logisticsInfo{
+            margin-left: .5rem;
+        }
+        .logisticsInfo p:nth-of-type(1){
+            font-size: .28rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .logisticsInfo p:nth-of-type(2){
+            font-size: .24rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <section>
+            <div class="order-status">
+                <img v-if="goods.status=='待发货'" src="../../image/orderDetails/waitSendGoods.png" alt="待发货">
+                <img v-if="goods.status=='待收货'" src="../../image/orderDetails/waitReceive.png" alt="待收货">
+                <img v-if="goods.status=='待付款'" src="../../image/orderDetails/wairPay.png" alt="待付款">
+                <img v-if="goods.status=='已完成'" src="../../image/orderDetails/done.png" alt="已完成">
+                <img v-if="goods.status=='已取消'" src="../../image/orderDetails/canceled.png" alt="已取消">
+                <span>{{goods.status}}</span>
+            </div>
+            <!-- 物流信息 -->
+            <div class="logistics" v-if="goods.status=='待收货' || goods.status=='已完成'">
+                <img class="car" src="../../image/orderDetails/logistics.png" alt="运输车">
+                <div class="logisticsInfo">
+                    <p>{{logistics.address}}已录入</p>
+                    <p>{{logistics.time}}</p>
+                </div>
+                <img class="right" src="../../image/submitOrder/right.png" alt="">
+            </div>
+            <div class="userInfo">
+                <div class="user-box">
+                    <img src="../../image/orderDetails/adress-order.png" alt="订单图片">
+                    <div class="user-info">
+                        <span class="userName">{{userInfo.userName}}</span>
+                        <span class="userPhone">{{userInfo.userPhone}}</span>
+                        <p>{{userInfo.adress}}</p>
+                    </div>
+                </div>
+                <div class="line">
+                    <img src="../../image/submitOrder/adress-line.png" alt="地址线">
+                </div>
+            </div>
+            <div class="goods-info">
+                <div class="good-box">
+                    <img :src="goods.swiper" alt="商品图片">
+                    <div class="right">
+                        <p>{{goods.details}}</p>
+                        <div class="right-flex">
+                            <span>￥{{goods.price}}</span>
+                            <span>x{{orderCount}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-box">
+                    <div class="item">
+                        <span>商品总价</span>
+                        <span>￥{{totalCount}}</span>
+                    </div>
+                    <div class="item">
+                        <span>需付款</span>
+                        <span class="needPay">￥{{totalCount}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="order-info">
+                <p>订单信息</p>
+                <div class="item">订单编号：{{orderInfo.no}}</div>
+                <div class="item">创建时间：{{orderInfo.createTime}}</div>
+                <div class="item" v-if="goods.status=='待发货' || goods.status=='待收货' || goods.status=='已完成'">支付方式：{{orderInfo.type}}</div>
+                <div class="item" v-if="goods.status=='待发货' || goods.status=='待收货' || goods.status=='已完成'">付款时间：{{orderInfo.payTime}}</div>
+            </div>
+            <div class="remiber">
+               <div class="list-btn">
+                    <div v-if="goods.status=='待付款'" class="active" @click="pay">立即付款</div>
+                    <div v-if="goods.status=='待发货'" class="active" @click="reminder">提醒发货</div>
+                    <div v-if="goods.status=='待收货'" class="active" @click="confirmGoods">确认收货</div>
+                    <div v-if="goods.status=='已取消' || goods.status=='已完成'" class="disActive" @click="del">删除订单</div>
+                    <div v-if="goods.status=='已完成'" class="disActive" @click="look">查看物流</div>
+                    <div v-if="goods.status=='待付款'" class="disActive" @click="cancel">取消订单</div>
+                </div>
+            </div>
+            <div class="shade" v-if="shadeFlag">
+                <div class="choose">
+                    <div class="top">
+                        <span>选择支付方式</span>
+                        <div class="close-img" @click="closeShade">
+                            <img src="../../image/store/store-close.png" alt="关闭">
+                        </div>
+                    </div>
+                    <div class="pay-type">
+                        <div class="wx-box box">
+                            <img class="pay" src="../../image/orderDetails/wx-pay.png" alt="">
+                            <span>微信支付</span>
+                            <img class="payFlag" v-if="payFlag" src="../../image/submitOrder/choose.png" alt="" @click="payFlag=false">
+                            <img class="payFlag" v-else src="../../image/submitOrder/choose-active.png" alt="" @click="payFlag=false">
+                        </div>
+                        <div class="zfb-box box">
+                            <img class="pay" src="../../image/orderDetails/zfb-pay.png" alt="">
+                            <span>支付宝支付</span>
+                            <img class="payFlag" v-if="!payFlag" src="../../image/submitOrder/choose.png" alt="" @click="payFlag=true">
+                            <img class="payFlag" v-else src="../../image/submitOrder/choose-active.png" alt="" @click="payFlag=true">
+                        </div>
+                    </div>
+                    <div class="order-btn" @click="payOrder">确定</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                userInfo:{
+                    userName:'大脸布丁',
+                    userPhone:15516354832,
+                    adress:'上海市松江区沪松公路1399弄68号1003-1004室'
+                },
+                goods:{
+                    swiper:'../../image/store/five.jpg',
+                    details:'暮厨不锈钢炒锅炒菜过32厘米无涂层少油烟304燃气',
+                    price:'368.90',
+                    status:'已完成',
+                    amount:666,
+                },
+                //物流信息
+                logistics:{
+                    adress:'上海市',
+                    time:"2019-12-30 12:30:28"
+                },
+                orderInfo:{
+                    no:132135468413216186,
+                    createTime:'2019-11-23 12:24:30',
+                    type:'微信支付',
+                    payTime:'2019-12-35 12:10:08'
+                },
+                orderCount:5,   //购买商品数量 
+                shadeFlag:false,  //支付类型
+                payFlag:true
+            },
+            created() {
+                if(this.goods.status=='已完成'|| this.goods.status=='待收货'){
+                    document.getElementsByClassName("userInfo")[0].style.height="13%"
+                    document.getElementsByClassName("goods-info")[0].style.height="34%"
+                }
+            },
+            computed: {
+                totalCount:function(){
+                    return parseFloat(this.orderCount*this.goods.price).toFixed(2)
+                }
+            },
+            methods: {
+                pay:function(){
+                    console.log("a")
+                    this.shadeFlag=true
+                },
+                reminder:function(){
+                    console.log("提醒发货")
+                },
+                confirmGoods:function(){
+                    console.log("确认收货")
+                },
+                del:function(){
+                    console.log("删除订单")
+                },
+                look:function(){
+                    console.log("查看物流")
+                },
+                cancel:function(){
+                    //取消订单
+                    if(confirm("您确认取消订单吗？")){
+                        console.log("取消")
+                    }else{
+                        return
+                    }
+                },
+                 //购买按钮
+                 order:function(){
+                    //添加禁止页面滚动
+                    this.shadeFlag=true
+                    document.body.addEventListener('touchmove', this.scroll
+                    , {passive:false});
+                },
+                //关闭遮罩层
+                closeShade:function(){
+                    this.shadeFlag=false
+                    document.body.removeEventListener('touchmove', this.scroll
+                    ,{passive:false});
+                },
+                //禁止滚动事件
+                scroll:function(e){
+                    e.preventDefault();
+                },
+                //确认付款
+                payOrder:function(){
+
+                }
+            },
+        })
+    </script>
+</body>
+</html>

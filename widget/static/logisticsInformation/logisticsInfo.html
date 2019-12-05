@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>提交订单页</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        html,body,.app{
+            width: 100%;
+            height: 100%;
+            background-color: white;
+        }
+        header{
+            width:100%;
+            height: .88rem;
+            line-height: .88rem;
+            text-align: center;
+            position: relative;
+        }
+        header img{
+            width: .4rem;
+            height: .45rem;
+            position: absolute;
+            left: .2rem;
+            top: .21rem;
+        }
+        header span{
+            font-size: .36rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .order-info{
+            width: 100%;
+            height: 1.8rem;
+            box-sizing: border-box;
+            padding: .3rem;
+            display: flex;
+            background-color: white;
+        }
+        .order-info img{
+            width: 1.3rem;
+            height: 1.3rem;
+        }
+        .order-info .right-info{
+            width: 3.5rem;
+            margin-left: .2rem;
+            color: #333;
+            font-size: .26rem;
+        }
+        .logistics-info{
+            width: 100%;
+            box-sizing: border-box;
+            padding: .3rem .2rem;
+            background-color: white;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .bg{
+            width: 100%;
+            height: .2rem;
+            background-color: #f7f7f7;
+        }
+        .logistics-info .delivery-address{
+            width: 5.2rem;
+            height: .8rem;
+            border-left: 3px dashed #E0E0E0;
+            box-sizing: border-box;
+            padding-left: .3rem;
+            font-size: .22rem;
+            color: #666;
+            margin-left: 1.3rem;
+            position: relative;
+        }
+        .delivery-address .dot{
+            width: .15rem;
+            height: .15rem;
+            background-color: #ccc;
+            border-radius: .09rem;
+            position: absolute;
+            left: -.1rem;
+            top: .1rem;
+        }
+        .logistics-info .time-line{
+            width: 100%;
+            height: 1rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .time-line .left{
+            width: .8rem;
+            height: .7rem;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .left span:nth-of-type(1){
+            font-size: .24rem;
+            color: #333;
+        }
+        .left span:nth-of-type(2){
+            font-size: .24rem;
+            color: #999;
+        }
+        .time-line .right{
+            width: 5.2rem;
+            height: 100%;
+            position: relative;
+            left: -.3rem;
+            color: #9D9D9D;
+            border-left: 1px solid #E0E0E0;
+            box-sizing: border-box;
+            padding-left: .3rem;
+            display: flex;
+            align-items: center;
+        }
+        .right .dot{
+            width: .09rem;
+            height: .09rem;
+            background-color: #ccc;
+            border-radius: .09rem;
+            position: absolute;
+            left: -.06rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <img src="../../image/register/black.png" alt="返回" @click="back">
+            <span>订单跟踪</span>
+        </header>
+        <section>
+            <div class="order-info">
+                <img :src="orderInfo.img" alt="">
+                <div class="right-info">
+                    <p>运单号：{{orderInfo.no}}</p>
+                    <p>国内承运人：{{orderInfo.type}}</p>
+                </div>
+            </div>
+            <div class="bg"></div>
+            <div class="logistics-info">
+                <div class="time-line" v-for="(item, index) in logisticsInfo" :key="index">
+                    <div class="left">
+                        <span>{{item.time.substr(0,5)}}</span>
+                        <span>{{item.time.substr(5,10)}}</span>
+                    </div>
+                    <div class="right">{{item.adress}}
+                        <div class="dot"></div>
+                    </div>
+                </div>
+                <div class="delivery-address">
+                        <!-- <img src="../../image/orderDetails/delivery-address.png" alt=""> -->
+                        <span class="user-address">[收货地址]{{orderInfo.address}}</span>
+                        <div class="dot"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                orderInfo:{
+                    img:'../../image/store/one.jpg',
+                    no:'1233546131212121',
+                    type:'韵达快递',
+                    address:'上海市松江区淞沪公路1399弄'
+                },
+                logisticsInfo:[
+                    {
+                        time:'11-23 11:31',
+                        adress:'商家下单'
+                    },
+                    {
+                        time:'11-24 11:31',
+                        adress:'您的办过已经被揽收'
+                    },
+                    {
+                        time:'11-24 11:31',
+                        adress:'您的快件已经到达上海'
+                    },
+                    {
+                        time:'11-24 11:31',
+                        adress:'您的快件已由上海分拨中心拨出'
+                    },
+                ]
+            },
+            methods: {
+                //返回按钮 这里返回支付界面
+                back:function(){
+
+                },
+            },
+        })
+    </script>
+</body>
+</html>

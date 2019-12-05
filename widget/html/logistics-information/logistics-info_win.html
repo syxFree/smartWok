@@ -10,15 +10,13 @@
         html,body,.app{
             width: 100%;
             height: 100%;
-            background-color: #f7f7f7;
+            background-color: white;
         }
         header{
             width:100%;
             height: .88rem;
             line-height: .88rem;
             text-align: center;
-            background-color: #f7f7f7;
-            border-bottom: 1px solid #ccc;
             position: relative;
         }
         header img{
@@ -33,49 +31,14 @@
             color: #333;
             font-weight: 600;
         }
-        section{
-            width: 100%;
-            height: 60%;
-            box-sizing: border-box;
-            padding-top: 2rem;
-        }
-        .img{
-            width: 3rem;
-            height: 3rem;
-            margin: 0 auto;
-            text-align: center;
-            font-size: .34rem;
-        }
-        .img img{
-            width: 1.8rem;
-            height: 2.3rem;
-        }
-        .backToStore{
-            width: 3.8rem;
-            height: .8rem;
-            margin: 0 auto;
-            border:1px solid #FF8C46;
-            border-radius: .8rem;
-            text-align: center;
-            line-height: .8rem;
-            color: #FF8C46;
-            font-size: .3rem;
-        }
     </style>
 </head>
 <body>
     <div class="app">
         <header>
             <img src="../../image/register/black.png" alt="返回" @click="back">
-            <span>支付状态</span>
+            <span>订单跟踪</span>
         </header>
-        <section>
-            <div class="img">
-                <img src="../../image/submitOrder/order-success.png" alt="">
-                <span>订单支付成功</span>
-            </div>
-            <div class="backToStore" @click="backToStore">返回商城</div>
-        </section>
     </div>
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
@@ -84,17 +47,13 @@
         var vm=new Vue({
             el:'.app',
             data:{
-                
+              
             },
             methods: {
                 //返回按钮 这里返回支付界面
                 back:function(){
 
                 },
-                //返回商城
-                backToStore:function(){
-                    
-                }
             },
         })
     </script>
