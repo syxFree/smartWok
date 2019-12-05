@@ -7,21 +7,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
-        .app{
-            overflow: hidden;
-            background-color: white;
-            min-height: 100vh;
-        }
-        header{
-            width: 100%;
-            height: 0.88rem;
-            line-height: 1.2rem;
-            padding-left: .2rem;
-        }
-        header img{
-            width: .4rem;
-            height: .4rem;
-        }
         .top-font{
             color: #333;
             font-size: 0.44rem;
@@ -126,9 +111,6 @@
 </head>
 <body>
     <div class="app">
-        <header>
-            <img src="../../image/register/返回-black.png" alt="返回">
-        </header>
         <section>
             <div class="top-font">
                 <div class="font-one">您好,</div>
@@ -153,7 +135,6 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script>
-        var apiready
         apiready = function(){
             //考虑手机嵌入式兼容性问题
             // var header = $api.dom('header');
@@ -204,7 +185,7 @@
                 changeCodeFlag:function(){
                     if(this.phone==''){
                         alert("请先输入手机号")
-                        return 
+                        return
                     }
                     if(this.phoneFlag==false){
                         alert("请输入合法的手机号")
@@ -237,7 +218,6 @@
                 // }
         })
         }   
-        apiready()
     </script>
 </body>
 </html>

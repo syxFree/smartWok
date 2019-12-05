@@ -7,38 +7,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
-        html,body{
-            height: 100%;
-        }
-        .app{
-            width: 100%;
-            height: 100%;
-            background-color: rgb(247, 247, 247)
-        }
-        header{
-            width: 100%;
-            height: .96rem;
-            display: flex;
-            box-sizing: border-box;
-            padding: 0 .2rem;
-            justify-content: space-around;
-            align-items: center;
-        }
-        header img{
-            width: .4rem;
-            height: .45rem;
-        }
-        header input{
-            width: 6.4rem;
-            height: .6rem;
-            outline: none;
-            box-sizing: border-box;
-            font-size: .28rem;
-            padding-left: .3rem;
-            border-radius: .6rem;
-            background-color: rgba(0, 0, 0, 0.05);
-            color: #333;
-        }
         section{
             height: calc(100% - .96rem);
         }
@@ -76,7 +44,7 @@
         }
         .goods-item img{
             width: 100%;
-            height: 3.3rem; 
+            height: 3.3rem;
         }
         .goods-item .describe{
             width: 100%;
@@ -87,7 +55,7 @@
             text-overflow:ellipsis;
             display:-webkit-box;
             -webkit-box-orient:vertical;
-            -webkit-line-clamp:2; 
+            -webkit-line-clamp:2;
         }
         .goods-item .price{
             font-size: .36rem;
@@ -114,10 +82,6 @@
 </head>
 <body>
     <div class="app">
-        <header>
-            <img src="../../image/information/back.png" alt="返回" @click="goSearch">
-            <input type="text" v-model="searchTxt" @click="goSearch">
-        </header>
         <section>
             <div class="content" v-if="flag">
                 <img src="../../image/search/search-img.png" alt="">

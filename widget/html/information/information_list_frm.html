@@ -7,28 +7,119 @@
     <title>资讯</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
-        .app{
-            overflow: hidden;
-            min-height: 100vh;
-            background-color: white;
-        }
-        header{
+        section{
             width: 100%;
-            height: 0.88rem;
-            background-color: white;
+            /* height: 11rem; */
+            margin-top: 0.88rem;
+            margin-bottom: 1rem;
+            /* overflow: auto; */
+        }
+        ::-webkit-scrollbar{
+            display: none;
+        }
+        .swiper{
+            width: 100%;
+            height: 3.8rem;
+            position: relative;
+        }
+        .swiper img{
+            width: 100%;
+            height: 100%;
+        }
+        .swiper .shade{
+            width: 100%;
+            height: .7rem;
+            background-color: rgba(0, 0, 0, .6);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            font-size: .34rem;
+            line-height: .7rem;
+            box-sizing: border-box;
+            padding-left: .3rem;
+        }
+        .food-item{
+            width: 100%;
+        }
+        .food-item .item{
+            width: 6.9rem;
+            height: 4.5rem;
+            margin: 0 auto;
+            border-radius: .14rem .14rem 0 0;
+            margin-top: .25rem;
+            box-shadow: 3px 6px 14px 0 rgba(255,140,70,0.14);
+        }
+        .item img{
+            width: 100%;
+            height: 3rem;
+            border-radius: .14rem .14rem 0 0;
+        }
+        .item .item-info{
+            width: 100%;
+            height: 1.5rem;
+            margin-top: .2rem;
+        }
+        .item-info .info{
+            font-size: .34rem;
+            color: #333;
+            padding-left: .2rem;
+        }
+        .item-info .detail{
+            width: 95%;
+            height: .4rem;
+            color: #999;
+            font-size: .26rem;
+            padding-left: .2rem;
+            margin-top: .1rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .item-bottom{
+            width: 100%;
+            height: .8rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 0.36rem;
-            position: fixed;
-            top: 0;
-            z-index: 100;
+        }
+        .item-bottom span{
+            width: 21%;
+            height: 1px;
+            background-color: #DDD;
+        }
+        .item-bottom p{
+            font-size: .28rem;
+            color: #999;
+
         }
     </style>
 </head>
 <body>
     <div class="app">
-        <header>资讯</header>
+        <section>
+            <div class="swiper">
+                <img src="../../image/information/one.jpg" alt="">
+                <div class="shade">
+                    <span v-if="currentIndex==1">第三届美食大赛实时新闻</span>
+                    <span v-if="currentIndex==2">第三节美食大赛实时新闻</span>
+                    <span v-if="currentIndex==3">第三节美食大赛实时新闻</span>
+                </div>
+            </div>
+            <div class="food-item">
+                <div class="item" v-for="(item, index) in list" :key="index">
+                    <img :src="item.img" alt="美食图片">
+                    <div class="item-info">
+                        <p class="info">{{item.info}}</p>
+                        <p class="detail">{{item.detail}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="item-bottom">
+                <span></span>
+                <p>一不小心到底了</p>
+                <span></span>
+            </div>
+        </section>
     </div>
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>

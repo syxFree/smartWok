@@ -8,24 +8,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
-        .app {
-            overflow: hidden;
-            background-color: white;
-            min-height: 100vh;
-        }
-
-        header {
-            width: 100%;
-            height: 0.88rem;
-            line-height: 1.2rem;
-            padding-left: .2rem;
-        }
-
-        header img {
-            width: .4rem;
-            height: .4rem;
-        }
-
         .top-font {
             color: #333;
             font-size: 0.44rem;
@@ -165,9 +147,6 @@
 
 <body>
     <div class="app">
-        <header>
-            <img src="../../image/register/black.png" alt="返回">
-        </header>
         <section>
             <div class="top-font">
                 <div class="font-one">您好,</div>
@@ -183,7 +162,7 @@
                     <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
                 </div>
                 <div class="TCp">
-                    <div style="margin-right: .08rem;"> 
+                    <div style="margin-right: .08rem;">
                         <img src="../../image/register/defaucheck.png" alt="" v-if="ckeckTCP" @click="ckeckTCP=false">
                         <img src="../../image/register/check.png" alt="" v-if="ckeckTCP === false" @click="ckeckTCP=true">
                     </div>

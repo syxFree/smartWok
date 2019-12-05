@@ -7,35 +7,6 @@
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
   <style>
-    header {
-      display: flex;
-      justify-content: space-between;
-      height: 0.88rem;
-      line-height: 0.88rem;
-      padding: 0 .2rem;
-      align-items: center;
-      border-bottom: 0.01rem solid #e0e0e0;
-      background-color: #ffffff;
-    }
-
-    header img {
-      width: .4rem;
-      height: .4rem;
-    }
-
-    header h2 {
-      font-size: 0.36rem;
-      color: #333333;
-      text-align: center;
-      padding: 0.2rem 0;
-    }
-
-    header div {
-      font-family: PingFang-SC-Medium;
-      font-size: .28rem;
-      color: #333333;
-    }
-
     .menu-box {
       background-color:#ffffff;
       display: flex;
@@ -124,14 +95,6 @@
 
 <body>
   <div class="app">
-    <header>
-      <img src="../../image/register/black.png" alt="返回">
-      <h2>我的菜谱</h2>
-      <div style="display:flex; align-items: center;">
-        <img src="../../image/menu/create-orange.png" alt="" style="width:.32rem;height: .32rem;margin-right: .1rem;">
-        <p>添加</p>
-      </div>
-    </header>
     <!-- 有菜谱 -->
     <div class="menu-boxs" v-if="hasmenu">
       <div class="menu-box">

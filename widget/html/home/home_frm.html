@@ -7,21 +7,6 @@
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
   <style>
-    .app {
-      height: 100vh;
-      width: 100%;
-      background-color: #F7F7F7;
-    }
-
-    h2 {
-      font-family: PingFang-SC-Bold;
-      font-size:.36rem;
-      color: #333333;
-      text-align: center;
-      background-color: #ffffff;
-      padding: 0.2rem 0;
-    }
-
     .container {
       height: 5rem;
       background-color: #ffffff;
@@ -146,7 +131,6 @@
 
 <body>
   <div class="app" v-cloak>
-    <h2>首页</h2>
     <div class="container">
       <img src="../../image/home/work.png" alt="">
       <div v-if="link===false">当前尚未添加任何设备，<span @click="getopenbluetooth">点击添加</span></div>
