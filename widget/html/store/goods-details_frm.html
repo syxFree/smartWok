@@ -323,6 +323,16 @@
                 },
                 //分享按钮
                 share:function(){
+                  api.openWin({
+                      name: 'share',
+                      url: '../information/share_win.html',
+                      reload:true,
+                      slidBackEnabled:false,
+                      bounces:false,
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
 
                 },
                 //联系按钮
@@ -374,7 +384,7 @@
                 goOrderSubmit:function(){
                     api.openWin({
                         name: 'orderSubmit',
-                        url: '../order-submit/orderSubmit_win.html',
+                        url: '../order_submit/orderSubmit_win.html',
                         reload:true,
                         bounces:false,
                         slidBackEnabled:false,
