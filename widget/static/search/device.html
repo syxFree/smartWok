@@ -1,0 +1,293 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding-left: .2rem;
+      align-items: center;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding: 0.2rem 0;
+    }
+
+    .search {
+      height: .88rem;
+      background-color: #F7F7F7;
+      font-size: 0.26rem;
+      color: #666666;
+      line-height: .88rem;
+      padding-left: .3rem;
+    }
+
+    .search img {
+      width: .4rem;
+      height: .4rem;
+      vertical-align: middle;
+      animation: mymove 3s linear infinite;
+    }
+
+    @keyframes mymove {
+      0% {
+        transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(0deg);
+        /* Firefox */
+        -webkit-transform: rotate(0deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(0deg);
+        /* Opera */
+        transform-origin: center;
+      }
+
+      25% {
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(90deg);
+        /* Firefox */
+        -webkit-transform: rotate(90deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(90deg);
+        /* Opera */
+      }
+
+      50% {
+        transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(180deg);
+        /* Firefox */
+        -webkit-transform: rotate(180deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(180deg);
+        /* Opera */
+      }
+
+      75% {
+        transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(270deg);
+        /* Firefox */
+        -webkit-transform: rotate(270deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(270deg);
+        /* Opera */
+      }
+
+      100% {
+        transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        /* Internet Explorer */
+        -moz-transform: rotate(360deg);
+        /* Firefox */
+        -webkit-transform: rotate(360deg);
+        /* Safari 和 Chrome */
+        -o-transform: rotate(360deg);
+        /* Opera */
+      }
+    }
+
+    .list-box {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e0e0ee;
+      padding: 0 .3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .list-box p {
+      font-family: PingFang-SC-Medium;
+      font-size: .34rem;
+      color: #333333;
+      margin-bottom: .1rem;
+      margin-top: .2rem;
+    }
+
+    .list-box span {
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #999999;
+      margin-bottom: .2rem;
+    }
+
+    .list-box .wait {
+      width: .4rem;
+      height: .4rem;
+      vertical-align: middle;
+      animation: mymove 3s linear infinite;
+    }
+
+    .list-box .success {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    .move {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: rgba(0, 0, 0, .6);
+    }
+
+    .move-box {
+      position: fixed;
+      top: 3rem;
+      left: 1.25rem;
+      width: 5rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      border-radius: 12px;
+    }
+
+    .close-box {
+      text-align: right;
+    }
+
+    .move-box .close {
+      width: .3rem;
+      height: .3rem;
+      text-align: right;
+      padding: .2rem .2rem 0 0;
+    }
+
+    .move-box .bluetooth {
+      width: 2.27rem;
+      height:1.96rem;
+      margin: .25rem 0;
+    }
+
+    .bluetooth-box {
+      text-align: center;
+    }
+
+    .move-title {
+      text-align: center;
+    }
+
+    .move-title b {
+      display: block;
+      font-size: 22px;
+      margin: .2rem 0;
+    }
+
+    .move-title p {
+      font-size: .24rem;
+      color: #666666;
+    }
+
+    .openblue {
+      width: 4rem;
+      height: .8rem;
+      margin: 0 auto;
+      text-align: center;
+      line-height: .8rem;
+      color: #ffffff;
+      font-size: 16px;
+      background: #FF8C46;
+      border-radius: 44px;
+      border-radius: 44px;
+      margin-top: .5rem;
+      margin-bottom: .3rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div></div>
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+      <h2>搜索设备</h2>
+      <span></span>
+    </header>
+    <div class="search">
+      <span>搜索到的设备</span>
+      <img src="../../image/home/frame-0.png" alt="等待">
+    </div>
+    <ul>
+      <li class="list-box">
+        <div>
+          <p>智能灶V1.0</p>
+          <span>LY:4564:da</span>
+        </div>
+        <!-- <img src="../../image/home/frame-0.png" class="wait" alt="等待"> -->
+        <img src="../../image/home/success.png" class="success" alt="成功">
+      </li>
+    </ul>
+    <!-- 连接失败弹框 -->
+    <div class="move" v-if="openbluetooth">
+      <div class="move-box">
+        <div class="close-box"><img src="../../image/home/close.png" alt="" class="close"
+            @click.prevent="getopenbluetooth"></div>
+        <div class="bluetooth-box"><img src="../../image/home/connectfalse.png" alt="" class="bluetooth"></div>
+        <div class="move-title">
+          <b>连接失败</b>
+          <p>连接失败，请查看蓝牙或者设备状态</p>
+        </div>
+        <div class="openblue">
+          确定
+        </div>
+      </div>
+    </div>
+    <!-- 连接输入配对码 -->
+    <!-- <div class="move" v-if="openbluetooth">
+      <div class="move-box">
+        <div class="close-box"><img src="../../image/home/close.png" alt="" class="close"
+            @click.prevent="getopenbluetooth"></div>
+        <div class="bluetooth-box"><img src="../../image/home/openblue.png" alt="" class="bluetooth"></div>
+        <div class="move-title">
+          <b>提示</b>
+          <p>添加设备，需要打开手机蓝牙</p>
+        </div>
+        <div class="openblue">
+          去打开
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          openbluetooth:false,
+        }
+      },
+      methods: {
+        getopenbluetooth() {
+          this.openbluetooth = !this.openbluetooth;
+        },
+      },
+    })
+  </script>
+
+</body>
+
+</html>

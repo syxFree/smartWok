@@ -1,0 +1,179 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .app {
+      min-height: 100vh;
+      background-color: #F7F7F7;
+    }
+
+    header {
+      background: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding-left: .2rem;
+      align-items: center;
+      border-bottom: 0.01rem solid #e0e0e0;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    header h2 {
+      font-size: 0.36rem;
+      color: #333333;
+      text-align: center;
+      padding-right: .5rem;
+    }
+
+    .btn {
+      width: 6.9rem;
+      height: .78rem;
+      background: #FF8C46;
+      border-radius: 39px;
+      border-radius: 39px;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #FFFFFF;
+    }
+
+    .content-box {
+      padding-left: .3rem;
+      background: #FFFFFF;
+    }
+
+    .content {
+      height: 1.07rem;
+      line-height: 1.07rem;
+      background: #FFFFFF;
+      padding-right: .3rem;
+      border-bottom: 1px solid #e0e0e0;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #333333;
+    }
+
+    .content input {
+      margin-left: .88rem;
+      width: 65%;
+    }
+
+    .unfold {
+      width: .15rem;
+      height: .25rem;
+      text-align: right;
+    }
+
+    .contentflex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .content-detail {
+      display: flex;
+      margin-top: .3rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #333333;
+    }
+
+    .content-detail span {
+      margin-right: .6rem;
+    }
+
+    .content-detail textarea {
+      font-size: .28rem;
+      color: #333333;
+    }
+
+    .switch {
+      height: 1.15rem;
+      display: flex;
+      justify-content: space-between;
+      background: #ffffff;
+      padding: 0 .3rem;
+      margin-top: .2rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #333333;
+      line-height: 1.15rem;
+      align-items: center;
+    }
+
+    .switch img {
+      width: .9rem;
+      height: .55rem;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+      <h2>新增收货地址</h2>
+      <span></span>
+    </header>
+    <div class="content-box">
+      <div class="content">
+        <span>收货人</span>
+        <input type="text" placeholder="请填写姓名">
+      </div>
+      <div class="content">
+        <span>手机号码</span>
+        <input type="text" placeholder="手机号码" style="margin-left: .60rem;">
+      </div>
+      <div class="content contentflex">
+        <div>
+          <span>所在地区</span>
+          <input type="text" placeholder="请选择" style="margin-left: .60rem;">
+        </div>
+        <img src="../../image/my/unfold.png" alt="" class="unfold">
+      </div>
+      <div class="content-detail">
+        <span>详细地址</span>
+        <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）" style="margin-top:.05rem"></textarea>
+      </div>
+    </div>
+    <div class="switch">
+      <p>设置默认地址</p>
+      <img src="../../image/my/switch.png" alt="" v-if="switchcase===false" @click="handleswitchcase">
+      <img src="../../image/my/switch-true.png" alt="" v-if="switchcase" @click="handleswitchcase">
+    </div>
+    <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
+      <button class="btn">保存</button>
+    </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          switchcase: false,
+        }
+      },
+      methods: {
+        handleswitchcase() {
+          this.switchcase = !this.switchcase;
+        },
+      },
+    })
+  </script>
+
+</body>
+
+</html>

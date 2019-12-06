@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>资讯详情</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        .app{
+            width: 100%;
+            min-height: 100vh;
+            background-color: #F7F7F7;
+        }
+        .header{
+            width: 100%;
+            height: .6rem;
+            position: absolute;
+            top: .2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 0 .2rem;
+        }
+        .header img{
+            width: .54rem;
+            height: .54rem;
+        }
+        .swiper{
+            width: 100%;
+            height: 7.5rem;
+        }
+        .swiper img{
+            width: 100%;
+            height: 100%;
+        }
+        .goods-describe{
+            width: 100%;
+            height: 2rem;
+            background-color: white;
+            box-sizing: border-box;
+            padding: .2rem;
+        }
+        .goods-describe .info{
+            width: 100%;
+            height: .9rem;
+            color: #333;
+            font-size: .32rem;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            display:-webkit-box;
+            -webkit-box-orient:vertical;
+            -webkit-line-clamp:2;
+        }
+        .goods-describe .goods-price-count{
+            width: 100%;
+            height: .5rem;
+            margin-top: .15rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .goods-price-count .good-price{
+            color: #FF8C46;
+            font-size: .36rem;
+        }
+        .goods-price-count .good-count{
+            color: #999;
+            font-size: .28rem;
+        }
+        .detail{
+            width: 100%;
+            background-color: white;
+            margin-top: .2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2rem;
+            font-size: .3rem;
+        }
+        .detail p{
+            width: 1.2rem;
+            height: 0.76rem;
+            margin-left: .3rem;
+            border-bottom: 4px solid #FF8C46;
+            margin-bottom: .5rem;
+        }
+        .detail img{
+            width: 100%;
+            height: 9rem;
+        }
+        footer{
+            width: 100%;
+            height: .98rem;
+            background-color: white;
+            position: fixed;
+            bottom: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            box-sizing: border-box;
+            padding: 0 .2rem;
+        }
+        footer .makeCall{
+            width: .5rem;
+            height: .8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .makeCall img{
+            width: .4rem;
+        }
+        footer .order{
+            width: 6rem;
+            height: .78rem;
+            border-radius: .78rem;
+            background-color: #FF8C46;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: .32rem;
+        }
+        .shade{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, .6);
+        }
+        .choose{
+            width: 100%;
+            height: 5.09rem;
+            background-color: white;
+            position: absolute;
+            bottom: 0;
+            border-radius: .2rem .2rem 0 0;
+        }
+        .choose .close-img{
+            width: .3rem;
+            height: .3rem;
+            position: absolute;
+            right: .3rem;
+            top: .3rem;
+        }
+        .close-img img{
+            width: 100%;
+            height: 100%;
+        }
+        .choose .goods-info{
+            width: 100%;
+            height: 2rem;
+            margin-top: .6rem;
+            box-sizing: border-box;
+            padding: 0 .3rem;
+            display: flex;
+        }
+        .goods-info img{
+            width: 2rem;
+            height: 2rem;
+        }
+        .goods-info .info-price-count{
+            width: 2rem;
+            height: 50%;
+            margin-left: .2rem;
+            margin-top: 1.05rem;
+        }
+        .info-price-count p:nth-of-type(1){
+            color: #FF8C46;
+            font-size: .36rem;
+        }
+        .info-price-count p:nth-of-type(2){
+            color: #999999;
+            font-size: .28rem;
+            margin-top: .08rem;
+        }
+        .choose .order-count{
+            width: 90%;
+            height: .6rem;
+            line-height: .6rem;
+            margin: .4rem auto;
+            display: flex;
+            justify-content: space-between;
+            font-size: .3rem;
+            color: #333;
+        }
+        .order-count .order-operate{
+            width: 1.7rem;
+            height: .52rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .order-count .order-operate img,
+        .order-count .order-operate .count
+        {
+            width: .52rem;
+            height: .52rem;
+            text-align: center;
+            ;line-height: .52rem;
+        }
+        .order-btn{
+            width: 6.9rem;
+            height: .78rem;
+            background-color: #FF8C46;
+            border-radius: .78rem;
+            color: white;
+            font-size: .32rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: .1rem;
+            left: 4%;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <section>
+            <div class="header">
+                <div class="back" @click="back">
+                    <img src="../../image/store/goods-back.png" alt="返回">
+                </div>
+                <div class="share" @click="share">
+                    <img src="../../image/store/goods-share.png" alt="分享">
+                </div>
+            </div>
+            <div class="swiper">
+                <img :src="goods.swiper" alt="轮播图">
+            </div>
+            <div class="goods-describe">
+                <div class="info">{{goods.details}}</div>
+                <div class="goods-price-count">
+                    <div class="good-price">￥{{goods.price}}</div>
+                    <div class="good-count">库存：{{goods.amount}}</div>
+                </div>
+            </div>
+            <div class="detail">
+                <p>商品详情</p>
+                <img :src="goods.detailImg1" alt="">
+                <img :src="goods.detailImg2" alt="">
+            </div>
+        </section>
+        <footer>
+            <div class="makeCall" @click="call">
+                <img src="../../image/store/makeCall.png" alt="联系">
+                <span>联系</span>
+            </div>
+            <div class="order" @click="order">立即购买</div>
+        </footer>
+        <div class="shade" v-if="shadeFlag">
+            <div class="choose">
+                <div class="close-img" @click="closeShade">
+                    <img src="../../image/store/store-close.png" alt="关闭">
+                </div>
+                <div class="goods-info">
+                    <img :src="goods.swiper" alt="商品图片">
+                    <div class="info-price-count">
+                        <p>￥{{goods.price}}</p>
+                        <p>库存：{{goods.amount}}</p>
+                    </div>
+                </div>
+                <div class="order-count">
+                    <span>数量</span>
+                    <div class="order-operate">
+                        <img v-if="delFlag" src="../../image/store/delActive.png" alt="" @click="del">
+                        <img v-else src="../../image/store/del.png" alt="" @click=del>
+                        <div class="count">{{orderCount}}</div>
+                        <img v-if="incFlag" src="../../image/store/incActive.png" alt="" @click="inc">
+                        <img v-else src="../../image/store/inc.png" alt="" @click=inc>
+                    </div>
+                </div>
+                <div class="order-btn" @click="goOrderSubmit">确定</div>
+            </div>
+        </div>
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                //商品信息
+                goods:{
+                    swiper:'../../image/store/five.jpg',
+                    details:'暮厨不锈钢炒锅炒菜过32厘米无涂层少油烟304燃气 国美厨空间（32cm）暮厨不锈钢炒锅炒菜过32厘米无涂层少油烟304燃气 国美厨空间（32cm）',
+                    price:'368.90',
+                    amount:666,
+                    detailImg1:'../../image/store/six.png',
+                    detailImg2:'../../image/store/seven.png'
+                },
+                orderCount:1,   //购买数量
+                delFlag:false,   //删除按钮的状态
+                incFlag:true,   //增加按钮的状态
+                shadeFlag:false,  //遮罩层状态
+            },
+            watch: {
+                //监听数量的加减，改版加减数量按钮的状态
+                orderCount:function(){
+                    if(this.orderCount<=1){
+                        this.delFlag=false
+                    }
+                    else{
+                        this.delFlag=true
+                    }
+                    if(this.orderCount>=this.goods.amount){
+                        this.incFlag=false
+                    }
+                    else{
+                        this.incFlag=true
+                    }
+                }
+            },
+            methods: {
+                //返回按钮
+                back:function(){
+
+                },
+                //分享按钮
+                share:function(){
+
+                },
+                //联系按钮
+                call:function(){
+
+                },
+                //购买按钮
+                order:function(){
+                    //添加禁止页面滚动
+                    this.shadeFlag=true
+                    document.body.addEventListener('touchmove', this.scroll
+                    , {passive:false});
+                },
+                //关闭遮罩层
+                closeShade:function(){
+                    this.shadeFlag=false
+                    document.body.removeEventListener('touchmove', this.scroll
+                    ,{passive:false});
+                },
+                //禁止滚动事件
+                scroll:function(e){
+                    e.preventDefault();
+                },
+                //点击增加数量
+                inc:function(){
+                    if(this.incFlag){
+                        console.log("jia")
+                        this.orderCount++
+                    }
+                    else{
+                        return
+                    }
+                },
+                //点击减少数量
+                del:function(){
+                    if(this.delFlag){
+                        console.log("减")
+                        this.orderCount--
+                    }
+                    else{
+                        return
+                    }
+                },
+                //跳转到提交订单页
+                goOrderSubmit:function(){
+                    console.log("跳转到提交订单页")
+                },
+            },
+        })
+    </script>
+</body>
+</html>

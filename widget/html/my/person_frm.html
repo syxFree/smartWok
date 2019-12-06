@@ -1,0 +1,178 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <link rel="stylesheet" href="../../css/mobileSelect.css">
+  <style>
+    .content {
+      margin-left: .3rem;
+    }
+
+    .head-img,
+    .content-name {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: .3rem;
+      border-bottom: .01rem solid #e0e0e0;
+    }
+
+    .head-img {
+      height: 1.48rem;
+    }
+
+    .content-name {
+      height: 1.02rem;
+    }
+
+    .head-img span,
+    .content-name span {
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #333333;
+    }
+
+    .head-img .unfold,
+    .content-name .unfold {
+      width: 0.15rem;
+      height: 0.25rem;
+      margin-left: .2rem;
+    }
+
+    .head-img .imgs {
+      display: flex;
+      align-items: center;
+    }
+
+    .head-img .head {
+      width: .9rem;
+      height: .9rem;
+    }
+
+    .content-name .name {
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #808080;
+    }
+
+    .mobileSelect .content {
+      left: -.3rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="content">
+      <div class="head-img">
+        <span>头像</span>
+        <div class="imgs">
+          <img src="../../image/my/default-head.png" alt="" class="head">
+          <img src="../../image/my/unfold.png" alt="" class="unfold">
+        </div>
+      </div>
+      <div class="content-name" >
+        <span>昵称</span>
+        <div>
+          <span class="name">用户小白</span>
+          <img src="../../image/my/unfold.png" alt="" class="unfold" @click="tonickname()">
+        </div>
+      </div>
+      <div class="content-name">
+        <span>性别</span>
+        <div>
+          <span class="name">男</span>
+          <img src="../../image/my/unfold.png" alt="" class="unfold" id="sex">
+        </div>
+      </div>
+      <div class="content-name">
+        <span>所在地</span>
+        <div>
+          <span class="name">{{address}}</span>
+          <img src="../../image/my/unfold.png" alt="" class="unfold" id="trigger">
+        </div>
+      </div>
+    </div>
+    <!-- 对于弹出框来选择男女和所在地 -->
+    <!-- <div class="move">
+      <div class="move-box">
+          <div class="first-line">
+              <p>取消</p>
+              <span>确定</span>
+            </div>
+            <div class="gender">
+              <div>男</div>
+              <div>女</div>
+            </div>
+      </div>
+    </div> -->
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script src="../../script/mobileSelect.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          openbluetooth: false,
+          address:'',
+        }
+      },
+      mounted() {
+        let vm=this
+        var mobileSelect1 = new MobileSelect({
+          trigger: '#sex',
+          title: '性别',
+          wheels: [
+            {
+              data: [
+                { 'id': 1, 'value': '男' },
+                { 'id': 0, 'value': '女' }
+              ]
+            }
+          ],
+          position: [0],
+          callback: function (indexArr, data) {
+            console.log(data)
+          }
+        });
+        var mobileSelect2 = new MobileSelect({
+          trigger: "#trigger",
+          title: "所在地",
+          wheels: [
+            { data: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"] }
+          ],
+          position: [0],
+          callback: function (indexArr, data) {
+            console.log(data);
+            vm.address=data
+          }
+        });
+
+      },
+      methods: {
+        getopenbluetooth() {
+          this.openbluetooth = !this.openbluetooth;
+        },
+        tonickname(){
+          api.openWin({
+              name: 'nick_name_win',
+              url: 'nick_name_win.html',
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+        }
+      },
+    })
+  </script>
+
+</body>
+
+</html>

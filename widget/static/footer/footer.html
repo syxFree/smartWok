@@ -1,0 +1,91 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    footer {
+      width: 100%;
+      height: 1rem;
+      position: fixed;
+      bottom: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border: solid 1px rgba(178, 178, 178, 0.16);
+      background: #fff;
+      z-index: 99999;
+      color: #4d4d4d;
+      font-size: .22rem;
+    }
+
+    .footer-item {
+      text-align: center;
+    }
+
+    .footer-item img {
+      width: .4rem;
+      height: .4rem;
+    }
+
+    .footer-item .title {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    .footer-item .title.on {
+      color: #FF8C46;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <footer>
+      <div class="footer-item" @click="toHomeType(0)" tapmode>
+        <img :src="currentIdx==0?home[1]:home[0]" alt="">
+        <span class="title" :class="{'on':currentIdx==0}">首页</span>
+      </div>
+      <div class="footer-item" @click="toHomeType(1)" tapmode>
+        <img :src="currentIdx==1?consult[1]:consult[0]" alt="">
+        <span class="title" :class="{'on':currentIdx==1}">资讯</span>
+      </div>
+      <div class="footer-item" @click="toHomeType(2)" tapmode>
+        <img :src="currentIdx==2?shop[1]:shop[0]" alt="">
+        <span class="title" :class="{'on':currentIdx==2}">商城</span>
+      </div>
+      <div class="footer-item" @click="toHomeType(3)" tapmode>
+        <img :src="currentIdx==3?mineImg[1]:mineImg[0]" alt="">
+        <span class="title" :class="{'on':currentIdx==3}">我的</span>
+      </div>
+    </footer>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          currentIdx: 0,
+          home: ['../../image/footer/home.png', '../../image/footer/home_true.png'],
+          consult: ['../../image/footer/consult.png', '../../image/footer/consult_true.png'],
+          shop: ['../../image/footer/shop.png', '../../image/footer/shop_true.png'],
+          mineImg: ['../../image/footer/my.png', '../../image/footer/my_true.png'],
+        }
+      },
+      methods: {
+        toHomeType(type) {
+          this.currentIdx=type
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

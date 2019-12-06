@@ -1,0 +1,200 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .container {
+      height: 5rem;
+      background-color: #ffffff;
+      margin: 0 auto;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    .container img {
+      width: 4.5rem;
+      height: 3rem;
+      padding-top: .6rem;
+    }
+
+    .container div {
+      font-family: PingFang-SC-Medium;
+      font-size: .26rem;
+      color: #666666;
+      text-align: center;
+      margin-top: .4rem;
+    }
+
+    .container span {
+      font-family: PingFang-SC-Medium;
+      font-size: .26rem;
+      color: #1C9EFE;
+      text-align: center;
+      line-height: 40px;
+    }
+
+    .create {
+      width: 4rem;
+      height: 1rem;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 1rem;
+      color: #ffffff;
+      font-size: .26rem;
+      background: #FF8C46;
+      border-radius: 44px;
+      border-radius: 44px;
+      margin-top: 1.2rem;
+    }
+    .create img{
+      width: .35rem;
+      height: .35rem;
+      vertical-align: middle;
+      margin-right:.1rem;
+      margin-bottom: .05rem;
+    }
+    .move {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: rgba(0, 0, 0, .6);
+    }
+
+    .move-box {
+      position: fixed;
+      top: 3rem;
+      left: 1.25rem;
+      width: 5rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      border-radius: 12px;
+    }
+
+    .close-box {
+      text-align: right;
+    }
+
+    .move-box .close {
+      width: .3rem;
+      height: .3rem;
+      text-align: right;
+      padding: .2rem .2rem 0 0;
+    }
+
+    .move-box .bluetooth {
+      width: 1.5rem;
+      height: 2.15rem;
+      margin: .25rem 0;
+    }
+
+    .bluetooth-box {
+      text-align: center;
+    }
+
+    .move-title {
+      text-align: center;
+    }
+
+    .move-title b {
+      display: block;
+      font-size: 22px;
+      margin: .2rem 0;
+    }
+
+    .move-title p {
+      font-size: .24rem;
+      color: #666666;
+    }
+
+    .openblue {
+      width: 4rem;
+      height: .8rem;
+      margin: 0 auto;
+      text-align: center;
+      line-height: .8rem;
+      color: #ffffff;
+      font-size: 16px;
+      background: #FF8C46;
+      border-radius: 44px;
+      border-radius: 44px;
+      margin-top: .5rem;
+      margin-bottom: .3rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" v-cloak>
+    <div class="container">
+      <img src="../../image/home/work.png" alt="">
+      <div v-if="link===false">当前尚未添加任何设备，<span @click="getopenbluetooth">点击添加</span></div>
+      <div v-if="link===true">当前连接设备：智能灶V1.0，<span>点击断开</span></div>
+    </div>
+    <div class="create"  @click="toMenu">
+      <img src="../../image/home/create.png" alt="">
+      创建菜谱
+    </div>
+
+    <div class="move" v-if="openbluetooth">
+      <div class="move-box">
+        <div class="close-box"><img src="../../image/home/close.png" alt="" class="close"
+            @click.prevent="getopenbluetooth"></div>
+        <div class="bluetooth-box"><img src="../../image/home/openblue.png" alt="" class="bluetooth"></div>
+        <div class="move-title">
+          <b>提示</b>
+          <p>添加设备，需要打开手机蓝牙</p>
+        </div>
+        <div class="openblue" @click="toopenblue">
+          去打开
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    apiready = function () {
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          link: false,
+          openbluetooth: false
+        }
+      },
+      methods: {
+        getopenbluetooth() {
+          this.openbluetooth = !this.openbluetooth;
+        },
+        toMenu: function() {
+            api.openWin({
+                name: 'menu_win',
+                url: '../menu/menu_win.html',
+                reload: true,
+                bounces: false,
+                slidBackEnabled: true,
+            });
+        },
+        toopenblue:function () {
+          api.openWin({
+              name: 'device_win',
+              url: '../search/device_win.html',
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+        }
+      },
+    })
+  }
+  </script>
+</body>
+
+</html>

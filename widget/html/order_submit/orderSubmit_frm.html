@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>提交订单页</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        html,body,.app{
+            width: 100%;
+            height: 100%;
+            background-color: #f7f7f7;
+        }
+        section{
+            width: 100%;
+            height: 90%;
+        }
+        .userInfo{
+            width: 100%;
+            height: 2rem;
+        }
+        .userInfo .user-box{
+            width: 94%;
+            height: 85%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .user-box img{
+            width: .64rem;
+            height: .64rem;
+        }
+        .user-box .user-info{
+            width: 75%;
+        }
+        .user-info span:nth-of-type(1){
+            font-size: .28rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .user-info span:nth-of-type(2){
+            font-size: .24rem;
+            color: #666;
+        }
+        .user-info p{
+            font-size: .24rem;
+            color: #666;
+            width: 5.3rem;
+            height: .33rem;
+            margin-top: .1rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .user-box .moreAdress{
+            width: .24rem;
+            height: .36rem;
+        }
+        .moreAdress img{
+            width: 100%;
+            height: 100%;
+        }
+        .line{
+            width: 100%;
+            height: 2.7%;
+            position: relative;
+        }
+        .line img{
+            width: 100%;
+            height: 3px;
+            position: absolute;
+            top: 0;
+        }
+        .goods-info{
+            width: 100%;
+            height: 5.8rem;
+            background-color: white;
+            box-sizing: border-box;
+            padding: 4%;
+        }
+        .goods-title{
+            font-size: .34rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .good-box{
+            width: 100%;
+            height: 40%;
+            box-sizing: border-box;
+            padding-bottom: 3%;
+            margin-top: 3%;
+            border-bottom: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .good-box img{
+            width: 2rem;
+            height: 100%;
+        }
+        .good-box .right{
+            width: 4.7rem;
+            margin-left: .2rem;
+            height: 100%;
+            display: flex;
+            color: #333;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .good-box .right p{
+            width: 4.6rem;
+            height: .88rem;
+            font-size: .28rem;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            display:-webkit-box;
+            -webkit-box-orient:vertical;
+            -webkit-line-clamp:2;
+        }
+        .right .right-flex{
+            display: flex;
+            justify-content: space-between;
+        }
+        .good-box .right span{
+            font-size: .3rem;
+        }
+        .order-box{
+            width: 100%;
+            height: 42%;
+            box-sizing: border-box;
+            padding-bottom: .3rem;
+            margin-top: .2rem;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        .order-box .item{
+            width: 100%;
+            height: 25%;
+            line-height: .6rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .order-box .item span:nth-of-type(1){
+            color: #666;
+            font-size: .26rem;
+        }
+        .order-box .item span:nth-of-type(2){
+            color: #333;
+            font-size: .26rem;
+        }
+        .order-box input{
+            width: 5rem;
+            size: 30;
+            text-align: right;
+            color: #999!important;
+            font-size: .26rem;
+        }
+        .payType{
+            width: 100%;
+            height: 2.5rem;
+            margin-top: .2rem;
+            background-color: white;
+            box-sizing: border-box;
+            padding: 3%;
+        }
+        .payType .goods-title{
+            height: 23%;
+        }
+        .payType .pay{
+            width: 100%;
+            height: 26%;
+            margin-top: 3%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pay img{
+            width: .42rem;
+            height: .42rem;
+        }
+        .pay-box{
+            width: 2.3rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: .3rem;
+        }
+        .pay-box img{
+            width: .34rem;
+            height: .34rem;
+            margin-right: .2rem;
+        }
+        .ticket{
+            width: 100%;
+            height: 1.25rem;
+            background-color: white;
+            margin-top: .2rem;
+            box-sizing: border-box;
+            padding: .3rem .3rem .5rem .3rem;
+            border-bottom: 1px solid #CCC;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #CCC;
+        }
+        .ticket img{
+            width: .42rem;
+            height: .42rem;
+        }
+        .btn-box{
+            width: 2rem;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ticket-flag{
+            width: .8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .bottom{
+            width: 100%;
+            height: 1rem;
+            position: fixed;
+            bottom: 0;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: .1rem .1rem .1rem 1rem;
+        }
+        .bottom span:nth-of-type(1){
+            font-size: .3rem;
+            color: #999;
+        }
+        .bottom .count{
+            font-size: .3rem;
+            color: #333;
+        }
+        .bottom .count span{
+            color: #FA7F34;
+        }
+        .bottom .submit{
+            width: 2.6rem;
+            height: 105%;
+            background-color: #FA7F34;
+            border-radius: .8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: .32rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <section>
+            <div class="userInfo" @click="goUserInfo">
+                <div class="user-box">
+                    <img src="../../image/submitOrder/adress-orderSubmit.png" alt="订单图片">
+                    <div class="user-info">
+                        <span class="userName">{{userInfo.userName}}</span>
+                        <span class="userPhone">{{userInfo.userPhone}}</span>
+                        <p>{{userInfo.adress}}</p>
+                    </div>
+                    <div class="moreAdress">
+                        <img src="../../image/submitOrder/right.png" alt="右箭头">
+                    </div>
+                </div>
+                <div class="line">
+                    <img src="../../image/submitOrder/adress-line.png" alt="地址线">
+                </div>
+            </div>
+            <div class="goods-info">
+                <p class="goods-title">商品信息</p>
+                <div class="good-box">
+                    <img :src="goods.swiper" alt="商品图片">
+                    <div class="right">
+                        <p>{{goods.details}}</p>
+                        <div class="right-flex">
+                            <span>￥{{goods.price}}</span>
+                            <span>x{{orderCount}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-box">
+                    <div class="item">
+                        <span>商品总价</span>
+                        <span>￥{{totalCount}}</span>
+                    </div>
+                    <div class="item">
+                        <span>配送方式（订单大于两万元免运费）</span>
+                        <span>邮费到付</span>
+                    </div>
+                    <div class="item">
+                        <span>实付款</span>
+                        <span>￥{{totalCount}}</span>
+                    </div>
+                    <div class="item">
+                        <span>订单备注</span>
+                        <input type="text" placeholder="选填(30字以内)">
+                    </div>
+                </div>
+            </div>
+            <div class="payType">
+                <p class="goods-title">支付方式</p>
+                <div class="pay-wx pay" @click="chooseFlag=false">
+                    <div class="pay-box">
+                        <img src="../../image/submitOrder/wx-pay.png" alt="微信支付">
+                        <span>微信支付</span>
+                    </div>
+                    <img v-if="chooseFlag" src="../../image/submitOrder/choose.png" alt="">
+                    <img v-else src="../../image/submitOrder/choose-active.png" alt="">
+                </div>
+                <div class="pay-zfb pay" @click="chooseFlag=true">
+                    <div class="pay-box">
+                        <img src="../../image/submitOrder/zfb-pay.png" alt="支付宝支付">
+                        <span>支付宝支付</span>
+                    </div>
+                    <img v-if="!chooseFlag" src="../../image/submitOrder/choose.png" alt="" >
+                    <img v-else src="../../image/submitOrder/choose-active.png" alt="">
+                </div>
+            </div>
+            <div class="ticket">
+                <span class="goods-title">是否需要发票</span>
+                <div class="btn-box">
+                    <div class="ticket-flag">
+                        <img v-if="ticketFlag" src="../../image/submitOrder/choose.png" alt="" @click="ticketFlag=false">
+                        <img v-else src="../../image/submitOrder/choose-active.png" alt="" @click="ticketFlag=false">
+                        是
+                    </div>
+                    <div class="ticket-flag">
+                        <img v-if="!ticketFlag" src="../../image/submitOrder/choose.png" alt="" @click="ticketFlag=true">
+                        <img v-else src="../../image/submitOrder/choose-active.png" alt="" @click="ticketFlag=true">
+                        否
+                    </div>
+                </div>
+            </div>
+            <div class="bottom">
+                <span>共{{orderCount}}件</span>
+                <div class="count">合计：<span>￥{{totalCount}}</span></div>
+                <div class="submit" @click="submit">提交订单</div>
+            </div>
+        </section>
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'.app',
+            data:{
+                userInfo:{
+                    userName:'大脸布丁',
+                    userPhone:15516354832,
+                    adress:'上海市松江区沪松公路1399弄68号1003-1004室'
+                },
+                goods:{
+                    swiper:'../../image/store/five.jpg',
+                    details:'暮厨不锈钢炒锅炒菜过32厘米无涂层少油烟304燃气',
+                    price:'368.90',
+                    amount:666,
+                    detailImg1:'../../image/store/six.png',
+                    detailImg2:'../../image/store/seven.png'
+                },
+                orderCount:12,   //购买商品数量
+                chooseFlag:false,  //支付按钮的选择状态
+                ticketFlag:false,  //订单按钮选择状态
+            },
+            computed: {
+                totalCount:function(){
+                    return parseFloat(this.orderCount*this.goods.price).toFixed(2)
+                }
+            },
+            methods: {
+                //提交订单
+                submit:function(){
+
+                },
+                goUserInfo:function(){
+                  api.openWin({
+                      name: 'userAdress',
+                      url: '../address/address_win.html',
+                      reload:true,
+                      slidBackEnabled:false,
+                      bounces:false,
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
+
+                }
+            },
+        })
+    </script>
+</body>
+</html>

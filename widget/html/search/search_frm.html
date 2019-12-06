@@ -1,0 +1,202 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .search-box{
+      width: 100%;
+      height: .96rem;
+      display: flex;
+      box-sizing: border-box;
+      padding: 0 .3rem;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .search-box span{
+      color: #FF8C46;
+      font-size: .32rem;
+    }
+    .search{
+      width: 6rem;
+      height: .6rem;
+      background-color: rgba(0, 0, 0, 0.05);
+      box-sizing: border-box;
+      padding: 0 .2rem;
+      border-radius: .6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .search img{
+      width: .3rem;
+      height: .3rem;
+    }
+    .search input{
+      outline: none;
+      width: 90%;
+      font-size: .26rem;
+    }
+    .search-history{
+      width: 100%;
+      box-sizing: border-box;
+      padding: .5rem .2rem;
+    }
+    .info-box{
+      width: 100%;
+      height: .5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .info-box span{
+      font-size: .34rem;
+      color: #333;
+    }
+    .info-box img{
+      width: .39rem;
+      height: .39rem;
+    }
+    .search-records{
+      width: 100%;
+      margin-top: .15rem;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .records-item{
+      padding: .2rem .3rem;
+      background-color: #F5F5F5;
+      color: #666;
+      margin: .1rem .15rem;
+    }
+    .searchContent{
+      width: 100%;
+      height: 4rem;
+      margin-top: .3rem;
+      background-color: white;
+      position: absolute;
+      top: .8rem;
+      left: .2rem;
+      overflow: hidden;
+    }
+    .searchContent ul{
+      width: 100%;
+      list-style: none;
+    }
+    .searchContent ul li{
+      width: 100%;
+      box-sizing: border-box;
+      height: .6rem;
+      font-size: .3rem;
+      line-height: .6rem;
+      padding-left: .2rem;
+      border-bottom: 1px solid #E0E0E0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <section>
+      <div class="search-box">
+        <div class="search">
+            <input type="text" placeholder="搜索" v-model="searchTxt" @input="showSearch" @focus="inputFocus">
+            <img v-if="flag" src="../../image/search/selece-inputDel.png" alt="删除" @click="del">
+            <div class="searchContent" v-if="searchFlag">
+              <ul>
+                <li v-for="(item, index) in searchList" :key="index">{{item}}</li>
+              </ul>
+            </div>
+        </div>
+        <span @click="cancel">取消</span>
+      </div>
+      <div class="search-history">
+        <div class="info-box">
+          <span>搜索历史</span>
+          <img src="../../image/search/search-delete.png" alt="删除搜索历史" @click="clearRecords">
+        </div>
+        <div class="search-records">
+          <div class="records-item" v-for="(item, index) in records" :key="index" @click="goSearch(item)">{{item}}</div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data:{
+        searchTxt:'',  //搜索框文本
+        flag:false,    //搜索框图片的显示与隐藏
+        records:['三层蒸煮锅','不锈钢锅','炒锅','电饭煲','不锈钢锅'],  //这里是从storage里拿的数据
+        searchList:['asdasdasdad','asdasdadasd','vfdfgdgdfgdsgs'],
+        searchFlag:false
+      },
+      watch: {
+        searchTxt:function(){
+          if(this.searchTxt!=''){
+            this.flag=true
+          }else{
+            this.flag=false
+          }
+        }
+      },
+      methods: {
+        //删除输入框的文本
+        del:function(){
+          this.searchTxt=''
+        },
+
+        //点击取消，回到列表页
+        cancel:function(){
+          api.closeWin()
+
+        },
+        //输入框获取焦点
+        inputFocus:function(){
+          // this.searchFlag=true
+          // this.searchList=this.records
+        },
+        inputBlur:function(){
+          // this.searchFlag=false
+        },
+        //展示搜索的内容
+        showSearch:function(){
+          console.log("a")
+        },
+        //点击搜索历史，跳转到搜索页面
+        goSearch:function(value){
+          api.openWin({
+              name: 'goodsDetails',
+              url: '../store/goods-details_win.html',
+              reload:true,
+              slidBackEnabled:false,
+              bounces:false,
+              pageParam: {
+                  name: 'test'
+              }
+          });
+
+        },
+
+        //清空已搜索内容
+        clearRecords:function(){
+          //这里做的是清空缓存 用api的内置方法
+          var con=confirm("您确认要清空搜索内容吗?")
+          if(con){
+            this.records=''
+          }else{
+            return
+          }
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .nickinput-box>p {
+      padding-left: .3rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #666666;
+      margin: .4rem 0 .2rem;
+    }
+
+    .nickinput {
+      width: 100%;
+      height: 1rem;
+      background-color: #F7F7F7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nickinput input {
+      width: 85%;
+      padding-left: .3rem;
+      height: .42rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #333333;
+    }
+
+    .nickinput img {
+      width: .3rem;
+      height: .3rem;
+      padding-right: .3rem;
+    }
+
+    .btn {
+      width: 6.9rem;
+      height: .78rem;
+      background: #FF8C46;
+      border-radius: 39px;
+      border-radius: 39px;
+      font-family: PingFang-SC-Medium;
+      font-size: .3rem;
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="nickinput-box">
+      <p>昵称</p>
+      <div class="nickinput">
+        <input type="text">
+        <img src="../../image/my/del-pic.png" alt="">
+      </div>
+    </div>
+    <div style="text-align: center;margin-top: 1.3rem;">
+      <button class="btn">确认修改</button>
+    </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          openbluetooth: false,
+        }
+      },
+      methods: {
+        getopenbluetooth() {
+          this.openbluetooth = !this.openbluetooth;
+        },
+      },
+    })
+  </script>
+
+</body>
+
+</html>
