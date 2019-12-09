@@ -150,7 +150,7 @@
                 </div>
                 <div class="countPrice">共{{item.orderCount}}件，合计<span>￥{{item.price*item.orderCount}}</span></div>
                 <div class="list-btn">
-                    <div v-if="item.status=='待付款'" class="active" @click="pay">立即付款</div>
+                    <div v-if="item.status=='待付款'" class="active" @click="pay(index)">立即付款</div>
                     <div v-if="item.status=='待发货'" class="active" @click="reminder">提醒发货</div>
                     <div v-if="item.status=='待收货'" class="active" @click="confirmGoods">确认收货</div>
                     <div v-if="item.status=='已取消' || item.status=='已完成'" class="disActive" @click="del">删除订单</div>
@@ -229,7 +229,7 @@
             },
             methods: {
                 //立即付款
-                pay:function(){
+                pay:function(index){
                   api.openWin({
                       name: 'orderDetails',
                       url: 'orderDetails_win.html',
@@ -237,11 +237,12 @@
                       slidBackEnabled:false,
                       bounces:false,
                       pageParam: {
-                        shadeFlag:true
+                        shadeFlag:true,
+                        type:this.orderList[index].status
                       }
                   });
                 },
-                //跳转到商品详情页
+                //跳转到订单详情页
                 goOrderDetails:function(index){
                     api.openWin({
                         name: 'orderDetails',
