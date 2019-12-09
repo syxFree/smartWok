@@ -49,7 +49,7 @@
     <div class="app">
        <section>
            <div class="shade">
-               <div class="content">
+               <div class="content" @click.prevent="cancel">
                    <div class="share-img" @click="shareWx">
                        <img src="../../image/information/share_wx.png" alt="">
                         <span>微信好友</span>
@@ -58,7 +58,7 @@
                         <img src="../../image/information/share_friend.png" alt="">
                         <span>朋友圈</span>
                    </div>
-                  
+
                </div>
            </div>
        </section>
@@ -79,6 +79,21 @@
                 },
                 shareFriend:function(){
                     alert("分享到朋友圈")
+                },
+                cancel:function(){
+                  console.log("quxiaofenxaing")
+                  api.openWin({
+                      name: 'information_detail_win',
+                      url: 'information_detail_win.html',
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
+                  api.closeWin({
+                      name: 'share.html'
+                  });
+
+
                 }
             }
 
