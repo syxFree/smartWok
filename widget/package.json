@@ -1,0 +1,15 @@
+{
+  "name": "logisticsalliance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "startSync": "apicloud wifiStart --port 10082",
+    "stopSync": "apicloud wifiStop --port 10082",
+    "sync": "apicloud wifiSync  --project ./ --updateAll false --port 10082",
+    "wifiinfo": "apicloud wifiInfo --port 10082",
+    "wifilog": "apicloud wifiLog --port 10082"
+  },
+  "author": "",
+  "license": "ISC"
+}
