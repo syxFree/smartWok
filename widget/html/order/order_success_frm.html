@@ -22,24 +22,12 @@
             width: 3rem;
             height: 3rem;
             margin: 0 auto;
-            /* margin-top: 2rem; */
             text-align: center;
             font-size: .34rem;
         }
         .img img{
             width: 1.8rem;
             height: 2.3rem;
-        }
-        .backToStore{
-            width: 3.8rem;
-            height: .8rem;
-            margin: 0 auto;
-            border:1px solid #FF8C46;
-            border-radius: .8rem;
-            text-align: center;
-            line-height: .8rem;
-            color: #FF8C46;
-            font-size: .3rem;
         }
     </style>
 </head>
@@ -50,7 +38,6 @@
                 <img src="../../image/submitOrder/order-success.png" alt="">
                 <span>订单支付成功</span>
             </div>
-            <div class="backToStore" @click="backToStore">返回商城</div>
         </section>
     </div>
     <script src="../../script/api.js"></script>
@@ -60,14 +47,10 @@
         var vm=new Vue({
             el:'.app',
             data:{
-                
+
             },
             methods: {
-                //返回按钮 这里返回支付界面
-                //返回商城
-                backToStore:function(){
-                    
-                }
+
             },
         })
     </script>

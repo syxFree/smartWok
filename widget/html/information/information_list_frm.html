@@ -125,99 +125,103 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script>
-        var vm=new Vue({
-            el:".app",
-            data:{
-                currentIndex:1,
-                list:[
-                    {
-                        img:"../../image/information/two.jpg",
-                        info:'红烧排骨怎么上色最好看?',
-                        detail:'关于红烧排骨怎么上色最好看，组要从一下几点说起首先是油温的控制'
-                    },
-                    {
-                        img:"../../image/information/three.jpg",
-                        info:'番茄鸡蛋汤好吃的秘方',
-                        detail:'关于红烧排骨怎么上色最好看，组要从一下几点说起。首先是油温的控制'
-                    },
-                    {
-                        img:"../../image/information/four.jpg",
-                        info:'看没事大赛有哪些美食广受好评',
-                        detail:'关于红烧排骨怎么上色最好看，组要从一下几点说起。首先是油温的控制'
+    apiready=function(){
+      // var UIScrollPicture = api.require('UIScrollPicture');
+      // UIScrollPicture.open({
+      //     rect: {
+      //         x: 0,
+      //         y: '0.88rem',
+      //         w: api.winWidth,
+      //         h: api.winHeight / 2
+      //     },
+      //     data: {
+      //         paths: [
+      //             '../../images/store/one.jpg',
+      //             '../../images/store/one.jpg',
+      //             '../../images/store/one.jpg',
+      //             'widget://image/information/one.jpg'
+      //         ],
+      //         //对图片的描述，可写可不写
+      //         captions: ['apicloud', 'apicloud', 'apicloud', 'apicloud']
+      //     },
+      //     //文字样式
+      //     styles: {
+      //         caption: {
+      //             height: 35,
+      //             color: '#E0FFFF',
+      //             size: 13,
+      //             bgColor: '#696969',
+      //             position: 'bottom'
+      //         },
+      //         indicator: {
+      //         //圆点样式
+      //         dot:{
+      //             w:20,
+      //             h:10,
+      //             r:5,
+      //             margin:20
+      //         },
+      //             align: 'center',
+      //             color: '#FFFFFF',
+      //             activeColor: '#DA70D6'
+      //         }
+      //     },
+      //     placeholderImg: 'widget://res/slide1.jpg',
+      //     contentMode: 'scaleToFill',
+      //     //切换的时间
+      //     interval: 3,
+      //     fixedOn: api.frameName,
+      //     loop: true,
+      //     fixed: false
+      // }, function(ret, err) {
+      //     if (ret) {
+      //         alert(JSON.stringify(ret));
+      //     } else {
+      //         alert(JSON.stringify(err));
+      //     }
+      // });
+      var vm=new Vue({
+          el:".app",
+          data:{
+              currentIndex:1,
+              list:[
+                  {
+                      img:"../../image/information/two.jpg",
+                      info:'红烧排骨怎么上色最好看?',
+                      detail:'关于红烧排骨怎么上色最好看，组要从一下几点说起首先是油温的控制'
+                  },
+                  {
+                      img:"../../image/information/three.jpg",
+                      info:'番茄鸡蛋汤好吃的秘方',
+                      detail:'关于红烧排骨怎么上色最好看，组要从一下几点说起。首先是油温的控制'
+                  },
+                  {
+                      img:"../../image/information/four.jpg",
+                      info:'看没事大赛有哪些美食广受好评',
+                      detail:'关于红烧排骨怎么上色最好看，组要从一下几点说起。首先是油温的控制'
+                  }
+              ]
+          },
+          methods:{
+            //跳转到商品详情页
+            goGoodsDetails:function(id){
+                api.openWin({
+                    name: 'information_detail_win',
+                    url: 'information_detail_win.html',
+                    reload:true,
+                    bounces:false,
+                    slidBackEnabled:false,
+                    pageParam: {
+                        id: id
                     }
-                ]
-            },
-            methods:{
-              //跳转到商品详情页
-              goGoodsDetails:function(id){
-                  api.openWin({
-                      name: 'information_detail_win',
-                      url: 'information_detail_win.html',
-                      reload:true,
-                      bounces:false,
-                      slidBackEnabled:false,
-                      pageParam: {
-                          id: id
-                      }
-                  });
+                });
 
-              }
             }
-        })
-        // var UIScrollPicture = api.require('UIScrollPicture');
-        // UIScrollPicture.open({
-        //     rect: {
-        //         x: 0,
-        //         y: '0.88rem',
-        //         w: api.winWidth,
-        //         h: api.winHeight / 2
-        //     },
-        //     data: {
-        //         paths: [
-        //             'widget://image/information/one.jpg',
-        //             'widget://image/information/one.jpg',
-        //             'widget://image/information/one.jpg',
-        //             'widget://image/information/one.jpg'
-        //         ],
-        //         //对图片的描述，可写可不写
-        //         captions: ['apicloud', 'apicloud', 'apicloud', 'apicloud']
-        //     },
-        //     //文字样式
-        //     styles: {
-        //         caption: {
-        //             height: 35,
-        //             color: '#E0FFFF',
-        //             size: 13,
-        //             bgColor: '#696969',
-        //             position: 'bottom'
-        //         },
-        //         indicator: {
-        //         //圆点样式
-        //         dot:{
-        //             w:20,
-        //             h:10,
-        //             r:5,
-        //             margin:20
-        //         },
-        //             align: 'center',
-        //             color: '#FFFFFF',
-        //             activeColor: '#DA70D6'
-        //         }
-        //     },
-        //     placeholderImg: 'widget://res/slide1.jpg',
-        //     contentMode: 'scaleToFill',
-        //     //切换的时间
-        //     interval: 3,
-        //     fixedOn: api.frameName,
-        //     loop: true,
-        //     fixed: false
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         alert(JSON.stringify(ret));
-        //     } else {
-        //         alert(JSON.stringify(err));
-        //     }
-        // });
+          }
+      })
+    }
+
+
     </script>
 </body>
 </html>

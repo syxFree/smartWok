@@ -131,14 +131,14 @@
 <body>
     <div class="app">
         <section>
-            <div class="list" v-for="(item, index) in orderList" :key="index" @click="goOrderDetails">
+            <div class="list" v-for="(item, index) in orderList" :key="index">
                 <div class="order-time">
                     <span>{{item.createTime}}</span>
                     <span v-if="item.status=='待付款'" class="activeRed">{{item.status}}</span>
                     <span v-if="item.status=='待发货' || item.status=='待收货'" class="activeGreen">{{item.status}}</span>
                     <span v-if="item.status=='已取消' || item.status=='已完成'" class="activeBlack">{{item.status}}</span>
                 </div>
-                <div class="good-box">
+                <div class="good-box" @click="goOrderDetails(index)">
                     <img :src="item.swiper" alt="商品图片">
                     <div class="right">
                         <p>{{item.details}}</p>
@@ -150,7 +150,7 @@
                 </div>
                 <div class="countPrice">共{{item.orderCount}}件，合计<span>￥{{item.price*item.orderCount}}</span></div>
                 <div class="list-btn">
-                    <div v-if="item.status=='待付款'" class="active" @click="pay">立即付款</div>
+                    <div v-if="item.status=='待付款'" class="active" @click="pay(index)">立即付款</div>
                     <div v-if="item.status=='待发货'" class="active" @click="reminder">提醒发货</div>
                     <div v-if="item.status=='待收货'" class="active" @click="confirmGoods">确认收货</div>
                     <div v-if="item.status=='已取消' || item.status=='已完成'" class="disActive" @click="del">删除订单</div>
@@ -229,11 +229,21 @@
             },
             methods: {
                 //立即付款
-                pay:function(){
-
+                pay:function(index){
+                  api.openWin({
+                      name: 'orderDetails',
+                      url: 'orderDetails_win.html',
+                      reload:true,
+                      slidBackEnabled:false,
+                      bounces:false,
+                      pageParam: {
+                        shadeFlag:true,
+                        type:this.orderList[index].status
+                      }
+                  });
                 },
-                //跳转到商品详情页
-                goOrderDetails:function(){
+                //跳转到订单详情页
+                goOrderDetails:function(index){
                     api.openWin({
                         name: 'orderDetails',
                         url: 'orderDetails_win.html',
@@ -241,6 +251,7 @@
                         slidBackEnabled:false,
                         bounces:false,
                         pageParam: {
+                          type:this.orderList[index].status
                         }
                     });
 
@@ -255,19 +266,50 @@
                 },
                 //删除订单
                 del:function(){
-
+                  api.confirm({
+                      title: '您确认要取消订单吗？',
+                      // msg: 'testmsg',
+                      buttons: ['确定', '取消']
+                  }, function(ret, err){
+                      if( ret ){
+                          //  alert( JSON.stringify( ret ) );
+                      }else{
+                          //  alert( JSON.stringify( err ) );
+                      }
+                  });
                 },
                 //查看物流
                 look:function(){
-
+                  api.openWin({
+                      name: 'logistics_information',
+                      url: '../logistics_information/logistics_info_win.html',
+                      reload:true,
+                      slidBackEnabled:false,
+                      bounces:false,
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
                 },
                 //取消订单
                 cancel:function(){
-                    if(confirm("您确认要删除订单吗？")){
-                        console.log("取消")
-                    }else{
-                        return
-                    }
+                  api.confirm({
+                      title: '您确认要取消订单吗？',
+                      // msg: 'testmsg',
+                      buttons: ['确定', '取消']
+                  }, function(ret, err){
+                      if( ret ){
+                          //  alert( JSON.stringify( ret ) );
+                      }else{
+                          //  alert( JSON.stringify( err ) );
+                      }
+                  });
+
+                    // if(confirm("您确认要删除订单吗？")){
+                    //     console.log("取消")
+                    // }else{
+                    //     return
+                    // }
                 }
             },
         })

@@ -44,7 +44,7 @@
         }
         .goods-describe .info{
             width: 100%;
-            height: .7rem;
+            /*height: 40px;*/
             margin-bottom: .2rem;
             color: #333;
             font-size: .32rem;
@@ -319,14 +319,28 @@
             methods: {
                 //返回按钮
                 back:function(){
-
+                  api.closeWin()
                 },
                 //分享按钮
                 share:function(){
+                  api.openWin({
+                      name: 'share',
+                      url: '../information/share_win.html',
+                      reload:true,
+                      slidBackEnabled:false,
+                      bounces:false,
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
 
                 },
                 //联系按钮
                 call:function(){
+                  api.call({
+                      type: 'tel_prompt',
+                      number: '18338514073' //商家电话
+                  });
 
                 },
                 //购买按钮
@@ -370,7 +384,7 @@
                 goOrderSubmit:function(){
                     api.openWin({
                         name: 'orderSubmit',
-                        url: '../order-submit/orderSubmit_win.html',
+                        url: '../order_submit/orderSubmit_win.html',
                         reload:true,
                         bounces:false,
                         slidBackEnabled:false,

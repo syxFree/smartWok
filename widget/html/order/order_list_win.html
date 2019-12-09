@@ -15,23 +15,31 @@
         header{
             width:100%;
             height: .88rem;
-            line-height: .88rem;
-            text-align: center;
             background-color: #f7f7f7;
             border-bottom: 1px solid #ccc;
             position: relative;
+            display: flex;
+            /*box-sizing: border-box;*/
+            /*padding-left: .2rem;*/
+            align-items: center;
+
         }
         header img{
             width: .4rem;
             height: .45rem;
-            position: absolute;
+            position: relative;
+            left: .2rem
+            /*position: absolute;
             left: .2rem;
-            top: .21rem;
+            top: .21rem;*/
         }
         header span{
             font-size: .36rem;
             color: #333;
             font-weight: 600;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
     </style>
 </head>
@@ -39,7 +47,7 @@
     <div class="app">
         <header>
             <img src="../../image/register/black.png" alt="返回" @click="back">
-            <span>支付状态</span>
+            <span>我的订单</span>
         </header>
     </div>
     <script src="../../script/api.js"></script>
@@ -62,15 +70,16 @@
 
           },
           methods: {
-              //返回按钮 这里返回支付界面
+              //返回上一页
               back:function(){
-
+                  api.closeWin()
               },
+
           },
       })
       api.openFrame({
           name: 'orderList',
-          url: 'orderList_frm.html',
+          url: 'order_list_frm.html',
           rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
               marginTop: headerH, // main页面距离win顶部的高度
               marginBottom: footerH, // main页面距离win底部的高度
