@@ -43,7 +43,7 @@
     <header>
       <img src="../../image/register/black.png" alt="返回" @click="back">
       <h2>我的菜谱</h2>
-      <div style="display:flex; align-items: center;">
+      <div style="display:flex; align-items: center;" @click="gotomenu">
         <img src="../../image/menu/create-orange.png" alt="" style="width:.32rem;height: .32rem;margin-right: .1rem;">
         <p>添加</p>
       </div>
@@ -71,6 +71,15 @@
             back: function () {
                 api.closeWin()
             },
+            gotomenu:function (){
+              api.openWin({
+                  name: 'menu_win',
+                  url: '../menu/menu_win.html',
+                  reload: true,
+                  bounces: false,
+                  slidBackEnabled: true,
+              });
+            }
           }
       });
       api.openFrame({
