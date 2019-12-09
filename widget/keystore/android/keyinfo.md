@@ -1,3 +1,15 @@
+包名：
+    
+    com.zskj.smartwok
+        
+别名：
+    
+    zhanshu
+    
+密码：
+    
+    zhanshu829*
+    
 生成keystore：
     
     命令：
