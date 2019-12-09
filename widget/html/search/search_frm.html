@@ -103,7 +103,7 @@
     <section>
       <div class="search-box">
         <div class="search">
-            <input type="text" placeholder="搜索" v-model="searchTxt" @input="showSearch" @focus="inputFocus">
+            <input type="text" placeholder="搜索" v-model="searchTxt" @input="showSearch" @focus="inputFocus" @keypress="keypress">
             <img v-if="flag" src="../../image/search/selece-inputDel.png" alt="删除" @click="del">
             <div class="searchContent" v-if="searchFlag">
               <ul>
@@ -156,6 +156,23 @@
         cancel:function(){
           api.closeWin()
 
+        },
+        keypress:function(e){
+            var keyCode=e.keyCode;
+            console.log(keyCode)
+            if(keyCode=='13'){
+              api.openWin({
+                  name: 'searchResult',
+                  url: 'searchResult_win.html',
+                  reload:true,
+                  slidBackEnabled:false,
+                  bounces:false,
+                  pageParam: {
+                      name: 'test'
+                  }
+              });
+
+            }
         },
         //输入框获取焦点
         inputFocus:function(){

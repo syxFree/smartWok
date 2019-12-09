@@ -43,7 +43,7 @@
 
 
     .menu-name1 .title {
-      width: 1.36rem;
+      width: 1.68rem;
       height: .48rem;
       font-family: PingFang-SC-Bold;
       font-size: .34rem;
@@ -71,7 +71,7 @@
     }
 
     .menu-name .title {
-      width: 1.36rem;
+      width: 1.4rem;
       height: .48rem;
       font-family: PingFang-SC-Bold;
       font-size: .34rem;
@@ -142,10 +142,15 @@
       text-align: center;
       margin: .3rem 0;
       display: flex;
-      justify-content: flex-start;
+      justify-content:space-between;
       align-items: center;
     }
-
+    .cover-left{
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 50%;
+    }
     .cover-box .num {
       width: .42rem;
       height: .42rem;
@@ -548,6 +553,11 @@
       width: .3rem !important;
       height: .3rem !important;
     }
+    .cover-right{
+      width: .38rem;
+      height: .38rem;
+      margin-right: .3rem;
+    }
   </style>
 </head>
 
@@ -574,7 +584,7 @@
     <div class="hrs"></div>
     <!-- 料盒 -->
     <div class="menu-name menu-magazine">
-      <div class="title" style="width:.68rem">
+      <div class="title" style="width:.7rem">
         <span>料盒</span>
       </div>
       <div class="name">
@@ -597,12 +607,15 @@
     <div class="hrs"></div>
     <!--程序  -->
     <div class="menu-name">
-      <div class="title" style="width:.68rem">
+      <div class="title" style="width:.7rem">
         <span>程序</span>
       </div>
-      <div class="cover-box" v-for="item in stepslist" :key="item.num" @click.prevent="getmove(item.num)">
-        <div class="num">{{item.num}}</div>
-        <div class="ncontent">{{item.content}}</div>
+      <div class="cover-box" v-for="(item,index) in stepslist" :key="item.num" >
+        <div class="cover-left" @click.prevent="getmove(item.num)">
+          <div class="num">{{item.num}}</div>
+          <div class="ncontent">{{item.content}}</div>
+        </div>
+        <img src="../../image/menu/shanchu.png" alt="" class="cover-right" v-if="item.content !== '请选择一个程序'" @click="deleteprocedure(index)">
       </div>
       <div class="add-box" @click="addbox">
         <img src="../../image/menu/create-orange.png" alt="添加">
@@ -654,7 +667,7 @@
         <div>
           <!-- 参数 -->
           <div class="menu-name1">
-            <div class="title" style="width:.68rem">
+            <div class="title" style="width:.7rem">
               <span>参数</span>
             </div>
             <div class="cross-box">
@@ -667,7 +680,7 @@
           </div>
           <!-- 温度 -->
           <div class="menu-name1 temperature">
-            <div class="title" style="width:1.25rem">
+            <div class="title" style="width:1.4rem">
               <span>温度(℃)</span>
             </div>
             <div class="cross-box">
@@ -679,7 +692,7 @@
           </div>
           <!-- 事件 -->
           <div class="menu-name1 timeouth">
-            <div class="title" style="width:.68rem">
+            <div class="title" style="width:.7rem">
               <span>时间</span>
             </div>
             <div class="cross-box">
@@ -783,6 +796,10 @@
           this.timeoutcon += this.timeouts[0]
         },
         methods: {
+          deleteprocedure(index){
+            console.log(index)
+            this.stepslist.splice(index,1)
+          },
           // 删除上传封面
           handledelpic(){
           },

@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="../../css/api.css">
     <style>
         .app{
-            overflow: hidden;
+            /*overflow: hidden;*/
             width: 100%;
-            min-height: 100vh;
+            height: 100%;
         }
         header{
             width: 100%;
@@ -30,6 +30,7 @@
             height: .38rem;
             margin-right: .3rem
         }
+
     </style>
 </head>
 <body>
@@ -42,6 +43,7 @@
                 <img src="../../image/information/share.png" alt="分享" @click="share">
             </div>
         </header>
+
     </div>
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
@@ -59,7 +61,9 @@
         var footerH = $api.fixTabBar(footer);
         var goodsvue = new Vue({
             el: '.app',
-            data: {},
+            data: {
+              flag:true
+            },
             created: function () {
             },
             methods: {
@@ -67,23 +71,22 @@
                   api.closeWin()
               },
               share:function(){
-                api.openWin({
+                api.sendEvent({
                     name: 'share',
-                    url: 'share_win.html',
-                    reload:true,
-                    slidBackEnabled:false,
-                    bounces:false,
-                    pageParam: {
-                        name: 'test'
+                    extra: {
+                        key1: 'value1',
+                        key2: 'value2'
                     }
                 });
 
-              }
-            }
+
+              },
+
+          }
         });
         api.openFrame({
-            name: 'information-detail_frm',
-            url: 'information-detail_frm.html',
+            name: 'information_detail_frm',
+            url: 'information_detail_frm.html',
             rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
                 marginTop: headerH, // main页面距离win顶部的高度
                 marginBottom: footerH, // main页面距离win底部的高度
