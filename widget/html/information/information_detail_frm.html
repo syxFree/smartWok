@@ -7,6 +7,14 @@
     <title>资讯详情</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
+    html,body{
+        width: 100%;
+        height: 100%;
+    }
+    .app{
+      width: 100%
+      height: 100%;
+    }
     h2{
       padding: .3rem;
     }
@@ -19,6 +27,38 @@
       margin: 1rem auto;
       margin-left: .5rem;
     }
+    .shade{
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .6);
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1000;
+    }
+    .content{
+        width: 100%;
+        height: 2.2rem;
+        position: fixed;
+        bottom: 0;
+        background-color: white;
+        display: flex;
+        align-items: center;
+    }
+    .share-img{
+        width: 1.7rem;
+        height: 70%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-direction: column;
+        font-size: .26rem;
+        color: #333;
+    }
+    .share-img img{
+        width: .9rem;
+        height: .9rem;
+    }
     </style>
 </head>
 <body>
@@ -28,9 +68,58 @@
         <p>后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案</p>
         <img src="../../image/information/two.jpg" alt="">
       </div>
+      <div class="shade" @click="cancel" v-if="flag">
+          <div class="content">
+              <div class="share-img" @click.stop="shareWx">
+                  <img src="../../image/information/share_wx.png" alt="">
+                   <span>微信好友</span>
+              </div>
+              <div class="share-img" @click.stop="shareFriend">
+                   <img src="../../image/information/share_friend.png" alt="">
+                   <span>朋友圈</span>
+              </div>
+
+          </div>
+      </div>
     </div>
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script type="text/javascript">
+    apiready=function(){
+      api.addEventListener({
+          name: 'share'
+      }, function(ret, err){
+          if( ret ){
+            alert(ret)
+              this.flag=true
+          }else{
+            console.log(err)
+          }
+      });
+      var vm=new Vue({
+        el:".app",
+        data:{
+          flag:false
+        },
+        created(){
+
+        },
+        methods:{
+          shareWx:function(){
+              alert("分享到微信")
+          },
+          shareFriend:function(){
+              alert("分享到朋友圈")
+          },
+          cancel:function(){
+            // alert("aaa")
+            this.flag=false
+          }
+        }
+      })
+    }
+
+    </script>
 </body>
 </html>
