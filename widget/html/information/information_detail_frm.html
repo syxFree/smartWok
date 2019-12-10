@@ -27,7 +27,7 @@
       margin: 1rem auto;
       margin-left: .5rem;
     }
-    .shade{
+    #shade{
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, .6);
@@ -35,6 +35,8 @@
         left: 0;
         top: 0;
         z-index: 1000;
+        display: none;
+        color: #333;
     }
     .content{
         width: 100%;
@@ -47,18 +49,19 @@
     }
     .share-img{
         width: 1.7rem;
-        height: 70%;
+        height: 100%;
         display: flex;
         justify-content: space-around;
         align-items: center;
         flex-direction: column;
         font-size: .26rem;
-        color: #333;
+        color: #333!important;
     }
     .share-img img{
         width: .9rem;
         height: .9rem;
     }
+
     </style>
 </head>
 <body>
@@ -68,17 +71,16 @@
         <p>后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案</p>
         <img src="../../image/information/two.jpg" alt="">
       </div>
-      <div class="shade" @click="cancel" v-if="flag">
+      <div id="shade" @click="cancel">
           <div class="content">
               <div class="share-img" @click.stop="shareWx">
                   <img src="../../image/information/share_wx.png" alt="">
-                   <span>微信好友</span>
+                  微信好友
               </div>
               <div class="share-img" @click.stop="shareFriend">
                    <img src="../../image/information/share_friend.png" alt="">
-                   <span>朋友圈</span>
+                   朋友圈
               </div>
-
           </div>
       </div>
     </div>
@@ -91,16 +93,17 @@
           name: 'share'
       }, function(ret, err){
           if( ret ){
-            // alert(ret)
-              this.flag=true
+              //  console.log(JSON.stringify($api.byId("shade").style))
+               $api.byId("shade").style.display='block'
           }else{
-            console.log(err)
+               alert( JSON.stringify( err ) );
           }
       });
+
       var vm=new Vue({
         el:".app",
         data:{
-          flag:false
+          flag:true
         },
         created(){
 
@@ -113,13 +116,11 @@
               alert("分享到朋友圈")
           },
           cancel:function(){
-            // alert("aaa")
-            this.flag=false
+             $api.byId("shade").style.display='none'
           }
         }
       })
     }
-
     </script>
 </body>
 </html>
