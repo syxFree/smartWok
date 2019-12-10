@@ -46,17 +46,20 @@
 </head>
 
 <body class="wrap">
-    <header>首页 返回键</header>
-    <section class="flex-1">
-        <ul>菜谱列表</ul>
-    </section>
-    <footer>导航栏 1 2 34 &copy;<span id="year"></span></footer>
+  <header>APICloud</header>
+  <section class="flex-1">
+
+  </section>
+  <footer>Copyright &copy;<span id="year"></span></footer>
 </body>
 <script type="text/javascript" src="./script/api.js"></script>
 <script type="text/javascript">
     apiready = function() {
         //输出Log，Log将显示在APICloud Studio控制台
-        console.log("Hello World! Hello APICloud!");
+        // console.log("Hello World! Hello APICloud!");
+        api.setStatusBarStyle({
+            style: 'dark'
+        });
 
         var header = $api.dom('header'); // 获取 header 标签元素
         var footer = $api.dom('footer'); // 获取 footer 标签元素
@@ -91,7 +94,6 @@
         var year = $api.byId('year');
         year.innerHTML = new Date().getFullYear();
     };
-
 </script>
 
 </html>
