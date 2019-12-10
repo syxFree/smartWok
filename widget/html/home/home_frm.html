@@ -161,6 +161,7 @@
   <script src="../../script/vue.min.js"></script>
   <script>
     apiready = function () {
+      console.log($api.getStorage('token'))
     var vue = new Vue({
       el: '.app',
       data() {
@@ -168,6 +169,16 @@
           link: false,
           openbluetooth: false
         }
+      },
+      created(){
+          api.openWin({
+              name: 'page1',
+              url: '../login/login_win.html',
+              pageParam: {
+                  name: 'test'
+              }
+          });
+
       },
       methods: {
         getopenbluetooth() {

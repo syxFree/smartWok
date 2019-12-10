@@ -15,6 +15,7 @@ var TOKEN_BEOVERDUE = 40001; // token过期
 
 
 var host = 'http://192.168.1.28:9102';
+// var host = 'http://192.168.1.106:9102'
 
 //外网测试地址
 // var host = "http://whale123.free.idcfengye.com";
@@ -26,6 +27,7 @@ var interfaces = {
     loginId: '/jgj/worker/worker_type', // 判断用户登录身份
     logout: '/jgj/worker/logout',//退出登录
     sendCode: '/api/common/send_code',//发送验证码
+    checkCode:'/api/common/check_code', //校验验证码
 
 
 };
@@ -54,7 +56,7 @@ function fnGet(apiurl, param, showLoading, callback) {
             headers: {
                 nonceStr: nonceStr,
                 timeStamp: timeStamp,
-                access-token: accessToken
+                'access-token': accessToken
             },
             data: {
                 values: param
@@ -100,7 +102,7 @@ function fnDelete(apiurl, showLoading, callback) {
             headers: {
                 nonceStr: nonceStr,
                 timeStamp: timeStamp,
-                access-token: accessToken,
+                'access-token': accessToken,
                 "Content-Type": APPLICATION_JSON_UTF8_FORM
             }
         },
@@ -143,7 +145,7 @@ function fnPut(apiurl, data, callback) {
             headers: {
                 nonceStr: nonceStr,
                 timeStamp: timeStamp,
-                access-token: accessToken,
+                'access-token': accessToken,
                 "Content-Type": APPLICATION_JSON_UTF8_FORM
             },
             data: {
@@ -187,7 +189,7 @@ function fnBodyPut(apiurl, data, callback) {
             headers: {
                 nonceStr: nonceStr,
                 timeStamp: timeStamp,
-                access-token: accessToken,
+                'access-token': accessToken,
                 "Content-Type": APPLICATION_JSON_UTF8_VALUE
             },
             data: {
@@ -232,7 +234,7 @@ function fnPost(apiurl, formdata, callback) {
             headers: {
                 nonceStr: nonceStr,
                 timeStamp: timeStamp,
-                access-token: accessToken,
+                'access-token': accessToken,
                 "Content-Type": APPLICATION_JSON_UTF8_FORM
             },
             data: {
@@ -278,7 +280,7 @@ function fnBodyPost(apiurl, formdata, callback) {
             headers: {
                 nonceStr: nonceStr,
                 timeStamp: timeStamp,
-                access-token: accessToken,
+                'access-token': accessToken,
                 "Content-Type": APPLICATION_JSON_UTF8_VALUE
             },
             data: {
