@@ -8,7 +8,6 @@ var AES_KEY = "logalliance_fac1";
 
 var RESPONSE_OK = 20000;
 var TOKEN_BEOVERDUE = 40001; // token过期
-
 /** 接口主机地址 */
 // var host = "http://192.168.1.10:8083";
 // var host = "http://192.168.1.28:99";
@@ -28,8 +27,10 @@ var interfaces = {
     logout: '/jgj/worker/logout',//退出登录
     sendCode: '/api/common/send_code',//发送验证码
     checkCode:'/api/common/check_code', //校验验证码
-
-
+    cookbookfun:'/sw/cookbook/functions',    //菜谱功能
+    cookbookpost:'/sw/cookbook',   //菜谱保存
+    feedback:'/sw/info/feedback', //意见反馈
+    upload: '/api/common/upload_image' //上传图片
 };
 
 /**
@@ -44,6 +45,7 @@ function fnGet(apiurl, param, showLoading, callback) {
     var nonceStr = guid();
     var timeStamp = new Date().getTime();
     var accessToken = $api.getStorage("accessToken");
+    console.log(accessToken)
     if (showLoading) {
         api.showProgress();
     }
@@ -271,6 +273,7 @@ function fnBodyPost(apiurl, formdata, callback) {
     var nonceStr = guid();
     var timeStamp = new Date().getTime();
     var accessToken = $api.getStorage("accessToken");
+        console.log(accessToken)
     api.showProgress();
     api.ajax(
         {

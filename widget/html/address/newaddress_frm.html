@@ -126,6 +126,7 @@
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/restful.js"></script>
   <script>
     var vue = new Vue({
       el: '.app',
@@ -134,7 +135,14 @@
           switchcase: false,
         }
       },
+      mounted:{
+
+      }
       methods: {
+        // 获取地址
+        getaddress(){
+          
+        }
         handleswitchcase() {
           this.switchcase = !this.switchcase;
         },

@@ -54,7 +54,7 @@
         <p>清除缓存</p>
         <span>55.5MB</span>
       </div>
-      <div class="line">
+      <div class="line" @click="changepass">
         <p>修改密码</p>
         <img src="../../image/my/unfold.png" alt="">
       </div>
@@ -67,6 +67,8 @@
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script>
+    apiready = function () {
+      // 获取缓存
     var vue = new Vue({
       el: '.app',
       data() {
@@ -74,8 +76,19 @@
         }
       },
       methods: {
+        changepass(){
+          api.openWin({
+              name: 'amend_win',
+              url: 'amend_win.html',
+              reload: true,
+              bounces: false,
+              slidBackEnabled: true,
+          });
+
+        }
       },
     })
+  }
   </script>
 </body>
 
