@@ -757,7 +757,9 @@
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
     <script>
+      apiready = function () {
       var vue = new Vue({
         el: '.app',
         data() {
@@ -794,8 +796,19 @@
           this.timeoutcon += this.timeouth[0] * 60 * 60
           this.timeoutcon += this.timeoutm[0] * 60
           this.timeoutcon += this.timeouts[0]
+          this.getFeature();
         },
         methods: {
+          getFeature(){
+            console.log(12314)
+            fnGet(interfaces.cookbookfun,{},true,function(ret, err) {
+              if(ret){
+                console.log(JSON.stringify(ret))
+              }else{
+                console.log(JSON.stringify(err))
+              }
+            })
+          },
           deleteprocedure(index){
             console.log(index)
             this.stepslist.splice(index,1)
@@ -886,6 +899,7 @@
           }
         },
       })
+    }
     </script>
 </body>
 
