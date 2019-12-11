@@ -14,6 +14,7 @@ var TOKEN_BEOVERDUE = 40001; // token过期
 
 
 var host = 'http://192.168.1.28:9102';
+// var host = 'http://192.168.1.106:9102'
 
 //外网测试地址
 // var host = "http://whale123.free.idcfengye.com";
@@ -25,6 +26,7 @@ var interfaces = {
     loginId: '/jgj/worker/worker_type', // 判断用户登录身份
     logout: '/jgj/worker/logout',//退出登录
     sendCode: '/api/common/send_code',//发送验证码
+    checkCode:'/api/common/check_code', //校验验证码
     cookbookfun:'/sw/cookbook/functions',    //菜谱功能
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈

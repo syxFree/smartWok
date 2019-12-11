@@ -169,6 +169,20 @@
           openbluetooth: false
         }
       },
+      created(){
+        console.log($api.getStorage('accessToken'))
+        if(!$api.getStorage('accessToken')){
+          api.openWin({
+              name: 'page1',
+              url: '../login/login_win.html',
+              pageParam: {
+                  name: 'test'
+              }
+          });
+        }
+
+
+      },
       methods: {
         getopenbluetooth() {
           this.openbluetooth = !this.openbluetooth;

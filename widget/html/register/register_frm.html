@@ -159,7 +159,7 @@
                 <div class="login-info">
                     <input type="password" @input="codeInput" placeholder="请输入验证码" v-model="code">
                     <div class="code" v-if="sendCodeFlag" @click="changeCodeFlag">获取验证码</div>
-                    <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
+                    <div v-else class="codeDisabled">重新发送({{sendCode}})</div>
                 </div>
                 <div class="TCp">
                     <div style="margin-right: .08rem;">
@@ -185,6 +185,7 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
     <script>
         apiready = function () {
             //考虑手机嵌入式兼容性问题
@@ -200,7 +201,7 @@
                     sendCode: 59,    //验证码倒计时
                     sendCodeFlag: true,   //刚开始验证码的状态
                     sendStatus: false,   //发送验证码按钮状态
-                    ckeckTCP: true,
+                    ckeckTCP: false,
                 },
                 watch: {
                     //监听输入手机号，动态显示删除按钮
@@ -218,8 +219,12 @@
                     phoneJudge: function () {
                         var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
                         if (!phoneReg.test(this.phone)) {
-                            alert("请输入正确的手机号")
-                            this.phoneFlag = false
+                          api.toast({
+                              msg: '请输入正确的手机号',
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                          this.phoneFlag = false
                         } else {
                             this.phoneFlag = true
                         }
@@ -235,49 +240,128 @@
                     },
                     //点击获取验证码，改变内容
                     changeCodeFlag: function () {
+                        var vm = this;
                         if (this.phone == '') {
-                            alert("请先输入手机号")
-                            return
+                          api.toast({
+                              msg: '请先输入手机号',
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                          return
                         }
                         if (this.phoneFlag == false) {
-                            alert("请输入合法的手机号")
+                          api.toast({
+                              msg: '请输入合法的手机号',
+                              duration: 2000,
+                              location: 'middle'
+                          });
                             return
                         }
-                        this.sendCodeFlag = false
-                        // 发送验证码倒计时
-                        var vm = this;
-                        var s = 5;
-                        var countInterval = setInterval(function () {
-                            if (vm.sendCode > 0) {
-                                s--;
-                                vm.sendCode = s;
-                            } else {
-                                vm.sendCodeFlag = true
-                                clearInterval(countInterval);
-                                vm.sendCode = 59;
-                                // vm.sendStatus = 'before';
+                        var params={
+                          phone:this.phone,
+                          type:0
+                        }
+                        console.log(interfaces.sendCode)
+                        fnBodyPost(interfaces.sendCode,params,function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'middle'
+                              });
+                              // 发送验证码倒计时
+                              vm.sendCodeFlag = false
+                              var s = 59;
+                              var countInterval = setInterval(function () {
+                                  if (vm.sendCode > 0) {
+                                      s--;
+                                      vm.sendCode = s;
+                                  } else {
+                                      vm.sendCodeFlag = true
+                                      clearInterval(countInterval);
+                                      vm.sendCode = 59;
+                                  }
+                              }, 1000);
+                            }else {
+                                if (ret.subMsg || ret.msg) {
+                                    api.toast({
+                                        msg: ret.subMsg ? ret.subMsg : ret.msg,
+                                        duration: 2000,
+                                        location: 'middle'
+                                    });
+                                }
                             }
-                        }, 1000);
-                        vm.countInterval = countInterval;
+                        })
+                    },
+
+                    // 点击下一步进入输入面页
+                    goNext:function(){
+                      var vm=this
+                        if(this.phone==''){
+                          api.toast({
+                              msg: '请先输入手机号',
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                          return
+                        }
+                        else if(this.code==''){
+                          api.toast({
+                              msg: '请先输入验证码',
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                          return
+                        }
+                        else if(!this.phoneFlag){
+                          api.toast({
+                              msg: '请输入合法的手机号',
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                          return
+                        }
+                        else if(!this.ckeckTCP){
+                          api.toast({
+                              msg: '请先勾选协议',
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                          return
+                        }
+                        else{
+                          var params={
+                            phone:this.phone,
+                            code:this.code,
+                            type:0
+                          }
+                          console.log(JSON.stringify(params))
+                          fnBodyPost(interfaces.checkCode,params,function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                              api.openWin({
+                                  name: 'setPwd',
+                                  url: 'setPwd_win.html',
+                                  reload:true,
+                                  bounces:false,
+                                  slidBackEnabled:false,
+                                  pageParam: {
+                                      code:vm.code,
+                                      username:vm.phone
+                                  }
+                              });
+                            }else {
+                                if (ret.subMsg || ret.msg) {
+                                    api.toast({
+                                        msg: '请输入正确的验证码',
+                                        duration: 2000,
+                                        location: 'middle'
+                                    });
+                                }
+                            }
+                          })
+                        }
                     }
                 },
-                // 点击下一步进入输入面页
-                goNext:function(){
-                    //这里做手机号验证，如果手机号填写正确，向后台发送的验证码也正确的话，则进行下一步操作
-                    if(this.phoneFlag){
-                        api.openWin({
-                            name: 'setPwd',
-                            url: 'setPwd_win.html',
-                            reload:true,
-                            bounces:false,
-                            slidBackEnabled:flse,
-                            pageParam: {
-
-                            }
-                        });
-
-                    }
-                }
             })
         }
     </script>
