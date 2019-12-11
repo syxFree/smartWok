@@ -31,7 +31,10 @@ var interfaces = {
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈
     upload: '/api/common/upload_image', //上传图片
-    area:  '/sw/area'   //获取地址
+    area:  '/sw/area' ,  //获取地址
+    address:'/sw/info/address' , //新增或更改地址
+    info:'/sw/info', //获取个人信息
+    aboutus:'/static_url/content', //获取关于我们富文本
 };
 
 /**
@@ -46,7 +49,6 @@ function fnGet(apiurl, param, showLoading, callback) {
     var nonceStr = guid();
     var timeStamp = new Date().getTime();
     var accessToken = $api.getStorage("accessToken");
-    console.log(accessToken)
     if (showLoading) {
         api.showProgress();
     }
@@ -90,7 +92,7 @@ function fnGet(apiurl, param, showLoading, callback) {
  * @param apiurl 格式为url/{id}
  * @param callback 回调函数
  */
-function fnDelete(apiurl, showLoading, callback) {
+function fnDelete(apiurl,showLoading, callback) {
     var nonceStr = guid();
     var timeStamp = new Date().getTime();
     var accessToken = $api.getStorage("accessToken");
@@ -107,7 +109,7 @@ function fnDelete(apiurl, showLoading, callback) {
                 timeStamp: timeStamp,
                 'access-token': accessToken,
                 "Content-Type": APPLICATION_JSON_UTF8_FORM
-            }
+            },
         },
         function (ret, err) {
             api.hideProgress();
@@ -274,7 +276,6 @@ function fnBodyPost(apiurl, formdata, callback) {
     var nonceStr = guid();
     var timeStamp = new Date().getTime();
     var accessToken = $api.getStorage("accessToken");
-        console.log(accessToken)
     api.showProgress();
     api.ajax(
         {
@@ -293,7 +294,6 @@ function fnBodyPost(apiurl, formdata, callback) {
         },
         function (ret, err) {
             api.hideProgress();
-
             if (ret) {
                 if (ret.code == TOKEN_BEOVERDUE) {
                     toLogin();

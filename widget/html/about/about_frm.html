@@ -12,21 +12,38 @@
 
 <body>
   <div class="app">
-    <div></div>
+    <div v-html="html"></div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
   <script>
+    apiready = function() {
     var vue = new Vue({
       el: '.app',
       data() {
         return {
+          html:""
         }
       },
+      mounted(){
+          this.getdata()
+      },
       methods: {
+        getdata(){
+          let vm=this
+          fnGet(interfaces.aboutus+'/0', {}, true, function(ret,err){
+            if(ret.code==RESPONSE_OK){
+              vm.html=ret.data
+            }else{
+              console.log(JSON.stringify(err))
+            }
+          })
+        },
       },
     })
+  }
   </script>
 </body>
 

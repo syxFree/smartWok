@@ -26,6 +26,7 @@
       width: 1.9rem;
       height: 1.9rem;
       margin: .88rem 0 .2rem;
+      border-radius: 50%;
     }
 
     .header p{
@@ -74,9 +75,11 @@
 <body>
   <div class="app">
     <div class="header">
-      <img src="../../image/my/default-head.png" alt=""  @click="tosomewhere('person_win','person_win.html')">
-      <p @click="tosomewhere('person_win','person_win.html')">用户小白</p>
-      <span>江苏 南京 鼓楼区</span>
+      <img :src="information.avater" alt=""  @click="tosomewhere('person_win','person_win.html')" v-if="information.avater">
+      <img src="../../image/my/default-head.png" alt=""  @click="tosomewhere('person_win','person_win.html')" v-if="!information.avater">
+      <p @click="tosomewhere('person_win','person_win.html')" v-if="information.nickname">{{information.nickname}}</p>
+      <p @click="tosomewhere('person_win','person_win.html')" v-if="!information.nickname">{{information.username}}</p>
+      <span>{{address}}</span>
     </div>
     <div class="content-box content-position">
       <div class="content" @click="tosomewhere('my_order_list','../order/order_list_win.html')">
@@ -111,14 +114,55 @@
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/restful.js" charset="utf-8"></script>
   <script>
+    apiready = function() {
+      api.addEventListener({
+        name: 'changeperson'
+      }, function(ret, err) {
+        vue.person()
+      });
     var vue = new Vue({
       el: '.app',
       data() {
         return {
+            information:'',
+            address:'',
         }
       },
+      mounted(){
+        this.person()
+      },
       methods: {
+        //获取个人信息
+        person(){
+          let vm=this
+          fnGet(interfaces.info, {}, true, function(ret,err){
+              if(ret.code==RESPONSE_OK){
+                vm.gethome(ret.data)
+              }else{
+                console.log(JSON.stringify(err))
+              }
+          })
+        },
+        // 获取地址
+        gethome(home){
+          let vm=this;
+          fnGet(interfaces.area,{},true,function(ret, err) {
+              if (ret.code == RESPONSE_OK) {
+                  for(var j=0;j<ret.data.length;j++){
+                    if(home.areaId ==ret.data[j].id){
+                       vm.address=ret.data[j].name
+                       vm.information=home
+                       console.log(JSON.stringify( vm.information))
+                    }
+                  }
+              }else{
+                console.log(JSON.stringify(err))
+              }
+            })
+        },
+
         tosomewhere:function(name,url){
           api.openWin({
               name: name,
@@ -130,6 +174,7 @@
         },
       },
     })
+  }
   </script>
 </body>
 

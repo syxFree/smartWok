@@ -51,6 +51,7 @@
     .head-img .head {
       width: .9rem;
       height: .9rem;
+      border-radius: 50%;
     }
 
     .content-name .name {
@@ -70,15 +71,17 @@
     <div class="content">
       <div class="head-img">
         <span>头像</span>
-        <div class="imgs">
-          <img src="../../image/my/default-head.png" alt="" class="head">
+        <div class="imgs" @click="upload_img">
+          <img :src="pers.avater" alt="" class="head" v-if="pers.avater">
+          <img src="../../image/my/default-head.png" alt="" class="head" v-else>
           <img src="../../image/my/unfold.png" alt="" class="unfold">
         </div>
       </div>
       <div class="content-name" >
         <span>昵称</span>
         <div>
-          <span class="name">用户小白</span>
+          <span class="name" v-if="pers.nickname">{{pers.nickname}}</span>
+          <span class="name" v-else>{{pers.username}}</span>
           <img src="../../image/my/unfold.png" alt="" class="unfold" @click="tonickname()">
         </div>
       </div>
@@ -93,7 +96,7 @@
         <span>所在地</span>
         <div>
           <span class="name">{{address}}</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" id="trigger">
+          <img src="../../image/my/unfold.png" alt="" class="unfold" id="address">
         </div>
       </div>
     </div>
@@ -115,48 +118,120 @@
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script src="../../script/mobileSelect.js"></script>
+  <script src="../../script/restful.js" charset="utf-8"></script>
   <script>
+  apiready = function() {
+    api.addEventListener({
+      name: 'changeperson'
+    }, function(ret, err) {
+      console.log(JSON.stringify(ret))
+      vue.person()
+    });
+
     var vue = new Vue({
       el: '.app',
       data() {
         return {
           openbluetooth: false,
+          addresslist:'',
+          data: [{ 'id': 0, 'value': '男' },{ 'id': 1, 'value': '女' }],
+          sex:'',
+          sexId:'0',
           address:'',
+          addressId:'',
+          pers:'',
         }
       },
       mounted() {
-        let vm=this
-        var mobileSelect1 = new MobileSelect({
+        // 获取个人信息、
+        this.person()
+      },
+      methods: {
+        // 地址
+        getaddress(person){
+          let vm=this;
+          fnGet(interfaces.area,{},true,function(ret, err) {
+              if (ret.code == RESPONSE_OK) {
+                let array=ret.data
+                var keyMap = {
+                    "name" : "value",
+                };
+                for (var i = 0; i < array.length; i++) {
+                   var obj = array[i];
+                   for(var key in obj){
+                      var newKey = keyMap[key];
+                      if(newKey){
+                            obj[newKey] = obj[key];
+                            delete obj[key];
+                     }
+                  }
+                }
+                // 来循环判断让第一个显示自己的地址
+                for(var j= 0; j < array.length; j++){
+                   console.log(JSON.stringify(array[j]))
+                   if(person.areaId==array[j].id){
+                       vm.address=array[j].value
+                       vm.addressId=array[j].id
+                      vm.pers=person
+                      vm.getmobileSelect1(j,array)
+                      vm.getmobileSelect2()
+                   break;
+                   }
+                }
+                console.log(JSON.stringify( vm.pers))
+              }
+
+            })
+
+        },
+        getmobileSelect1(index,array){
+          let vm=this
+          var mobileSelect1 = new MobileSelect({
+          trigger: '#address',
+          title: '所在地区',
+          wheels: [
+            {
+              data: array
+            }
+          ],
+          position: [index],
+          callback: function (indexArr, data) {
+            vm.address=data[0].value
+            vm.addressId=data[0].id
+            vm.saveperson()
+          }
+        });
+      },
+        getmobileSelect2(){
+          let vm=this
+          var mobileSelect2 = new MobileSelect({
           trigger: '#sex',
           title: '性别',
           wheels: [
             {
-              data: [
-                { 'id': 1, 'value': '男' },
-                { 'id': 0, 'value': '女' }
-              ]
+              data:this.data
             }
           ],
           position: [0],
           callback: function (indexArr, data) {
-            console.log(data)
+            vm.sex=data[0].value
+            vm.sexId=data[0].id
+            vm.saveperson()
           }
         });
-        var mobileSelect2 = new MobileSelect({
-          trigger: "#trigger",
-          title: "所在地",
-          wheels: [
-            { data: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"] }
-          ],
-          position: [0],
-          callback: function (indexArr, data) {
-            console.log(data);
-            vm.address=data
-          }
-        });
-
       },
-      methods: {
+        // 个人信息
+        person(){
+          let vm=this
+          fnGet(interfaces.info, {}, true, function(ret,err){
+              if(ret.code==RESPONSE_OK){
+                // console.log(JSON.stringify(ret.data))
+                vm.getaddress(ret.data)
+              }else{
+                console.log(JSON.stringify(err))
+              }
+          })
+        },
         getopenbluetooth() {
           this.openbluetooth = !this.openbluetooth;
         },
@@ -168,9 +243,108 @@
               bounces: false,
               slidBackEnabled: true,
           });
-        }
+        },
+
+      // 上传
+      upload_img(){
+        var vm = this;
+        api.actionSheet({
+                title: '',
+                cancelTitle: '取消',
+                buttons: ['拍摄','相册']
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                var sourType = '';
+                if (index == 1 || index == 2 ) {
+                 sourType=index==1?'camera':'photos'
+                    var resultList = api.hasPermission({
+                        list: [sourType]
+                    });
+                    if (!resultList[0].granted) {
+                        api.requestPermission({
+                            list: [sourType],
+                            code: 1
+                        }, function(ret, err) {
+                            if (ret && ret.list && ret.list.length > 0 && ret.list[0].granted) {
+                                vm.getPicture(sourType)
+                            }
+                        });
+                    } else {
+                        vm.getPicture(sourType)
+                    }
+                } else  {
+                    return;
+                }
+
+            });
       },
+      getPicture(sourType){
+        if(sourType==='photos'){
+          sourType='library'
+        }
+        let vm=this
+        api.getPicture({
+            sourceType: sourType,
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'base64',
+            allowEdit: false,
+            quality: 80,
+            targetWidth: 500,
+            targetHeight: 500,
+            saveToPhotoAlbum: false
+        }, function(ret, err) {
+          if (ret) {
+            var formdata = {
+                  base64Image: ret.base64Data.substring(ret.base64Data.indexOf('base64,') + 'base64,'.length)
+            };
+            fnBodyPost(interfaces.upload, formdata, function(ret, err) {
+                if (ret.code == RESPONSE_OK) {
+                  vm.pers.avater=ret.data
+                  vm.saveperson()
+                } else {
+                    if (ret.subMsg || ret.msg) {
+                        api.toast({
+                            msg: ret.subMsg ? ret.subMsg : ret.msg,
+                            duration: 2000,
+                            location: 'middle'
+                        });
+                    }
+                }
+            });
+          } else {
+            console.log(JSON.stringify(err));
+          }
+        })
+      },
+        // 更改了就立马保存
+        saveperson(){
+         let vm=this
+          let param={
+            "areaId": vm.addressId,
+            "avater": vm.pers.avater,
+            "sex": vm.sexId
+          }
+          fnBodyPost(interfaces.info, param, function(ret,err){
+              console.log(JSON.stringify(ret))
+            if(ret.code==RESPONSE_OK){
+                console.log(JSON.stringify(ret))
+                api.toast({
+                    msg: '修改成功',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                api.sendEvent({
+                    name: 'changeperson',
+                });
+            }else{
+              console.log(JSON.stringify(err))
+            }
+          })
+        },
+    }
     })
+  }
   </script>
 
 </body>
