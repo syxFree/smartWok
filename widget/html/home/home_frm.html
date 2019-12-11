@@ -161,7 +161,6 @@
   <script src="../../script/vue.min.js"></script>
   <script>
     apiready = function () {
-      console.log($api.getStorage('token'))
     var vue = new Vue({
       el: '.app',
       data() {
@@ -171,6 +170,8 @@
         }
       },
       created(){
+        console.log($api.getStorage('accessToken'))
+        if(!$api.getStorage('accessToken')){
           api.openWin({
               name: 'page1',
               url: '../login/login_win.html',
@@ -178,6 +179,8 @@
                   name: 'test'
               }
           });
+        }
+
 
       },
       methods: {

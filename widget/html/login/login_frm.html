@@ -13,10 +13,10 @@
         .app{
             overflow: hidden;
             background-color: white;
-            height: 100%;
+            /*height: 100%;*/
         }
         section{
-          height: 100%;
+          /*height: 100%;*/
         }
         .top-font{
             color: #333;
@@ -109,8 +109,9 @@
         .wx-login{
             width: 100%;
             height: 3rem;
-            position: absolute;
-            bottom:2rem;
+            margin-top: 43%;
+            /*position: fixed;*/
+            /*bottom:.5rem;*/
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -173,6 +174,14 @@
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
+        // window.addEventListener('resize',function(){
+        //   if(document.activeElement.tagName==='INPUT' || document.activeElement.tagName==='TEXTAREA'){
+        //     console.log("aaaaa")
+        //     window.setTimeout(function(){
+        //         document.activeElement.scrollIntoViewIfNeeded()
+        //     },20)
+        //   }
+        // })
         apiready = function(){
             //考虑手机嵌入式兼容性问题
             var header = $api.dom('header');
@@ -197,6 +206,10 @@
                         this.imgFlag=false
                     }
                 }
+            },
+            created(){
+              
+
             },
             methods: {
                 //清空手机号
@@ -229,13 +242,19 @@
                         $api.setStorage('accessToken',ret.data)
                         api.openWin({
                             name: 'home',
-                            url: '../home/home_win.html',
+                            url: '../footer/footer_win.html',
                             reload: true,
                             bounces: false,
                             slidBackEnabled: false,
                             pageParam: {
 
                             }
+                        });
+                      }else{
+                        api.toast({
+                            msg: ret.msg,
+                            duration: 2000,
+                            location: 'bottom'
                         });
                       }
                     })

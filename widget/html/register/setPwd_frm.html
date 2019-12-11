@@ -156,17 +156,18 @@
                   }
                   console.log(JSON.stringify(params))
                     if(this.nextFlag){
-                      fnBodyPost(interfaces.register,{params},function(ret,err){
+                      fnBodyPost(interfaces.register,params,function(ret,err){
                         console.log(JSON.stringify(ret))
                         if(ret.code==RESPONSE_OK){
+                          $api.setStorage('accessToken',ret.data)
                           api.toast({
                               msg: '注册成功',
                               duration: 2000,
                               location: 'middle'
                           });
                           api.openWin({
-                              name: 'home',
-                              url: '../home/home_win.html',
+                              name: 'footer',
+                              url: '../footer/footer_win.html',
                               reload:true,
                               bounces:false,
                               slidBackEnabled:false,
