@@ -23,9 +23,9 @@
       margin: 0 auto;
     }
     img{
-      width: 90%;
+      /*width: 90%;
       margin: 1rem auto;
-      margin-left: .5rem;
+      margin-left: .5rem;*/
     }
     #shade{
         width: 100%;
@@ -34,7 +34,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        z-index: 1000;
+        z-index: 99999;
         display: none;
         color: #333;
     }
@@ -48,38 +48,38 @@
         align-items: center;
     }
     .share-img{
-        width: 1.7rem;
+        width: 2rem;
         height: 100%;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         align-items: center;
         flex-direction: column;
         font-size: .26rem;
-        color: #333!important;
+        color: #333;
     }
     .share-img img{
         width: .9rem;
         height: .9rem;
     }
-
+    .share-img span{
+      margin-top: .1rem
+    }
     </style>
 </head>
 <body>
     <div class="app">
-      <div>
-        <h2>红烧排骨怎么上色好看？</h2>
-        <p>后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案后台编辑的咨询文案</p>
-        <img src="../../image/information/two.jpg" alt="">
+      <div class="" v-html="content">
+        <!-- {{content}} -->
       </div>
       <div id="shade" @click="cancel">
           <div class="content">
               <div class="share-img" @click.stop="shareWx">
                   <img src="../../image/information/share_wx.png" alt="">
-                  微信好友
+                  <span>微信好友</span>
               </div>
               <div class="share-img" @click.stop="shareFriend">
                    <img src="../../image/information/share_friend.png" alt="">
-                   朋友圈
+                   <span>朋友圈</span>
               </div>
           </div>
       </div>
@@ -87,8 +87,11 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script type="text/javascript">
     apiready=function(){
+      var id=api.pageParam.id
+      console.log(id)
       api.addEventListener({
           name: 'share'
       }, function(ret, err){
@@ -103,10 +106,11 @@
       var vm=new Vue({
         el:".app",
         data:{
-          flag:true
+          flag:true,
+          content:''
         },
         created(){
-
+            this.getData()
         },
         methods:{
           shareWx:function(){
@@ -117,6 +121,32 @@
           },
           cancel:function(){
              $api.byId("shade").style.display='none'
+          },
+          getData:function(){
+            var vm=this
+            var params={
+              id:id
+            }
+            fnGet(interfaces.informationDetail,params,true,function(ret,err){
+              // if (refresh = 'refresh') {
+              //     api.refreshHeaderLoadDone()
+              // }
+              if (ret) {
+                  if (ret.code == RESPONSE_OK) {
+                    // console.log(JSON.stringify(ret.data.list))
+                      vm.content=ret.data.content
+                      // console.log(JSON.stringify(vm.content))
+                  } else {
+                      if (ret.subMsg || ret.msg) {
+                          api.toast({
+                              msg: ret.subMsg ? ret.subMsg : ret.msg,
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                      }
+                  }
+              }
+            })
           }
         }
       })

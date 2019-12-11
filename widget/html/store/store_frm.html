@@ -39,19 +39,39 @@
         .search-content span{
             margin-left: 0.05rem;
         }
+        .nav-box{
+          overflow: hidden;
+          display: flex;
+        }
         .nav{
-            width: 100%;
+            width: 9rem;
+            box-sizing: border-box;
+            padding: 0 .3rem;
+            overflow:auto;
             height: .9rem;
             display: flex;
+            flex: 1;
             justify-content: space-around;
             align-items: center;
             font-size: .3rem;
             color: rgba(0, 0, 0, 0.58);
         }
+        .nav .nav-item{
+            /*margin: 0 .5rem;*/
+            /*display: flex;
+            box-sizing: border-box;
+            padding: 0 .5rem;
+            width: auto;
+            height: .2rem;*/
+        }
         .nav .nav-item-active{
+          /*margin: 0 .5rem;*/
+            /*width: auto;
+            height: .2rem;*/
             font-weight: 600;
             color: #333;
             border-bottom: 3px solid #FF8C46;
+            /*margin:0 .3rem*/
         }
         .goods{
             width: 90%;
@@ -95,19 +115,21 @@
                    <span>搜索</span>
                </div>
            </div>
-           <div class="nav">
-                <div
-                :class="[navIndex==index?'nav-item-active':'nav-item']"
-                v-for="(item, index) in nav"
-                :key="index"
-                @click="navChange(index)">
-                    {{item}}
-                </div>
+           <div class="nav-box">
+             <div class="nav">
+                  <div
+                  :class="[navIndex==index?'nav-item-active':'nav-item']"
+                  v-for="(item, index) in nav"
+                  :key="item.id"
+                  @click="navChange(index,item.id)">
+                      {{item.name}}
+                  </div>
+             </div>
            </div>
            <div class="goods">
-               <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails">
-                    <img :src="item.img" alt="图片">
-                    <div class="describe">{{item.describe}}</div>
+               <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails(item.id)">
+                    <img :src="img[index]" alt="图片">
+                    <div class="describe">{{item.goodsName}}</div>
                     <div class="price">￥{{item.price}}</div>
                </div>
            </div>
@@ -116,12 +138,17 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
         var vm=new Vue({
             el:'.app',
             data:{
                 navIndex:0,  //导航列表索引
                 nav:['全部','炒锅系列','电火锅','电饭煲','火锅'],
+                pageNum:1,
+                pageSize:10,
+                img:[],
                 goods:[
                     {
                         img:'../../image/store/one.jpg',
@@ -145,7 +172,55 @@
                     }
                 ]
             },
+            created(){
+                this.getCategory()
+                this.getGoodsList()
+            },
             methods:{
+              //获取分类列表
+                getCategory:function(){
+                    var vm=this
+                    fnGet(interfaces.goodsCategory,{},true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          vm.nav=ret.data
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                        }
+                    })
+                },
+                getGoodsList:function(value){
+                  // console.log(JSON.stringify(this.nav))
+                  console.log("111111111")
+                    if(value=='10'){
+                      value=''
+                    }
+                    var vm=this
+                    var params={
+                      pageSize:vm.pageSize,
+                      pageNum:vm.pageNum,
+                      categoryId:value
+                    }
+                    // console.log(JSON.stringify(params))
+                    fnGet(interfaces.goodsList,params,true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          vm.goods=ret.data.list
+                          for(var i=0;i<vm.goods.length;i++){
+                            vm.img.push(vm.goods[i].images.split(',')[0])
+                          }
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
+                        }
+                    })
+                },
                 //跳转到搜索页面
                 goSearch:function(){
                     api.openWin({
@@ -161,11 +236,15 @@
 
                 },
                 //切换导航栏状态
-                navChange:function(index){
+                navChange:function(index,id){
                     this.navIndex=index
+
+                    console.log(id)
+                    this.getGoodsList(id)
+                    console.log(JSON.stringify(this.goods))
                 },
                 //跳转到商品详情页
-                goGoodsDetails:function(){
+                goGoodsDetails:function(id){
                     api.openWin({
                         name: 'details',
                         url: 'goods-details_win.html',
@@ -173,13 +252,14 @@
                         bounces:false,
                         slidBackEnabled:false,
                         pageParam: {
-                            name: 'test'
+                            id:id
                         }
                     });
 
                 }
             }
         })
+      }
     </script>
 </body>
 </html>

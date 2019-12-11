@@ -7,21 +7,31 @@
     <title>资讯详情</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            /* overflow: hidden; */
+        }
         .app{
             width: 100%;
-            min-height: 100vh;
+            height: 100%;
             background-color: #F7F7F7;
         }
+        section{
+          height: 100%;
+        }
         .header{
-            width: 100%;
+            width: 90%;
             height: .6rem;
             position: absolute;;
             top: .7rem;
+            left: 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-sizing: border-box;
-            padding: 0 .2rem;
+            /*box-sizing: border-box;
+            padding: 0 .2rem;*/
+            z-index: 9999;
         }
         .header img{
             width: .54rem;
@@ -30,6 +40,7 @@
         .swiper{
             width: 100%;
             height: 7.5rem;
+            position: relative;
         }
         .swiper img{
             width: 100%;
@@ -38,12 +49,14 @@
         .goods-describe{
             width: 100%;
             height: 2rem;
+            /*margin-top: 7.5rem;*/
             background-color: white;
-            box-sizing: border-box;
-            padding: .2rem;
+            /*box-sizing:content-box;*/
+            /*padding: .2rem;*/
+            position: relative;
         }
         .goods-describe .info{
-            width: 100%;
+            width: 90%;
             /*height: 40px;*/
             margin-bottom: .2rem;
             color: #333;
@@ -53,21 +66,31 @@
             display:-webkit-box;
             -webkit-box-orient:vertical;
             -webkit-line-clamp:2;
+            position: relative;
+            padding-top: .3rem;
+            padding-left: .3rem;
         }
         .goods-describe .goods-price-count{
+          text-align: justify;
             width: 100%;
             height: .5rem;
-            margin-top: .15rem;
+            /*margin-top: .15rem;*/
             display: flex;
             justify-content: space-between;
+            position: absolute;
+            bottom: .2rem;
         }
         .goods-price-count .good-price{
             color: #FF8C46;
             font-size: .36rem;
+            position: relative;
+            left: .3rem
         }
         .goods-price-count .good-count{
             color: #999;
             font-size: .28rem;
+            position: relative;
+            left: -.2rem;
         }
         .detail{
             width: 100%;
@@ -98,8 +121,8 @@
             display: flex;
             align-items: center;
             justify-content: space-around;
-            box-sizing: border-box;
-            padding: 0 .2rem;
+            /*box-sizing: border-box;
+            padding: 0 .2rem;*/
         }
         footer .makeCall{
             width: .5rem;
@@ -152,11 +175,13 @@
             height: 100%;
         }
         .choose .goods-info{
-            width: 100%;
+            width: 90%;
             height: 2rem;
             margin-top: .6rem;
-            box-sizing: border-box;
-            padding: 0 .3rem;
+            position: relative;
+            left: .3rem;
+            /* box-sizing: border-box;
+            padding: 0 .3rem; */
             display: flex;
         }
         .goods-info img{
@@ -250,6 +275,30 @@
             width: .9rem;
             height: .9rem;
         }
+        .circle{
+          /*width: 1rem;*/
+          height: .6rem;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          position: absolute;
+          bottom: 0rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .circleItem{
+          width: .14rem;
+          height: .14rem;
+          margin: 0 .1rem;
+          border-radius: 50%;
+          background-color: white;
+        }
+        .circleItemActive{
+          width: .14rem;
+          height: .14rem;
+          border-radius: 50%;
+          background-color: rgb(0,0,0);
+        }
     </style>
 </head>
 <body>
@@ -264,19 +313,21 @@
                 </div>
             </div>
             <div class="swiper">
-                <img :src="goods.swiper" alt="轮播图">
+                <img :src="img[currentIndex]" alt="轮播图">
+                <div class="circle">
+                    <div :class="currentIndex==index?'circleItemActive':'circleItem'" v-for="(item,index) in img.length"></div>
+                </div>
             </div>
             <div class="goods-describe">
-                <div class="info">{{goods.details}}</div>
+                <div class="info" v-html="goods.desc">{{goods.desc}}</div>
                 <div class="goods-price-count">
                     <div class="good-price">￥{{goods.price}}</div>
-                    <div class="good-count">库存：{{goods.amount}}</div>
+                    <div class="good-count">库存：{{goods.stock}}</div>
                 </div>
             </div>
             <div class="detail">
                 <p>商品详情</p>
-                <img :src="goods.detailImg1" alt="">
-                <img :src="goods.detailImg2" alt="">
+                <img :src="item" alt="" v-for="(item, index) in img" :key="index">
             </div>
         </section>
         <footer>
@@ -292,7 +343,7 @@
                     <img src="../../image/store/store-close.png" alt="关闭">
                 </div>
                 <div class="goods-info">
-                    <img :src="goods.swiper" alt="商品图片">
+                    <img :src="img[0]" alt="商品图片">
                     <div class="info-price-count">
                         <p>￥{{goods.price}}</p>
                         <p>库存：{{goods.amount}}</p>
@@ -327,7 +378,11 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
+      var id=api.pageParam.id
+      console.log(id)
         var vm=new Vue({
             el:'.app',
             data:{
@@ -345,6 +400,11 @@
                 incFlag:true,   //增加按钮的状态
                 shadeFlag:false,  //遮罩层状态
                 shadeFlag2:false,
+                img:[],
+                currentIndex:1,
+            },
+            created(){
+                this.getData()
             },
             watch: {
                 //监听数量的加减，改版加减数量按钮的状态
@@ -368,6 +428,44 @@
                 back:function(){
                   api.closeWin()
                 },
+                getData:function(){
+                  var vm=this
+                  var params={
+                    id:id
+                  }
+                  fnGet(interfaces.goodsDetails,params,true,function(ret,err){
+                    if(ret.code==RESPONSE_OK){
+                      vm.goods=ret.data
+                      var bannerList=vm.goods.images.split(',')
+                      vm.img=bannerList
+                      vm.moveSlide()
+                      api.openFrame({
+                          name: 'header_frm',
+                          url: 'header_frm.html',
+                          rect: {
+                              x: 0,
+                              y: api.winWidth/2,
+                              w: 320,
+                              h: 480
+                          },
+                          pageParam: {
+                              name: 'test'
+                          },
+                          bounces: true,
+                          bgColor: 'red',
+                          vScrollBarEnabled: true,
+                          hScrollBarEnabled: true
+                      });
+                    }else{
+                      api.toast({
+                          msg: ret.msg,
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+
+                    }
+                  })
+                },
                 //分享按钮
                 share:function(){
                   this.shadeFlag2=true
@@ -387,10 +485,19 @@
                 },
                 //联系按钮
                 call:function(){
-                  api.call({
-                      type: 'tel_prompt',
-                      number: '18338514073' //商家电话
-                  });
+                    api.confirm({
+                        // title: 'title',
+                        msg: '123454679800',
+                        buttons:['拨打', '取消']
+                    },function(ret,err){
+                        if(ret.buttonIndex == 1){
+                            api.alert({msg: '点击了确定'});
+                        }
+                    });
+                //   api.call({
+                //       type: 'tel_prompt',
+                //       number: '18338514073' //商家电话
+                //   });
                 },
                 //购买按钮
                 order:function(){
@@ -431,6 +538,10 @@
                 },
                 //跳转到提交订单页
                 goOrderSubmit:function(){
+                    var goodsInfo=this.goods
+                    goodsInfo.count=this.orderCount
+                    goodsInfo.img=this.img[0]
+                    console.log(JSON.stringify(goodsInfo))
                     api.openWin({
                         name: 'orderSubmit',
                         url: '../order_submit/orderSubmit_win.html',
@@ -438,13 +549,115 @@
                         bounces:false,
                         slidBackEnabled:false,
                         pageParam: {
-                            name: 'test'
+                            goodsInfo:goodsInfo
                         }
                     });
-
                 },
+                //左右滑动手势
+                moveSlide() {
+                    var vm = this;
+                    this.$nextTick(function () {
+                        //侧滑显示删除按钮
+                        var container = document.querySelectorAll('body');
+                        console.log(container)
+                        console.log(JSON.stringify(container))
+                        for (var i = 0; i < container.length; i++) {
+                            var x, y, X, Y, swipeX, swipeY;
+                            container[i].addEventListener('touchstart', function (event) {
+                                x = event.changedTouches[0].pageX;
+                                y = event.changedTouches[0].pageY;
+                                swipeX = true;
+                                swipeY = true;
+                            });
+                            container[i].addEventListener('touchmove', function (event) {
+                                X = event.changedTouches[0].pageX;
+                                Y = event.changedTouches[0].pageY;
+                                // 左右滑动
+                                if (swipeX && Math.abs(X - x) - Math.abs(Y - y) > 0) {
+                                    // 阻止事件冒泡
+                                    event.stopPropagation();
+                                    if (X - x > 10) {   //右滑
+                                      if(vm.currentIndex>=vm.img.length-1){
+                                          return
+                                      }
+
+                                        console.log("向右滑动事件")
+                                          vm.currentIndex++
+
+                                    }
+                                    if (x - X > 10) {   //左滑
+                                      if(vm.currentIndex<=0){
+                                          return
+                                      }
+
+                                        console.log("向左滑动事件")
+                                          vm.currentIndex--
+                                      
+                                    }
+                                    swipeY = false;
+                                }
+                            });
+                        }
+                    })
+                },
+                banner:function(){
+                  var vm=this
+                  var bannerList=vm.goods.images.split(',')
+                  vm.img=bannerList
+                  console.log(JSON.stringify(bannerList))
+                  var UIScrollPicture = api.require('UIScrollPicture');
+                  UIScrollPicture.open({
+                      rect: {
+                          x: 0,
+                          y: 0,
+                          w: api.winWidth,
+                          h: api.winHeight/2
+                      },
+                      data: {
+                          paths: bannerList,
+                          //对图片的描述，可写可不写
+                          // captions: wordList
+                      },
+                      //文字样式
+                      styles: {
+                          caption: {
+                              height: 30,
+                              color: '#E0FFFF',
+                              size: 15,
+                              bgColor: 'rgba(0, 0, 0, .6)',
+                              position: 'bottom'
+                          },
+                          indicator: {
+                          //圆点样式
+                          dot:{
+                              w:7,
+                              h:7,
+                              r:3,
+                              margin:10
+                          },
+                              align: 'center',
+                              color: '#000000',
+                              activeColor: 'rgba(0,0,0,.4)'
+                          }
+                      },
+                      placeholderImg: 'widget://res/slide1.jpg',
+                      contentMode: 'scaleToFill',
+                      //切换的时间
+                      interval: 3,
+                      fixedOn: api.frameName,
+                      loop: true,
+                      fixed: false
+                  }, function(ret, err) {
+                      if (ret) {
+
+                      } else {
+                          alert(JSON.stringify(err));
+                      }
+                  });
+                }
             },
         })
+      }
     </script>
 </body>
 </html>

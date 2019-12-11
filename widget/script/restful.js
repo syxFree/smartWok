@@ -27,6 +27,15 @@ var interfaces = {
     logout: '/jgj/worker/logout',//退出登录
     sendCode: '/api/common/send_code',//发送验证码
     checkCode:'/api/common/check_code', //校验验证码
+    informationList:'/sw/news/list',  //咨询列表
+    informationBanner:'/sw/news/brand/list',  //咨询轮播图
+    informationDetail:'/sw/news',           //咨询详情
+    goodsList:'/sw/shop/list',    //商品列表
+    goodsDetails:'/sw/shop/detial',    //商品详情
+    goodsCategory:'/sw/shop/category',    //分类列表
+    call:'/sw/shop/phone',    //获取客服电话
+    getAdress:'/sw/info/address/def',  //获取默认地址
+    createOrder:'/sw/order/create',  //创建订单
     cookbookfun:'/sw/cookbook/functions',    //菜谱功能
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈
