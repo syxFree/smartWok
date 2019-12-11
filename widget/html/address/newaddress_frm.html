@@ -135,14 +135,20 @@
           switchcase: false,
         }
       },
-      mounted:{
+      mounted(){
 
-      }
+      },
       methods: {
         // 获取地址
         getaddress(){
-          
-        }
+          fnBodyPost(interfaces.area, {},true, function(ret, err) {
+              if (ret.code == RESPONSE_OK) {
+                console.log(JSON.stringify(ret.data))
+              } else {
+                console.log(JSON.stringify(err))
+              }
+            })
+        },
         handleswitchcase() {
           this.switchcase = !this.switchcase;
         },
