@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/mobileSelect.css">
   <style>
 
     .btn {
@@ -25,7 +26,6 @@
     }
 
     .content {
-      height: 1.07rem;
       line-height: 1.07rem;
       background: #FFFFFF;
       padding-right: .3rem;
@@ -86,7 +86,6 @@
     .switch img {
       width: .9rem;
       height: .55rem;
-
     }
   </style>
 </head>
@@ -96,22 +95,22 @@
     <div class="content-box">
       <div class="content">
         <span>收货人</span>
-        <input type="text" placeholder="请填写姓名">
+        <input type="text" placeholder="请填写姓名" v-model="name">
       </div>
       <div class="content">
         <span>手机号码</span>
-        <input type="text" placeholder="手机号码" style="margin-left: .60rem;">
+        <input type="text" placeholder="手机号码" style="margin-left: .60rem;" v-model="phone">
       </div>
-      <div class="content contentflex">
-        <div>
+      <div class="content contentflex"  >
+        <div >
           <span>所在地区</span>
-          <input type="text" placeholder="请选择" style="margin-left: .60rem;">
+          <input type="text" placeholder="请输入" style="margin-left: .60rem;" v-model="address" disabled="true" >
         </div>
-        <img src="../../image/my/unfold.png" alt="" class="unfold">
+        <img src="../../image/my/unfold.png" alt="" class="unfold" id="address">
       </div>
       <div class="content-detail">
         <span>详细地址</span>
-        <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）" style="margin-top:.05rem"></textarea>
+        <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）" style="margin-top:.05rem" v-model="detail"></textarea>
       </div>
     </div>
     <div class="switch">
@@ -120,40 +119,141 @@
       <img src="../../image/my/switch-true.png" alt="" v-if="switchcase" @click="handleswitchcase">
     </div>
     <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
-      <button class="btn">保存</button>
+      <button class="btn" @click="saveaddress">保存</button>
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script src="../../script/restful.js"></script>
+    <script src="../../script/mobileSelect.js"></script>
   <script>
+  apiready = function() {
     var vue = new Vue({
       el: '.app',
       data() {
         return {
           switchcase: false,
+          address:'',
+          addressId:'',
+          name:'',
+          phone:'',
+          detail:''
         }
       },
       mounted(){
-
+          this.getaddress()
       },
       methods: {
         // 获取地址
         getaddress(){
-          fnBodyPost(interfaces.area, {},true, function(ret, err) {
+          let vm=this;
+          fnGet(interfaces.area,{},true,function(ret, err) {
               if (ret.code == RESPONSE_OK) {
                 console.log(JSON.stringify(ret.data))
+                let array=ret.data
+                var keyMap = {
+                    "name" : "value",
+                };
+                for (var i = 0; i < array.length; i++) {
+                   var obj = array[i];
+                   for(var key in obj){
+                      var newKey = keyMap[key];
+                      if(newKey){
+                            obj[newKey] = obj[key];
+                            delete obj[key];
+                     }
+                  }
+                }
+                  var mobileSelect1 = new MobileSelect({
+                  trigger: '#address',
+                  title: '所在地区',
+                  wheels: [
+                    {
+                      data: ret.data
+                    }
+                  ],
+                  position: [0],
+                  callback: function (indexArr, data) {
+                    vm.address=data[0].value
+                    vm.addressId=data[0].id
+                  }
+                });
               } else {
                 console.log(JSON.stringify(err))
               }
-            })
+          })
+        },
+      // 保存收货地址
+        saveaddress(){
+          if(this.name=== ""){
+            api.toast({
+                msg: '收货人不能为空',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+          }
+          if(this.phone=== ""){
+            api.toast({
+                msg: '电话不能为空',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+          }
+          if(this.detail=== ""){
+            api.toast({
+                msg: '收货地址详情不能为空',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+          }
+          if(this.address=== ""){
+            api.toast({
+                msg: '收货所在地不能为空',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+          }
+          let def=0
+          if(this.switchcase){
+            def=1
+          }else{
+            def=0
+          }
+          console.log(def)
+          let param={
+            "address":this.detail,
+            "areaId":this.addressId,
+            "def": def,
+            "receiptorName": this.name,
+            "receiptorPhone": this.phone
+          }
+          fnBodyPost(interfaces.address, param, function(ret,err){
+            console.log(JSON.stringify(ret))
+            if(ret.code==RESPONSE_OK){
+              api.toast({
+                  msg: '新增地址创建成功',
+                  duration: 2000,
+                  location: 'bottom'
+              });
+              setTimeout(function(){
+                      api.closeWin()
+              },2000)
+            }else {
+              console.log(JSON.stringify(err))
+            }
+          })
         },
         handleswitchcase() {
           this.switchcase = !this.switchcase;
         },
       },
     })
+  }
   </script>
 
 </body>

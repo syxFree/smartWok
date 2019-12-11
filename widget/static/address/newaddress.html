@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/mobileSelect.css">
   <style>
     .app {
       min-height: 100vh;
@@ -35,7 +36,7 @@
       padding-right: .5rem;
     }
 
-    .btn {
+  .btn {
       width: 6.9rem;
       height: .78rem;
       background: #FF8C46;
@@ -52,7 +53,6 @@
     }
 
     .content {
-      height: 1.07rem;
       line-height: 1.07rem;
       background: #FFFFFF;
       padding-right: .3rem;
@@ -113,7 +113,13 @@
     .switch img {
       width: .9rem;
       height: .55rem;
-
+    }
+    #address{
+      display: inline-block;
+      color: #75758B;
+    }
+    .fontcolor{
+      color: #333333;
     }
   </style>
 </head>
@@ -134,12 +140,13 @@
         <span>手机号码</span>
         <input type="text" placeholder="手机号码" style="margin-left: .60rem;">
       </div>
-      <div class="content contentflex">
+      <div class="content contentflex" >
         <div>
           <span>所在地区</span>
-          <input type="text" placeholder="请选择" style="margin-left: .60rem;">
+            <input type="text" placeholder="手机号码" style="margin-left: .60rem;" v-model="address" disabled="true" >
+            <!-- <p  style="margin-left: .60rem;"  id="address" :class="{curindx>-1?'fontcolor':''}">{{address}}</p> -->
         </div>
-        <img src="../../image/my/unfold.png" alt="" class="unfold">
+        <img src="../../image/my/unfold.png" alt="" class="unfold" id="address">
       </div>
       <div class="content-detail">
         <span>详细地址</span>
@@ -158,13 +165,38 @@
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/mobileSelect.js"></script>
   <script>
     var vue = new Vue({
       el: '.app',
       data() {
         return {
           switchcase: false,
+          address:'',
+          curindx:-1
         }
+      },
+      mounted(){
+        let vm=this;
+          var mobileSelect1 = new MobileSelect({
+            trigger: '#address',
+            title: '性别',
+            wheels: [
+              {
+                data: [
+                  { 'id': 1, 'value': '男' },
+                  { 'id': 0, 'value': '女' }
+                ]
+              }
+            ],
+            position: [0],
+            callback: function (indexArr, data) {
+              console.log(data)
+              vm.address=data[0].value
+              console.log(vm.address)
+              vm.curindx=data[0].id
+            }
+          });
       },
       methods: {
         handleswitchcase() {

@@ -57,31 +57,77 @@
     <div class="nickinput-box">
       <p>昵称</p>
       <div class="nickinput">
-        <input type="text">
+        <input type="text" v-model="nickname">
         <img src="../../image/my/del-pic.png" alt="">
       </div>
     </div>
     <div style="text-align: center;margin-top: 1.3rem;">
-      <button class="btn">确认修改</button>
+      <button class="btn" @click="savechange">确认修改</button>
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
   <script>
+    apiready = function() {
     var vue = new Vue({
       el: '.app',
       data() {
         return {
-          openbluetooth: false,
+          nickname:'',
+          persons:'',
         }
       },
-      methods: {
-        getopenbluetooth() {
-          this.openbluetooth = !this.openbluetooth;
-        },
+      mounted(){
+        this.person()
       },
+      methods: {
+        // 个人信息
+        person(){
+          let vm=this
+          fnGet(interfaces.info, {}, true, function(ret,err){
+              if(ret.code==RESPONSE_OK){
+                if(ret.data.nickname){
+                  vm.nickname=ret.data.nickname
+                }else{
+                  vm.nickname=ret.data.username
+                }
+                vm.persons=ret.data
+              }else{
+                console.log(JSON.stringify(err))
+              }
+          })
+        },
+
+        // 提交
+        savechange(){
+          let vm=this
+           let param={
+             "areaId": vm.persons.areaId,
+             "nickname": vm.nickname,
+             "sex": vm.persons.sex
+           }
+           fnBodyPost(interfaces.info, param, function(ret,err){
+              //  console.log(JSON.stringify(ret))
+             if(ret.code==RESPONSE_OK){
+                 console.log(JSON.stringify(ret))
+                 api.toast({
+                     msg: '修改成功',
+                     duration: 2000,
+                     location: 'bottom'
+                 });
+                 api.sendEvent({
+                     name: 'changeperson',
+                 });
+             }else{
+               console.log(JSON.stringify(err))
+             }
+           })
+        },
+      }
     })
+  }
   </script>
 
 </body>
