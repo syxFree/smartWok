@@ -28,7 +28,8 @@ var interfaces = {
     cookbookfun:'/sw/cookbook/functions',    //菜谱功能
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈
-    upload: '/api/common/upload_image' //上传图片
+    upload: '/api/common/upload_image', //上传图片
+    area:  '/sw/area'   //获取地址
 };
 
 /**
