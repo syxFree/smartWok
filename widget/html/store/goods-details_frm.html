@@ -41,6 +41,8 @@
             width: 100%;
             height: 7.5rem;
             position: relative;
+            overflow: hidden;
+            display: flex;
         }
         .swiper img{
             width: 100%;
@@ -314,8 +316,9 @@
             </div>
             <div class="swiper">
                 <img :src="img[currentIndex]" alt="轮播图">
+                <!-- <img :src="item" v-for="item in img" alt="轮播图"> -->
                 <div class="circle">
-                    <div :class="currentIndex==index?'circleItemActive':'circleItem'" v-for="(item,index) in img.length"></div>
+                    <div :class="currentIndex==index?'circleItemActive':'circleItem'" v-for="(item,index) in img.length" @click="currentIndex=index"></div>
                 </div>
             </div>
             <div class="goods-describe">
@@ -346,7 +349,7 @@
                     <img :src="img[0]" alt="商品图片">
                     <div class="info-price-count">
                         <p>￥{{goods.price}}</p>
-                        <p>库存：{{goods.amount}}</p>
+                        <p>库存：{{goods.stock}}</p>
                     </div>
                 </div>
                 <div class="order-count">
@@ -401,10 +404,12 @@
                 shadeFlag:false,  //遮罩层状态
                 shadeFlag2:false,
                 img:[],
-                currentIndex:1,
+                currentIndex:0,
+                phone:'123456789123'
             },
             created(){
                 this.getData()
+                this.getCall()
             },
             watch: {
                 //监听数量的加减，改版加减数量按钮的状态
@@ -466,6 +471,21 @@
                     }
                   })
                 },
+                getCall:function(){
+                    var vm=this
+                    fnGet(interfaces.call,{},true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          vm.phone=ret.data
+                        }
+                        else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                        }
+                    })
+                },
                 //分享按钮
                 share:function(){
                   this.shadeFlag2=true
@@ -485,19 +505,26 @@
                 },
                 //联系按钮
                 call:function(){
+                  var vm=this
                     api.confirm({
                         // title: 'title',
-                        msg: '123454679800',
+                        msg: vm.phone,
                         buttons:['拨打', '取消']
                     },function(ret,err){
                         if(ret.buttonIndex == 1){
-                            api.alert({msg: '点击了确定'});
+                          api.call({
+                              type: 'tel_prompt',
+                              number: vm.phone //商家电话
+                          });
+                        }else{
+                          api.toast({
+                              msg: '您取消了拨号',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
                         }
                     });
-                //   api.call({
-                //       type: 'tel_prompt',
-                //       number: '18338514073' //商家电话
-                //   });
+
                 },
                 //购买按钮
                 order:function(){
@@ -556,9 +583,18 @@
                 //左右滑动手势
                 moveSlide() {
                     var vm = this;
+                    clearInterval(timer)
+                    var timer=setInterval(function(){
+                        if(vm.currentIndex==vm.img.length-1){
+                          vm.currentIndex=0
+                        }
+                        else{
+                            vm.currentIndex++
+                        }
+                    },3000)
                     this.$nextTick(function () {
                         //侧滑显示删除按钮
-                        var container = document.querySelectorAll('body');
+                        var container = document.querySelectorAll('.swiper img');
                         console.log(container)
                         console.log(JSON.stringify(container))
                         for (var i = 0; i < container.length; i++) {
@@ -568,10 +604,12 @@
                                 y = event.changedTouches[0].pageY;
                                 swipeX = true;
                                 swipeY = true;
+                                // setInterval(timer)
                             });
                             container[i].addEventListener('touchmove', function (event) {
                                 X = event.changedTouches[0].pageX;
                                 Y = event.changedTouches[0].pageY;
+                                // clearInterval(timer)
                                 // 左右滑动
                                 if (swipeX && Math.abs(X - x) - Math.abs(Y - y) > 0) {
                                     // 阻止事件冒泡
@@ -580,21 +618,21 @@
                                       if(vm.currentIndex>=vm.img.length-1){
                                           return
                                       }
-
-                                        console.log("向右滑动事件")
-                                          vm.currentIndex++
-
+                                      console.log(X-x)
+                                      vm.currentIndex++
+                                      // document.getElementsByClassName("swiper")[0].style.transform='translateX(100%)'
+                                      // document.getElementsByClassName("swiper")[0].style.transition='all .5s ease'
                                     }
                                     if (x - X > 10) {   //左滑
                                       if(vm.currentIndex<=0){
                                           return
                                       }
-
-                                        console.log("向左滑动事件")
-                                          vm.currentIndex--
-                                      
+                                      console.log("向左滑动事件")
+                                      vm.currentIndex--
+                                      // document.getElementsByClassName("swiper")[0].style.transform='translateX(-100%)'
+                                      // document.getElementsByClassName("swiper")[0].style.transition='all .5s ease'
                                     }
-                                    swipeY = false;
+                                    swipeX = false;
                                 }
                             });
                         }

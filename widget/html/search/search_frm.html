@@ -127,6 +127,7 @@
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/restful.js" charset="utf-8"></script>
   <script>
     var vue = new Vue({
       el: '.app',
@@ -146,6 +147,10 @@
           }
         }
       },
+      created(){
+          var item=$api.getStorage('search')
+          this.records=item
+      },
       methods: {
         //删除输入框的文本
         del:function(){
@@ -157,9 +162,37 @@
           api.closeWin()
 
         },
+        //点击搜索跳转页面
         keypress:function(e){
+            var vm=this
             var keyCode=e.keyCode;
-            console.log(keyCode)
+            if(vm.searchTxt==''){
+              api.toast({
+                  msg: '请先输入搜索字',
+                  duration: 2000,
+                  location: 'bottom'
+              });
+              return
+            }
+            if($api.getStorage('search')){
+                console.log('111')
+                var search=$api.getStorage('search')
+            }
+            else{
+              console.log('222')
+                var search=[]
+            }
+            search.unshift(vm.searchTxt)
+            //搜索过的商品去重，并且经最后搜索的商品排列在最前边
+            for(var i=0;i<search.length;i++){
+              for(var j=0;j<i;j++){
+                if(search[i]==search[j]){
+                  search.splice(i,1)
+                  j--
+                }
+              }
+            }
+            $api.setStorage('search',search)
             if(keyCode=='13'){
               api.openWin({
                   name: 'searchResult',
@@ -168,7 +201,7 @@
                   slidBackEnabled:false,
                   bounces:false,
                   pageParam: {
-                      name: 'test'
+                      text: vm.searchTxt
                   }
               });
 
@@ -189,23 +222,23 @@
         //点击搜索历史，跳转到搜索页面
         goSearch:function(value){
           api.openWin({
-              name: 'goodsDetails',
-              url: '../store/goods-details_win.html',
+              name: 'searchResult',
+              url: 'searchResult_win.html',
               reload:true,
               slidBackEnabled:false,
               bounces:false,
               pageParam: {
-                  name: 'test'
+                  text: value
               }
           });
 
         },
-
         //清空已搜索内容
         clearRecords:function(){
           //这里做的是清空缓存 用api的内置方法
           var con=confirm("您确认要清空搜索内容吗?")
           if(con){
+            $api.rmStorage('search');
             this.records=''
           }else{
             return

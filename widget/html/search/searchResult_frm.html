@@ -47,6 +47,8 @@
             width: 3.2rem;
             height: 4.9rem;
             background-color: white;
+            /*border:1px solid;*/
+            position: relative;
         }
         .goods-item img{
             width: 100%;
@@ -54,6 +56,7 @@
         }
         .goods-item .describe{
             width: 100%;
+            margin-top: .1rem;
             font-size: .3rem;
             color: #333;
             overflow:hidden;
@@ -65,6 +68,8 @@
         .goods-item .price{
             font-size: .36rem;
             color: #FF8C46;
+            position: absolute;
+            bottom: .2rem;
         }
         .item-bottom{
             width: 100%;
@@ -93,9 +98,9 @@
                 <p>抱歉，暂时没有搜索到相关产品</p>
             </div>
             <div class="goods" v-else>
-                <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails">
-                    <img :src="item.img" alt="图片">
-                    <div class="describe">{{item.describe}}</div>
+                <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails(item.id)">
+                    <img :src="img[index]" alt="图片">
+                    <div class="describe" v-html="item.goodsName">{{item.describe}}</div>
                     <div class="price">￥{{item.price}}</div>
                 </div>
             </div>
@@ -109,11 +114,15 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
+        var text=api.pageParam.text
         var vm=new Vue({
             el:'.app',
             data:{
                 flag:true,   //根据商品有无判断
+                img:[],
                 // searchTxt:'这是一只皮卡丘', //这里是跳转过来的输入框文本
                 goods:[
                     {
@@ -139,23 +148,63 @@
                 ]
             },
             created() {
-                if(this.goods.length==0){
-                    this.flag=true
-                }else{
-                    this.flag=false
+                var params={
+                  keyword:text
                 }
+                this.getData(params)
             },
             methods: {
+                getData:function(params){
+                    var vm=this
+                    fnGet(interfaces.goodsList,params,true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                            vm.goods=ret.data.list
+                            for(var i=0;i<vm.goods.length;i++){
+                              vm.img.push(vm.goods[i].images.split(',')[0])
+                            }
+                            if(vm.goods.length==0){
+                              vm.flag=true
+                            }else{
+                              vm.flag=false
+                            }
+                        }
+                    })
+                },
                 //返回搜索页面
                 goSearch:function(){
 
                 },
                 //进入商品详情页
-                goGoodsDetails:function(){
+                goGoodsDetails:function(value){
+                    api.openWin({
+                        name: 'goods_details',
+                        url: '../store/goods-details_win.html',
+                        reload:true,
+                        slidBackEnabled:false,
+                        bounces:false,
+                        pageParam: {
+                            id: value
+                        }
+                    });
 
                 }
             },
         })
+        api.addEventListener({
+            name: 'search'
+        }, function(ret, err){
+            if( ret ){
+              console.log(JSON.stringify(ret.value))
+                var params={
+                  keyword:ret.value.value
+                }
+                vm.getData(params)
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+        console.log(JSON.stringify(vm.goods))
+      }
     </script>
 </body>
 </html>

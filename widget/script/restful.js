@@ -36,6 +36,9 @@ var interfaces = {
     call:'/sw/shop/phone',    //获取客服电话
     getAdress:'/sw/info/address/def',  //获取默认地址
     createOrder:'/sw/order/create',  //创建订单
+    getOrderList:'/sw/order',     //获取订单
+    cancelOrder:'/sw/order/cancel',  //取消订单
+    getLogistics:'/sw/info/logistics',  //获取物流信息
     cookbookfun:'/sw/cookbook/functions',    //菜谱功能
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈
@@ -183,7 +186,40 @@ function fnPut(apiurl, data, callback) {
         }
     );
 }
-
+function fnHederPut(apiurl, data, callback) {
+    var nonceStr = guid();
+    var timeStamp = new Date().getTime();
+    var accessToken = $api.getStorage("accessToken");
+    api.showProgress();
+    api.ajax(
+        {
+            url: host + apiurl,
+            method: "put",
+            timeout: 10,
+            headers: {
+                nonceStr: nonceStr,
+                timeStamp: timeStamp,
+                'access-token': accessToken,
+                "Content-Type": APPLICATION_JSON_UTF8_VALUE
+            }
+        },
+        function (ret, err) {
+            api.hideProgress();
+            if (ret) {
+                if (ret.code == TOKEN_BEOVERDUE) {
+                    toLogin();
+                } else {
+                    callback(ret, err);
+                }
+            } else {
+                callback(null, err);
+                api.toast({
+                    msg: "服务器连接失败"
+                });
+            }
+        }
+    );
+}
 /**
  * put请求，修改操作
  * @param apiurl 请求地址

@@ -30,6 +30,9 @@
             color: #333;
             font-size: .26rem;
         }
+        .right-info p:nth-of-type(2){
+          padding: .1rem 0;
+        }
         .logistics-info{
             width: 100%;
             box-sizing: border-box;
@@ -112,18 +115,18 @@
             <div class="order-info">
                 <img :src="orderInfo.img" alt="">
                 <div class="right-info">
-                    <p>运单号：{{orderInfo.no}}</p>
-                    <p>国内承运人：{{orderInfo.type}}</p>
+                    <p>运单号：{{orderInfo.logisticCode}}</p>
+                    <p>国内承运人：{{orderInfo.logisticsName}}</p>
                 </div>
             </div>
             <div class="bg"></div>
             <div class="logistics-info">
                 <div class="time-line" v-for="(item, index) in logisticsInfo" :key="index">
                     <div class="left">
-                        <span>{{item.time.substr(0,5)}}</span>
-                        <span>{{item.time.substr(5,10)}}</span>
+                        <span>{{time1[index]}}</span>
+                        <span>{{time2[index]}}</span>
                     </div>
-                    <div class="right">{{item.adress}}
+                    <div class="right">{{item.AcceptStation}}
                         <div class="dot"></div>
                     </div>
                 </div>
@@ -138,7 +141,10 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
+        var id=api.pageParam.id
         var vm=new Vue({
             el:'.app',
             data:{
@@ -165,12 +171,46 @@
                         time:'11-24 11:31',
                         adress:'您的快件已由上海分拨中心拨出'
                     },
-                ]
+                ],
+                time1:[],
+                time2:[]
+            },
+            created(){
+                console.log(id)
+                this.getData(id)
             },
             methods: {
-                
+                //获取物流信息
+                getData:function(value){
+                  var vm=this
+                  var params={
+                    orderId:value
+                  }
+                  fnGet(interfaces.getLogistics,params,true,function(ret,err){
+                      if(ret.code==RESPONSE_OK){
+                          vm.logisticsInfo=ret.data.logistics
+                          vm.orderInfo=ret.data.company
+                          for(var i=0;i<vm.logisticsInfo.length;i++){
+                              vm.time1.push(vm.timeToDate(vm.logisticsInfo[i].AcceptTime).substr(0,5))
+                              vm.time2.push(vm.timeToDate(vm.logisticsInfo[i].AcceptTime).substr(5,10))
+                          }
+                      }
+                  })
+                },
+                timeToDate:function(timestamp){
+                  if (!timestamp) {
+                      return ''
+                  }
+                  var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                  M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                  D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+                  h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':';
+                  m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes());
+                  return  M + D + h + m ;
+                }
             },
         })
+      }
     </script>
 </body>
 </html>

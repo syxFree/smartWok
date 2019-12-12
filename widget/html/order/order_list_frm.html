@@ -133,29 +133,29 @@
         <section>
             <div class="list" v-for="(item, index) in orderList" :key="index">
                 <div class="order-time">
-                    <span>{{item.createTime}}</span>
-                    <span v-if="item.status=='待付款'" class="activeRed">{{item.status}}</span>
-                    <span v-if="item.status=='待发货' || item.status=='待收货'" class="activeGreen">{{item.status}}</span>
-                    <span v-if="item.status=='已取消' || item.status=='已完成'" class="activeBlack">{{item.status}}</span>
+                    <span>{{orderTime[index]}}</span>
+                    <span v-if="item.orderStatus==0" class="activeRed">{{orderStatus[index]}}</span>
+                    <span v-if="item.orderStatus==1 || item.orderStatus==2" class="activeGreen">{{orderStatus[index]}}</span>
+                    <span v-if="item.orderStatus==5 || item.orderStatus==3" class="activeBlack">{{orderStatus[index]}}</span>
                 </div>
-                <div class="good-box" @click="goOrderDetails(index)">
-                    <img :src="item.swiper" alt="商品图片">
+                <div class="good-box" @click="goOrderDetails(item.id)" v-if="item.orderItems">
+                    <img :src="item.orderItems[0].image" alt="商品图片">
                     <div class="right">
-                        <p>{{item.details}}</p>
+                        <p>{{item.orderItems[0].productName}}</p>
                         <div class="right-flex">
-                            <span>￥{{item.price}}</span>
-                            <span>x{{item.orderCount}}</span>
+                            <span>￥{{item.orderItems[0].unitPrice }}</span>
+                            <span>x{{item.orderItems[0].quantity }}</span>
                         </div>
                     </div>
                 </div>
-                <div class="countPrice">共{{item.orderCount}}件，合计<span>￥{{item.price*item.orderCount}}</span></div>
+                <div v-if="item.orderItems" class="countPrice">共{{item.orderItems[0].quantity}}件，合计：<span>￥{{item.orderItems[0].unitPrice*item.orderItems[0].quantity}}</span></div>
                 <div class="list-btn">
-                    <div v-if="item.status=='待付款'" class="active" @click="pay(index)">立即付款</div>
-                    <div v-if="item.status=='待发货'" class="active" @click="reminder">提醒发货</div>
-                    <div v-if="item.status=='待收货'" class="active" @click="confirmGoods">确认收货</div>
-                    <div v-if="item.status=='已取消' || item.status=='已完成'" class="disActive" @click="del">删除订单</div>
-                    <div v-if="item.status=='待收货' || item.status=='已完成'" class="disActive" @click="look">查看物流</div>
-                    <div v-if="item.status=='待付款'" class="disActive" @click="cancel">取消订单</div>
+                    <div v-if="item.orderStatus==0" class="active" @click="pay(item.id)">立即付款</div>
+                    <div v-if="item.orderStatus==1" class="active" @click="reminder">提醒发货</div>
+                    <div v-if="item.orderStatus==2" class="active" @click="confirmGoods">确认收货</div>
+                    <div v-if="item.orderStatus==5 || item.orderStatus==3" class="disActive" @click="del">删除订单</div>
+                    <div v-if="item.orderStatus==2 || item.orderStatus==3" class="disActive" @click="look(item.id)">查看物流</div>
+                    <div v-if="item.orderStatus==0" class="disActive" @click="cancel">取消订单</div>
                 </div>
             </div>
         </section>
@@ -163,7 +163,9 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
         var vm=new Vue({
             el:'.app',
             data:{
@@ -226,10 +228,80 @@
                 ],
                 chooseFlag:false,  //支付按钮的选择状态
                 ticketFlag:false,  //订单按钮选择状态
+                pageSize:10,
+                pageNum:1,
+                orderTime:[],
+                orderStatus:[]
+            },
+            created(){
+              this.getData()
+              // console.log(this.timeToDate(1575354633000))
             },
             methods: {
+                //获取数据
+                getData(){
+                  var vm=this
+                  var params={
+                    pageSize:vm.pageSize,
+                    pageNum:vm.pageNum
+                  }
+                  console.log(JSON.stringify(params))
+                  fnGet(interfaces.getOrderList,params,true,function(ret,err){
+                      if(ret.code==RESPONSE_OK){
+                        vm.orderList=ret.data.list
+                        for(var i=0;i<vm.orderList.length;i++){
+                          vm.orderTime.push(vm.timeToDate(vm.orderList[i].createDate))
+                          vm.orderStatus.push(vm.numsToStatus(vm.orderList[i].orderStatus))
+                        }
+                        // console.log(JSON.stringify(vm.orderList))
+                      }else{
+                        api.toast({
+                            msg: ret.msg,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                      }
+                  })
+                },
+                //状态转换
+                numsToStatus:function(value){
+                    if(value==0){
+                      return '待付款'
+                    }
+                    else if(value==1){
+                      return '待发货'
+                    }
+                    else if(value==2){
+                      return '待收货'
+                    }
+                    else if(value==3){
+                      return '已完成'
+                    }
+                    else if(value==4){
+                      return '已关闭'
+                    }
+                    else if(value==5){
+                      return '已取消'
+                    }
+                },
+                //时间转换
+                timeToDate:function(timestamp){
+                  if (!timestamp) {
+                      return ''
+                  }
+                  var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                  Y = date.getFullYear() + '-';
+                  M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                  D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+                  h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':';
+                  m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes()) + ':';
+                  s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds())
+                  // s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds());
+                  return Y + M + D + h + m + s;
+                },
                 //立即付款
                 pay:function(index){
+                  console.log(index)
                   api.openWin({
                       name: 'orderDetails',
                       url: 'orderDetails_win.html',
@@ -238,9 +310,19 @@
                       bounces:false,
                       pageParam: {
                         shadeFlag:true,
-                        type:this.orderList[index].status
+                        id:index
+                        // type:this.orderList[index].status
                       }
                   });
+                  // setTimeout(function(){
+                  //   api.sendEvent({
+                  //       name: 'orderImmediately',
+                  //       extra: {
+                  //           id:index
+                  //       }
+                  //   });
+                  // },300)
+
                 },
                 //跳转到订单详情页
                 goOrderDetails:function(index){
@@ -251,7 +333,7 @@
                         slidBackEnabled:false,
                         bounces:false,
                         pageParam: {
-                          type:this.orderList[index].status
+                          id:index
                         }
                     });
 
@@ -279,7 +361,7 @@
                   });
                 },
                 //查看物流
-                look:function(){
+                look:function(index){
                   api.openWin({
                       name: 'logistics_information',
                       url: '../logistics_information/logistics_info_win.html',
@@ -287,32 +369,43 @@
                       slidBackEnabled:false,
                       bounces:false,
                       pageParam: {
-                          name: 'test'
+                          id:index
                       }
                   });
                 },
                 //取消订单
                 cancel:function(){
                   api.confirm({
-                      title: '您确认要取消订单吗？',
-                      // msg: 'testmsg',
+                      title: '删除提示',
+                      msg: '您确定要删除此订单吗',
                       buttons: ['确定', '取消']
                   }, function(ret, err){
                       if( ret ){
-                          //  alert( JSON.stringify( ret ) );
+                        if(ret.buttonIndex==1){
+                            fnHederPut(interfaces.cancelOrder,params,function(ret,err){
+                              if(ret.code==RESPONSE_OK){
+                                api.toast({
+                                    msg: '取消成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+
+                              }
+                            })
+                        }
                       }else{
-                          //  alert( JSON.stringify( err ) );
+                          api.toast({
+                              msg: '您选择了取消',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
                       }
                   });
-
-                    // if(confirm("您确认要删除订单吗？")){
-                    //     console.log("取消")
-                    // }else{
-                    //     return
-                    // }
                 }
             },
         })
+      }
     </script>
 </body>
 </html>

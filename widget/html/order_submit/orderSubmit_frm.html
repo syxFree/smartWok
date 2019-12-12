@@ -267,9 +267,9 @@
                 <div class="user-box">
                     <img src="../../image/submitOrder/adress-orderSubmit.png" alt="订单图片">
                     <div v-if="userInfoFlag" class="user-info">
-                        <span class="userName">{{userInfo.userName}}</span>
-                        <span class="userPhone">{{userInfo.userPhone}}</span>
-                        <p>{{userInfo.adress}}</p>
+                        <span class="userName">{{userInfo.receiptorName}}</span>
+                        <span class="userPhone">{{userInfo.receiptorPhone}}</span>
+                        <p>{{userInfo.address}}</p>
                     </div>
                     <div v-else class="user-info-else">您还没有添加过地址，点击添加</div>
                     <div class="moreAdress">
@@ -364,7 +364,7 @@
                 userInfo:{
                     userName:'大脸布丁',
                     userPhone:15516354832,
-                    adress:'上海市松江区沪松公路1399弄68号1003-1004室'
+                    address:'上海市松江区沪松公路1399弄68号1003-1004室'
                 },
                 goods:{
                     swiper:'../../image/store/five.jpg',
@@ -389,33 +389,60 @@
             created(){
                 this.goods=api.pageParam.goodsInfo
                 this.getAddress()
+                console.log(JSON.stringify(this.goods))
             },
             methods: {
                 //提交订单
                 submit:function(){
+                    var vm=this
                     var type=0
                     if(vm.chooseFlag){
                       type=0   //0代表支付宝
                     }else{
                       type=1   //1代表微信
                     }
-                    var vm=this
                     var params={
                       memo:vm.memo,
                       payType:type,
-                      productId:vm.goods.id,
+                      productId:vm.goods.productId,
                       quantity:vm.goods.count,
-                      receiptAddressId:vm.address.id  //收货地址id
+                      receiptAddressId:vm.userInfo.areaId  //收货地址id
                     }
+                    console.log(JSON.stringify(params))
                     fnBodyPost(interfaces.createOrder,params,function(ret,err){
 
                     })
                 },
+                //获取用户默认地址
                 getAddress:function(){
                     var vm=this
                     fnGet(interfaces.getAdress,{},true,function(ret,err){
                         if(ret.code==40071){
                             vm.userInfoFlag=false
+                            api.toast({
+                                msg: '您还没有设置默认地址',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+
+                        }else{
+                            vm.userInfo=ret.data
+                            console.log(JSON.stringify(vm.address))
+                        }
+                    })
+                },
+                //获取用户信息
+                getUserInfo:function(){
+                    var vm=this
+                    fnGet(interfaces.info,{},true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          vm.userInfo=ret.data
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
                         }
                     })
                 },

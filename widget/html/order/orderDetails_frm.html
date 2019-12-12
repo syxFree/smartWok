@@ -404,7 +404,7 @@
             <div class="logistics" v-if="goods.status=='待收货' || goods.status=='已完成'" @click="goWuliu">
                 <img class="car" src="../../image/orderDetails/logistics.png" alt="运输车">
                 <div class="logisticsInfo">
-                    <p>{{logistics.address}}已录入</p>
+                    <p>{{logistics.address}}</p>
                     <p>{{logistics.time}}</p>
                 </div>
                 <img class="right" src="../../image/submitOrder/right.png" alt="">
@@ -459,6 +459,7 @@
                     <div v-if="goods.status=='已取消' || goods.status=='已完成'" class="disActive" @click="del">删除订单</div>
                     <div v-if="goods.status=='已完成'" class="disActive" @click="look">查看物流</div>
                     <div v-if="goods.status=='待付款'" class="disActive" @click="cancel">取消订单</div>
+                    <div v-if="goods.status=='待发货' || goods.status=='待收货' || goods.status== '已完成'" class="disActive" @click="ApplicationInvoice">申请发票</div>
                 </div>
             </div>
             <div class="shade" v-if="shadeFlag">
@@ -491,17 +492,18 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
     apiready=function(){
         var shadeFlag=api.pageParam.shadeFlag
-        var type=api.pageParam.type
+        var id=api.pageParam.id    //这里是传过来的id 获取该id的商品
         var vm=new Vue({
             el:'.app',
             data:{
                 userInfo:{
                     userName:'大脸布丁',
                     userPhone:15516354832,
-                    adress:'上海市松江区沪松公路1399弄68号1003-1004室'
+                    address:'上海市松江区沪松公路1399弄68号1003-1004室'
                 },
                 goods:{
                     swiper:'../../image/store/five.jpg',
@@ -512,7 +514,7 @@
                 },
                 //物流信息
                 logistics:{
-                    adress:'上海市',
+                    address:'上海市',
                     time:"2019-12-30 12:30:28"
                 },
                 orderInfo:{
@@ -530,8 +532,14 @@
                     document.getElementsByClassName("userInfo")[0].style.height="13%"
                     document.getElementsByClassName("goods-info")[0].style.height="34%"
                 }
-                this.shadeFlag=shadeFlag
-                this.goods.status=type
+                // this.shadeFlag=shadeFlag
+                if(shadeFlag==true){
+                  this.shadeFlag=shadeFlag
+                  this.getData(id)
+                }else{
+                    this.getData(id)
+                }
+                this.getData(id)
             },
             computed: {
                 totalCount:function(){
@@ -539,9 +547,103 @@
                 }
             },
             methods: {
+                //获取订单详情数据
+                getData:function(id){
+                    var vm=this
+                    console.log(interfaces.getOrderList+'/'+id)
+                    fnGet(interfaces.getOrderList+'/'+id,{},true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                            var msg=ret.data
+                            vm.goods.status=vm.numsToStatus(msg.orderStatus)
+                            vm.goods.swiper=msg.orderItems[0].image
+                            vm.goods.details=msg.orderItems[0].productName
+                            vm.goods.price=msg.orderItems[0].unitPrice
+                            vm.orderCount=msg.orderItems[0].quantity
+                            vm.userInfo.userName=msg.receiptorName
+                            vm.userInfo.userPhone=msg.receiptorPhone
+                            vm.userInfo.address=msg.receiptorAddress
+                            vm.orderInfo.no=msg.sn
+                            vm.orderInfo.createTime=vm.timeToDate(msg.createDate)
+                            vm.orderInfo.payTime=vm.timeToDate(msg.payDate)
+                            vm.orderInfo.type=vm.numToType(msg.payType)
+                            // console.log(JSON.stringify(ret.data))
+                            vm.getLogistics(msg.id)
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                        }
+                    })
+                },
+                //获取物流信息
+                getLogistics:function(value){
+                    var vm=this
+                    var params={
+                      orderId:value
+                    }
+                    fnGet(interfaces.getLogistics,params,true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          // console.log(JSON.stringify(ret.data.logistics[ret.data.logistics.length-1]))
+                          var logistics=ret.data.logistics[ret.data.logistics.length-1]
+                          vm.logistics.address=logistics.AcceptStation
+                          vm.logistics.time=vm.timeToDate(logistics.AcceptTime)
+                        }
+                    })
+                },
+                //时间转换
+                timeToDate:function(timestamp){
+                  if (!timestamp) {
+                      return ''
+                  }
+                  var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                  Y = date.getFullYear() + '-';
+                  M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                  D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+                  h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':';
+                  m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes()) + ':';
+                  s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds())
+                  // s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds());
+                  return Y + M + D + h + m + s;
+                },
+                //付款状态转换
+                numToType:function(value){
+                    if(value==0){
+                      return '支付宝支付'
+                    }
+                    else if(value==1){
+                      return '微信支付'
+                    }
+                },
+                //状态转换
+                numsToStatus:function(value){
+                    if(value==0){
+                      return '待付款'
+                    }
+                    else if(value==1){
+                      return '待发货'
+                    }
+                    else if(value==2){
+                      return '待收货'
+                    }
+                    else if(value==3){
+                      return '已完成'
+                    }
+                    else if(value==4){
+                      return '已关闭'
+                    }
+                    else if(value==5){
+                      return '已取消'
+                    }
+                },
                 pay:function(){
                     console.log("a")
                     this.shadeFlag=true
+                },
+                //申请发票
+                ApplicationInvoice:function(){
+                    alert("申请发票")
                 },
                 reminder:function(){
                     console.log("提醒发货")
@@ -608,6 +710,16 @@
                 }
             },
         })
+        api.addEventListener({
+            name: 'orderImmediately'
+        }, function(ret, err){
+            if( ret ){
+                console.log(JSON.stringify(vm.userInfo))
+                vm.getData(ret.value.id)
+            }else{
+                 alert( JSON.stringify( err ));
+            }
+        });
       }
     </script>
 </body>
