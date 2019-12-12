@@ -35,6 +35,8 @@ var interfaces = {
     address:'/sw/info/address' , //新增或更改地址
     info:'/sw/info', //获取个人信息
     aboutus:'/static_url/content', //获取关于我们富文本
+    cooklist:'/sw/cookbook/list', //获取菜谱列表
+    cookdetail:'/sw/cookbook/detail',
 };
 
 /**

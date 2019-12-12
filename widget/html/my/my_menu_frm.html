@@ -100,13 +100,13 @@
 <body>
     <div class="app">
         <!-- 有菜谱 -->
-        <div class="menu-boxs" v-if="hasmenu">
-            <div class="menu-box">
-                <div class="menu-bleft">
-                    <img src="../../image/my/jidan.png" alt="">
-                    <div class="menu-bleft-box" @click="toMenu()">
-                        <p>番茄鸡蛋汤</p>
-                        <div>2019-11-27 12:34:58</div>
+        <div class="menu-boxs" v-if="cooklist.length>0">
+            <div class="menu-box" v-for="(item,index) in cooklist">
+                <div class="menu-bleft" @click="toMenuchange(item.id)">
+                    <img :src="item.image" alt="" >
+                    <div class="menu-bleft-box" >
+                        <p>{{item.name}}</p>
+                        <div>{{item.time}}</div>
                     </div>
                 </div>
                 <div style="position: relative;">
@@ -120,7 +120,7 @@
 
         </div>
         <!-- 无菜谱 -->
-        <div class="empty" v-if="hasmenu===false">
+        <div class="empty" v-if="cooklist.length===0">
             <img src="../../image/my/empty-menu.png" alt="">
             <p>当前还没有菜谱</p>
             <button class="btn" style="width: 3.8rem;height:.8rem" @click='toMenu()'>创建菜谱</button>
@@ -129,18 +129,53 @@
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
+    <script src="../../script/moment.js"></script>
     <script>
+      apiready = function () {
         var vue = new Vue({
             el: '.app',
             data() {
                 return {
                     hasmenu: true,
-                    ulright: false
+                    ulright: false,
+                    cooklist:[],
                 }
             },
+            mounted(){
+                this.getdata()
+            },
             methods: {
+                getdata(){
+                  let vm=this
+                  fnGet(interfaces.cooklist, {}, true, function(ret,err){
+                      if(ret.code==RESPONSE_OK){
+                        let list =ret.data.list
+                        for (var i = 0; i < list.length; i++) {
+                          let time=moment(list[i].createDate).format('YYYY-MM-DD HH:mm:ss');
+                          list[i].time=time
+                        }
+                        vm.cooklist=list
+                          console.log(JSON.stringify(vm.cooklist))
+                      }else{
+                        console.log(JSON.stringify(err))
+                      }
+                  })
+                },
                 handledetail() {
                     this.ulright = !this.ulright;
+                },
+                toMenuchange:function(id){
+                  api.openWin({
+                      name: 'menuchange_win',
+                      url: '../menu/menuchange_win.html',
+                      reload: true,
+                      bounces: false,
+                      slidBackEnabled: true,
+                      pageParam:{
+                        id:id
+                      }
+                  });
                 },
                 toMenu: function() {
                     api.openWin({
@@ -153,6 +188,7 @@
                 },
             },
         })
+      }
     </script>
 
 </body>
