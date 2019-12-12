@@ -148,7 +148,9 @@
         // 获取地址
         gethome(home){
           let vm=this;
+             console.log(JSON.stringify( home))
           fnGet(interfaces.area,{},true,function(ret, err) {
+            console.log(JSON.stringify( ret))
               if (ret.code == RESPONSE_OK) {
                   for(var j=0;j<ret.data.length;j++){
                     if(home.areaId ==ret.data[j].id){
