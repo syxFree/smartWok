@@ -48,7 +48,9 @@ var interfaces = {
     info:'/sw/info', //获取个人信息
     aboutus:'/static_url/content', //获取关于我们富文本
     cooklist:'/sw/cookbook/list', //获取菜谱列表
-    cookdetail:'/sw/cookbook/detail',
+    cookdetail:'/sw/cookbook/detail', //获取菜谱详情
+    shareCode:'/sw/cookbook/share_code/', //生成分享码
+
 };
 
 /**

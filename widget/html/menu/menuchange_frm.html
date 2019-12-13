@@ -559,6 +559,15 @@
       height: .38rem;
       margin-right: .3rem;
     }
+    .mb1{
+      margin-bottom:1rem;
+    }
+    .transfer-box{
+      position: fixed;
+      bottom: 0;
+      background: #fff;
+      width:7.5rem;
+    }
   </style>
 </head>
 
@@ -623,12 +632,14 @@
         <span>添加程序</span>
       </div>
     </div>
-    <div class="hrs"></div>
+    <div class="hrs mb1"></div>
     <!-- 提交 -->
-    <div class="transfer">
-      <div class="del">删除</div>
-      <div class="fer" @click="handleisbluetooth">传输</div>
-      <div class="save" @click="savemenu">保存</div>
+    <div class="transfer-box">
+      <div class="transfer">
+        <div class="del" @click="empty">删除</div>
+        <div class="fer" @click="handleisbluetooth">传输</div>
+        <div class="save" @click="savemenu">保存</div>
+      </div>
     </div>
     <!-- 返回保存 -->
     <div class="move1" v-if="openbluetooth">
@@ -653,7 +664,7 @@
           <span>功能选择</span>
           <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
         </div>
-        <div class="move-content" v-for="(item, index) in contentlist" :key="index" @click.prevent="getcontent(item)">
+        <div class="move-content" v-for="(item, index) in contentlist" :key="index" @click.prevent="getcontent(item,index)">
           {{item.name}}</div>
       </div>
       <!-- 选择需要功能后在编辑详情 -->
@@ -793,30 +804,29 @@
             timeoutsBox: 0,
             temperaturecon: '',
             parametercon: '',
-            parameterconValue:[],//value值对应参数id
+            parameterconValue:[],//value值
             timeoutcon:0,
             timeHnum:0,
             timeMnum:0,
             timeSnum:0,
-            // 三中状态数组
+            // 对于回显的步骤数组
+            itemname:[],
             paramelist:[],
-              temperlist:[],
-              timelist:[],
-              itemname:[],
+            parameterconValue:[],
+            temperlist:[],
+            timelist:[]
           }
         },
         mounted() {
-          console.log(this.id)
           this.temperaturecon = this.temperature[0]
           this.parametercon = this.parameter[0]
           this.timeHnum= this.timeouth[0] * 60 * 60
           this.timeMnum= this.timeoutm[0] * 60
           this.timeSnum= this.timeouts[0]
           this.getFeature();
-          this.getcookdetail();
+          this.getcookdetail()
         },
         methods: {
-          // 获取功能
           getFeature(){
             let vm=this
             fnGet(interfaces.cookbookfun,{},true,function(ret, err) {
@@ -828,81 +838,119 @@
             })
           },
           // 获取详情
-        getcookdetail(){
-          let vm=this
-          fnGet(interfaces.cookdetail,{id:this.id},true,function(ret, err) {
-            if(ret){
-            vm.datadisplay(ret.data)
-            }else{
-              console.log(JSON.stringify(err))
-            }
-          })
-        },
-        //
-        datadisplay(data){
-          console.log(JSON.stringify(data))
-          let vm=this
-          vm.imgcover=data.image
-          vm.name=data.name
-          vm.seasoningBox1=data.seasoningBox1
-          vm.seasoningBox2=data.seasoningBox2
-          vm.seasoningBox3=data.seasoningBox3
-          vm.seasoningBox4=data.seasoningBox4
-          let functions=data.functions
-          for(var i=0;i<functions.length;i++){
-            vm.type.push(functions[i].type)
-            let options=functions[i].options
-            for(var j=0;j<options.length;j++){
-                if(j==0){ //for循环找到对应的状态参数
-                  console.log(JSON.stringify(options[j].optionValue))
-                    vm.contentlist.forEach(item=>{
-                      // console.log(JSON.stringify(item))
-                      if(item.type==functions[i].type){
-                        vm.itemname.push(item.name)
-                        item.functions.forEach(item2=>{
-                          console.log(JSON.stringify(item2))
-                          if(item2.group==0){
-                          item2.funcOptions.forEach(item3=>{
-                            // console.log(item3.optionOrdinal)
-                            if(item3.optionOrdinal==options[j].optionValue){
-                              vm.paramelist.push(item3)
-                              vm.parameterconValue.push(item3.optionOrdinal)
+            getcookdetail(){
+            let vm=this
+            fnGet(interfaces.cookdetail,{id:this.id},true,function(ret, err) {
+              if(ret){
+              vm.datadisplay(ret.data)
+              }else{
+                console.log(JSON.stringify(err))
+              }
+            })
+            },
+            //
+            datadisplay(data){
+            console.log(JSON.stringify(data))
+            let vm=this
+            vm.imgcover=data.image
+            vm.name=data.name
+            vm.seasoningBox1=data.seasoningBox1
+            vm.seasoningBox2=data.seasoningBox2
+            vm.seasoningBox3=data.seasoningBox3
+            vm.seasoningBox4=data.seasoningBox4
+            let functions=data.functions
+            for(var i=0;i<functions.length;i++){
+              vm.type.push(functions[i].type)
+                 console.log(JSON.stringify(vm.type))
+              let options=functions[i].options
+              console.log(JSON.stringify(options))
+              for(var j=0;j<options.length;j++){
+                  if(j==0){ //for循环找到对应的状态参数
+                      vm.contentlist.forEach(item=>{
+
+                        if(item.type==functions[i].type){
+                          vm.itemname.push(item.name)
+                          item.functions.forEach(item2=>{
+
+                            if(item2.group==0){
+                            item2.funcOptions.forEach(item3=>{
+                              console.log(options[j].optionValue)
+                              if(item3.optionOrdinal==options[j].optionValue){
+                                vm.paramelist.push(item3)
+                                vm.parameterconValue.push(item3.optionOrdinal)
+                              }
+                            })
                             }
                           })
-                          }
-                        })
-                      }
-                    })
-                }else if(j==1){
-                  vm.temperlist=options[j].optionValue
-                }else{
-                  vm.timelist=options[j].optionValue
-                }
+                        }
+                      })
+                  }else if(j==1){
+                    vm.temperlist.push(options[j].optionValue)
+                  }else{
+                    vm.timelist.push(options[j].optionValue)
+                  }
+              }
             }
-          }
-          vm.stepslistall()
-        },
-        // 实现到元素身上
-        stepslistall(){
-          let vm=this
-          let type=this.itemname
-          console.log(JSON.stringify(vm.type))
-          console.log(JSON.stringify(type))
-          for(var i=0;i<type.length;i++){
-             if(type[i] == '停顿'){
-               this.stepslist[i]=type[i]
-             }else{
-               console.log(JSON.stringify(this.paramelist[i]))
-                // this.stepslist[i]=type[i] + '：' + this.paramelist[i].optionName+'，温度：'+this.temperlist[i]+'℃，时间：'+this.timelist[i]+'s'
-             }
-          }
-        },
+            vm.stepslistall()
+            },
+            // 实现到元素身上
+            stepslistall(){
+            let vm=this
+            let type=this.type
+            for(var i=0;i<type.length;i++){
+               if(type[i] == 4){
+                 this.stepslist[i]='停顿'
+                 continue
+               }else{
+                 if(this.stepslist[i-1]=='停顿'){
+                  //  console.log(JSON.stringify(this.timelist))
+                  this.stepslist[i]=this.itemname[i-1] + '：' + this.paramelist[i-1].optionName+'，温度：'+this.temperlist[i-1]+'℃，时间：'+this.timelist[i-1]+'s'
+                }else {
+                  console.log(JSON.stringify(this.timelist))
+                 this.stepslist[i]=this.itemname[i] + '：' + this.paramelist[i].optionName+'，温度：'+this.temperlist[i]+'℃，时间：'+this.timelist[i]+'s'
+                }
+
+               }
+            }
+            },
+
+          empty(){
+            let vm=this
+            api.confirm({
+                title: '提示',
+                msg: '是否要删除该菜谱',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                if(index === 1){
+                  let url=interfaces.cookbookpost+'?id='+vm.id
+                  fnDelete(url,true, function(ret,err){
+                  console.log(JSON.stringify(ret))
+                    if(ret.code==RESPONSE_OK){
+                        api.toast({
+                            msg: '删除成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                        api.sendEvent({
+                            name: 'changemenu',
+                        });
+                        api.closeWin()
+
+                    }else{
+                      console.log(JSON.stringify(err))
+                    }
+                })
+                }
+            });
+          },
           deleteprocedure(index){
             console.log(index)
             this.stepslist.splice(index,1)
           },
           // 删除上传封面
           handledelpic(){
+            this.imgcover=""
           },
           handletransfer(){
             // 调用ajax
@@ -929,10 +977,18 @@
             this.movebox = true
             this.moveshow = true
           },
-          getcontent(item) {
+          getcontent(item,index) {
             this.movebox = false
             this.content = item.name
-            this.type.push(item.type)
+            console.log(this.type.length)
+            console.log(this.stepslist.length)
+            if(this.type.length=this.stepslist.length){
+              this.type[this.movenum-1]=item.type
+            }else{
+              this.type.push(item.type)
+            }
+            console.log(JSON.stringify(this.type))
+              //修改对应
             let contentlist=this.contentlist
             for(var i=0;i<contentlist.length;i++){
               if(contentlist[i].name===item.name){
@@ -1004,6 +1060,7 @@
             for (let i = 0; i < this.stepslist.length; i++) {
               if (this.movenum === Number([i+1])) {
                 if(this.content==='停顿'){
+                    this.parameterconValue.push('')
                     this.stepslist[i]= this.content
                 }else{
                   this.parameterconValue.push(this.parametercon.optionOrdinal)
@@ -1109,6 +1166,7 @@
             const functions=[]  //获取步骤数据
             for(var i =0;i<stepslist.length;i++){
               const  type=vm.type[i]
+              console.log(type)
               const alldata={}
               if(stepslist[i]==='请选择一个程序'){
                 api.toast({
@@ -1119,7 +1177,7 @@
                 return
               }
               if(stepslist[i]==='停顿'){
-                alldata.type=5
+                alldata.type=4
                 functions.push(alldata)
                 continue
               }
@@ -1143,7 +1201,7 @@
                 }
                 options.push(obj)
               }
-                alldata.type=Number(type)+1
+                alldata.type=Number(type)
                 alldata.options=options
                 functions.push(alldata)
             }
@@ -1163,6 +1221,11 @@
               console.log(JSON.stringify(CookbookParam))
               fnBodyPost(interfaces.cookbookpost, CookbookParam, function(ret,err){
                 if(ret.code == RESPONSE_OK){
+                    api.toast({
+                        msg: '保存成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
                   console.log(JSON.stringify(ret))
                 }else{
                   console.log(JSON.stringify(err))

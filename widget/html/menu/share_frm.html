@@ -97,23 +97,58 @@
                 <p>分享码</p>
             </div>
             <span>点击复制，发送给好友即可</span>
-            <div class="code">GUILFGILAFIEULBFIBEAFBELBFALBB</div>
-            <div class="btn">复制</div>
+            <div class="code" >{{html}}</div>
+            <div class="btn" @click="copy">复制</div>
         </div>
     </div>
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
     <script>
+    apiready = function () {
         var vue = new Vue({
             el: '.app',
             data() {
                 return {
-
+                    id:api.pageParam.id,
+                    html:''
                 }
             },
-            methods: {},
+            mounted(){
+              this.getshareCode()
+            },
+            methods: {
+                // 复制到剪切板
+                copy(){
+                  var vm=this
+                  var clipBoard = api.require('clipBoard');
+                  clipBoard.set({
+                      value: vm.html
+                  }, function(ret, err) {
+                      if (ret) {
+                          alert(JSON.stringify(ret));
+                      } else {
+                          alert(JSON.stringify(err));
+                      }
+                  });
+                },
+                // 获取分享码
+                getshareCode(){
+                  let vm=this
+                  let url=interfaces.shareCode+this.id
+                  fnGet(url, {}, true, function(ret,err){
+                    if(ret.code==RESPONSE_OK){
+                      vm.html=ret.data
+                    }else{
+                      console.log(JSON.stringify(err))
+                    }
+                  })
+                }
+
+            },
         })
+      }
     </script>
 </body>
 

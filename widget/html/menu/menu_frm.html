@@ -559,6 +559,15 @@
       height: .38rem;
       margin-right: .3rem;
     }
+    .mb1{
+      margin-bottom:1rem;
+    }
+    .transfer-box{
+      position: fixed;
+      bottom: 0;
+      background: #fff;
+      width:7.5rem;
+    }
   </style>
 </head>
 
@@ -623,12 +632,14 @@
         <span>添加程序</span>
       </div>
     </div>
-    <div class="hrs"></div>
+    <div class="hrs mb1"></div>
     <!-- 提交 -->
-    <div class="transfer">
-      <div class="del">删除</div>
-      <div class="fer" @click="handleisbluetooth">传输</div>
-      <div class="save" @click="savemenu">保存</div>
+    <div class="transfer-box">
+      <div class="transfer">
+        <div class="del" @click="empty">清空</div>
+        <div class="fer" @click="handleisbluetooth">传输</div>
+        <div class="save" @click="savemenu">保存</div>
+      </div>
     </div>
     <!-- 返回保存 -->
     <div class="move1" v-if="openbluetooth">
@@ -818,12 +829,32 @@
               }
             })
           },
+          empty(){
+            let vm=this
+            api.confirm({
+                title: '提示',
+                msg: '是否要清空所有',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                if(index === 1){
+                  vm.imgcover=""
+                  vm.name=""
+                  vm.seasoningBox1=""
+                  vm.seasoningBox2=""
+                  vm.seasoningBox3=""
+                  vm.seasoningBox4=""
+                  vm.stepslist=['请选择一个程序']
+                }
+            });
+          },
           deleteprocedure(index){
             console.log(index)
             this.stepslist.splice(index,1)
           },
           // 删除上传封面
           handledelpic(){
+            this.imgcover=""
           },
           handletransfer(){
             // 调用ajax
@@ -856,7 +887,6 @@
             console.log(this.type.length)
             console.log(this.stepslist.length)
             if(this.type.length=this.stepslist.length){
-              console.log(124)
               this.type[this.movenum-1]=item.type
             }else{
               this.type.push(item.type)
@@ -934,6 +964,7 @@
             for (let i = 0; i < this.stepslist.length; i++) {
               if (this.movenum === Number([i+1])) {
                 if(this.content==='停顿'){
+                    this.parameterconValue.push('')
                     this.stepslist[i]= this.content
                 }else{
                   this.parameterconValue.push(this.parametercon.optionOrdinal)
@@ -1050,7 +1081,7 @@
                 return
               }
               if(stepslist[i]==='停顿'){
-                alldata.type=5
+                alldata.type=4
                 functions.push(alldata)
                 continue
               }
@@ -1074,7 +1105,7 @@
                 }
                 options.push(obj)
               }
-                alldata.type=Number(type)+1
+                alldata.type=Number(type)
                 alldata.options=options
                 functions.push(alldata)
             }
@@ -1094,6 +1125,11 @@
               console.log(JSON.stringify(CookbookParam))
               fnBodyPost(interfaces.cookbookpost, CookbookParam, function(ret,err){
                 if(ret.code == RESPONSE_OK){
+                    api.toast({
+                        msg: '保存成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
                   console.log(JSON.stringify(ret))
                 }else{
                   console.log(JSON.stringify(err))
