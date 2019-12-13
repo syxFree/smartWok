@@ -385,6 +385,7 @@
     <script>
     apiready=function(){
       var id=api.pageParam.id
+
       console.log(id)
         var vm=new Vue({
             el:'.app',
@@ -420,7 +421,7 @@
                     else{
                         this.delFlag=true
                     }
-                    if(this.orderCount>=this.goods.amount){
+                    if(this.orderCount>=this.goods.stock){
                         this.incFlag=false
                     }
                     else{
@@ -441,6 +442,9 @@
                   fnGet(interfaces.goodsDetails,params,true,function(ret,err){
                     if(ret.code==RESPONSE_OK){
                       vm.goods=ret.data
+                      if(vm.orderCount>=vm.goods.stock){
+                          vm.incFlag=false
+                      }
                       var bannerList=vm.goods.images.split(',')
                       vm.img=bannerList
                       vm.moveSlide()
@@ -497,8 +501,23 @@
                     document.body.removeEventListener('touchmove', this.scroll
                     ,{passive:false});
                 },
+                //分享到微信
                 shareWx:function(){
-                    alert("分享到微信")
+                  var wxPlus = api.require('wxPlus');
+                  wxPlus.shareWebpage({
+                      apiKey: '',
+                      scene: 'session',
+                      title: '测试标题',
+                      description: '分享内容的描述',
+                      thumb: '',
+                      contentUrl: 'http://apicloud.com'
+                  }, function(ret, err) {
+                      if (ret.status) {
+                          alert('分享成功');
+                      } else {
+                          alert(err.code);
+                      }
+                  });
                 },
                 shareFriend:function(){
                     alert("分享到朋友圈")
@@ -574,7 +593,7 @@
                         url: '../order_submit/orderSubmit_win.html',
                         reload:true,
                         bounces:false,
-                        slidBackEnabled:false,
+                        slidBackEnabled:true,
                         pageParam: {
                             goodsInfo:goodsInfo
                         }
@@ -695,6 +714,16 @@
                 }
             },
         })
+        api.addEventListener({
+            name: 'orderSuccess'
+        }, function(ret, err){
+            if( ret ){
+              console.log("监听到了订单成功")
+              vm.shadeFlag=false
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
       }
     </script>
 </body>

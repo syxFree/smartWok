@@ -115,7 +115,7 @@
         }
         .good-box .right p{
             width: 4.6rem;
-            height: .88rem;
+            /*height: .88rem;*/
             font-size: .28rem;
             overflow:hidden;
             text-overflow:ellipsis;
@@ -358,6 +358,14 @@
     <script src="../../script/restful.js"></script>
     <script>
     apiready=function(){
+        //点击输入框的时候让屏幕向上滑动
+        window.addEventListener('resize',function(){
+          if(document.activeElement.tagName==='INPUT' || document.activeElement.tagName==='TEXTAREA'){
+            window.setTimeout(function(){
+                document.activeElement.scrollIntoView(true)
+            },100)
+          }
+        })
         var vm=new Vue({
             el:'.app',
             data:{
@@ -398,20 +406,81 @@
                     var type=0
                     if(vm.chooseFlag){
                       type=0   //0代表支付宝
+                      vm.aliPay()
                     }else{
                       type=1   //1代表微信
+                      vm.wxPay()
                     }
+                    //付款成功后的状态
+                    // api.openWin({
+                    //     name: 'orderSuccess',
+                    //     url: 'orderSuccess_win.html',
+                    //     reload:true,
+                    //     slidBackEnabled:false,
+                    //     bounces:false,
+                    //     pageParam: {
+                    //         name: 'test'
+                    //     }
+                    // });
                     var params={
-                      memo:vm.memo,
-                      payType:type,
-                      productId:vm.goods.productId,
-                      quantity:vm.goods.count,
+                      memo:vm.memo,   //留言
+                      payType:type,   //那种方法付款
+                      productId:vm.goods.productId,  // 商品的id
+                      quantity:vm.goods.count,   //商品数量
                       receiptAddressId:vm.userInfo.areaId  //收货地址id
                     }
                     console.log(JSON.stringify(params))
                     fnBodyPost(interfaces.createOrder,params,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          alert('创建订单成功')
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
 
+                        }
                     })
+                },
+                wxPay:function(){
+                  var wxPay = api.require('wxPay');
+                  wxPay.getOrderId({
+                      info: ''
+                  }, function(ret, err) {});
+                  wx.isInstalled(function(ret,err){
+                    if(ret.installed){
+                      wxPay.payOrder({
+                          apiKey: '',
+                          orderId: '',
+                          mchId: '',
+                          nonceStr: '',
+                          timeStamp: '',
+                          package: '',
+                          sign: ''
+                      }, function(ret, err) {
+                          if (ret.status) {
+                              //支付成功
+                          } else {
+                              alert(err.code);
+                          }
+                      });
+                    }else{
+                      alert("当前设备未安装微信客户端")
+                    }
+                  })
+                },
+                aliPay:function(value){
+                  var aliPayPlus = api.require('aliPayPlus');
+                  aliPayPlus.payOrder({
+                    orderInfo: value   //这里是后台返回的一个字段
+                  }, function(ret, err) {
+                    api.alert({
+                        title: '支付结果',
+                        msg: ret.code,
+                        buttons: ['确定']
+                    });
+                  });
                 },
                 //获取用户默认地址
                 getAddress:function(){
@@ -451,7 +520,7 @@
                       name: 'userAdress',
                       url: '../address/address_win.html',
                       reload:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
                           name: 'test'

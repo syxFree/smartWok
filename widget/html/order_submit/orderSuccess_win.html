@@ -16,7 +16,8 @@
             width:100%;
             height: .88rem;
             line-height: .88rem;
-            text-align: center;
+            display: flex;
+            align-items: center;
             background-color: #f7f7f7;
             border-bottom: 1px solid #ccc;
             position: relative;
@@ -24,14 +25,16 @@
         header img{
             width: .4rem;
             height: .45rem;
-            position: absolute;
+            position: relative;;
             left: .2rem;
-            top: .21rem;
         }
         header span{
             font-size: .36rem;
             color: #333;
             font-weight: 600;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
     </style>
 </head>
@@ -46,6 +49,16 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script>
+    apiready=function(){
+        var header = $api.dom('header'); // 获取 header 标签元素
+        var footer = $api.dom('footer'); // 获取 footer 标签元素
+
+        // 1.修复开启沉浸式效果带来的顶部Header与手机状态栏重合的问题，最新api.js方法已支持适配iPhoneX；
+        // 2.默认已开启了沉浸式效果 config.xml中 <preference name="statusBarAppearance" value="true"/>
+        // 3.沉浸式效果适配支持iOS7+，Android4.4+以上版本
+        var headerH = $api.fixStatusBar(header);
+        // 最新api.js为了适配iPhoneX增加的方法，修复底部Footer部分与iPhoneX的底部虚拟横条键重叠的问题；
+        var footerH = $api.fixTabBar(footer);
         var vm=new Vue({
             el:'.app',
             data:{
@@ -54,12 +67,22 @@
             methods: {
                 //返回按钮 这里返回支付界面
                 back:function(){
-                  back: function () {
-                      api.closeWin()
-                  },
+                    api.closeWin()
                 },
             },
         })
+        api.openFrame({
+            name: 'orderSuccess',
+            url: 'orderSuccess_frm.html',
+            reload:true,
+            rect: {
+              marginTop: headerH, // main页面距离win顶部的高度
+              marginBottom: footerH, // main页面距离win底部的高度
+              w: 'auto' // main页面的宽度 自适应屏幕宽度
+            },
+            pageParam: api.pageParam
+        });
+      }
     </script>
 </body>
 </html>

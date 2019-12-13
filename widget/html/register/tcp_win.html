@@ -36,7 +36,7 @@
   <div class="app">
     <header>
       <img src="../../image/register/black.png" alt="返回" @click="back">
-      <h2>协议详情</h2>
+      <h2>{{msg}}</h2>
       <span></span>
     </header>
   </div>
@@ -45,6 +45,7 @@
   <script src="../../script/vue.min.js"></script>
   <script>
   apiready = function () {
+      var title=api.pageParam.title
       var header = $api.dom('header'); // 获取 header 标签元素
       var footer = $api.dom('footer'); // 获取 footer 标签元素
 
@@ -56,8 +57,11 @@
       var footerH = $api.fixTabBar(footer);
       var goodsvue = new Vue({
           el: '.app',
-          data: {},
-          created: function () {
+          data: {
+            msg:'隐私政策'
+          },
+          created(){
+              this.msg=title
           },
           methods: {
             back: function () {
