@@ -37,7 +37,7 @@
 
     .content input {
       margin-left: .88rem;
-      width: 65%;
+      width: 50%;
     }
 
     .unfold {
@@ -110,7 +110,7 @@
       </div>
       <div class="content-detail">
         <span>详细地址</span>
-        <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）" style="margin-top:.05rem" v-model="detail"></textarea>
+        <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）"  v-model="detail"></textarea>
       </div>
     </div>
     <div class="switch">
@@ -170,7 +170,39 @@
                   title: '所在地区',
                   wheels: [
                     {
-                      data: ret.data
+                      data:[
+                      {
+                          id:'1',
+                          value:'附近',
+                          childs:[
+                              {id:'1',value:'1000米'},
+                              {id:'2',value:'2000米'},
+                              {id:'3',value:'3000米'},
+                              {id:'4',value:'5000米'},
+                              {id:'5',value:'10000米'}
+                          ]
+                      },
+                      {id:'2',value:'上城区',
+                      childs:[
+                          {id:'1',
+                          value:'1000米',
+                          childs:[
+                              {id:'1',value:'1000米'},
+                              {id:'2',value:'2000米'},
+                              {id:'3',value:'3000米'},
+                              {id:'4',value:'5000米'},
+                              {id:'5',value:'10000米'}
+                          ]},
+                          {id:'2',value:'2000米'},
+                          {id:'3',value:'3000米'},
+                          {id:'4',value:'5000米'},
+                          {id:'5',value:'10000米'}
+                      ]},
+                      {id:'3',value:'下城区'},
+                      {id:'4',value:'江干区'},
+                      {id:'5',value:'拱墅区'},
+                      {id:'6',value:'西湖区'}
+                  ]
                     }
                   ],
                   position: [0],
@@ -240,9 +272,12 @@
                   duration: 2000,
                   location: 'bottom'
               });
-              setTimeout(function(){
-                      api.closeWin()
-              },2000)
+              api.sendEvent({
+                  name: 'changeaddress',
+              });
+
+              api.closeWin()
+
             }else {
               console.log(JSON.stringify(err))
             }

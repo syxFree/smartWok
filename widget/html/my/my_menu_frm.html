@@ -110,10 +110,10 @@
                     </div>
                 </div>
                 <div style="position: relative;">
-                    <img src="../../image/my/menu-point.png" alt="" class="menu-bright" @click="handledetail">
-                    <ul class="menu-ulright" v-if="ulright">
-                        <li>分享</li>
-                        <li>删除</li>
+                    <img src="../../image/my/menu-point.png" alt="" class="menu-bright" @click="handledetail(index)">
+                    <ul class="menu-ulright" v-if="ulright&&ulrightindex===index">
+                        <li @click="share(item.id)">分享</li>
+                        <li @click="deleteMenu(item,index)">删除</li>
                     </ul>
                 </div>
             </div>
@@ -133,6 +133,11 @@
     <script src="../../script/moment.js"></script>
     <script>
       apiready = function () {
+        api.addEventListener({
+          name: 'changemenu'
+        }, function(ret, err) {
+          vue.getdata()
+        });
         var vue = new Vue({
             el: '.app',
             data() {
@@ -140,6 +145,7 @@
                     hasmenu: true,
                     ulright: false,
                     cooklist:[],
+                    ulrightindex:-1,
                 }
             },
             mounted(){
@@ -162,8 +168,46 @@
                       }
                   })
                 },
-                handledetail() {
+                handledetail(index) {
                     this.ulright = !this.ulright;
+                    this.ulrightindex=index
+                },
+                share(id){
+                  api.openWin({
+                      name: 'share_win',
+                      url: '../menu/share_win.html',
+                      reload: true,
+                      bounces: false,
+                      slidBackEnabled: true,
+                      pageParam:{
+                        id:id
+                      }
+                  });
+                },
+                deleteMenu(item,index){
+                  // 点击先询问 如果是删除
+                  let vm=this
+                  api.confirm({
+                      title: '警告',
+                      msg: '您确认要删除该菜谱么',
+                      buttons: ['确定', '取消']
+                  }, function(ret, err) {
+                      var btn = ret.buttonIndex;
+                      // 因为index为1点击确定删除
+                      if(btn===1){
+                      let url=interfaces.cookbookpost+'?id='+item.id
+                      fnDelete(url,true, function(ret,err){
+                      console.log(JSON.stringify(ret))
+                        if(ret.code==RESPONSE_OK){
+                          console.log(JSON.stringify(ret))
+                            vm.ulrightindex=-1
+                           vm.cooklist.splice(index,1)
+                        }else{
+                          console.log(JSON.stringify(err))
+                        }
+                    })
+                      }
+                  });
                 },
                 toMenuchange:function(id){
                   api.openWin({
