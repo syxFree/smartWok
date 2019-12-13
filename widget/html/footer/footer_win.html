@@ -132,7 +132,7 @@
                       var that = this;
                       var headerH = '';
                       var footerH = '';
-                      setTimeout(function () {
+                      // setTimeout(function () {
                           var header = $api.dom('header'); // 获取 header 标签元素
                           var footer = $api.dom('footer'); // 获取 footer 标签元素
                           headerH = $api.fixStatusBar(header);
@@ -159,14 +159,17 @@
                           }, function (ret, err) {
                               var index = ret.index;
                               that.currentIdx = index;
-                              api.sendEvent({
-                                  name: 'footerIndexMarket',
-                                  extra: {
-                                      index: index
-                                  }
-                              })
+                              setTimeout(function(){
+                                api.sendEvent({
+                                    name: 'footerIndexMarket',
+                                    extra: {
+                                        index: index
+                                    }
+                                })
+                              }, 300);
+
                           });
-                      }, 300);
+                      // }, 300);
                   },
 
                 },
