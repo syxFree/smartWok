@@ -60,13 +60,14 @@
       </div>
     </div>
     <div style="text-align: center;margin-top: 2rem;">
-      <button class="btn">退出登录</button>
+      <button class="btn" @click="loginout">退出登录</button>
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script>
+    apiready = function () {
     var vue = new Vue({
       el: '.app',
       data() {
@@ -74,8 +75,15 @@
         }
       },
       methods: {
+        loginout(){
+          api.openWin({
+              name: 'login_win',
+              url:'../login/login_win.html'
+          })
+        }
       },
     })
+  }
   </script>
 </body>
 

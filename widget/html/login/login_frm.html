@@ -198,8 +198,8 @@
                 },
                 login:function(){
                     api.openWin({
-                        name: 'home',
-                        url: '../home/home_win.html',
+                        name: 'footer_win',
+                        url: '../footer/footer_win.html',
                         reload: true,
                         bounces: false,
                         slidBackEnabled: false,
@@ -210,17 +210,14 @@
 
                 },
                 goRegister:function(){
+                  console.log(1231)
                   api.openWin({
                       name: 'register',
                       url: '../register/register_win.html',
                       reload:true,
                       bounces:false,
-                      slidBackEnabled;false,
-                      pageParam: {
-
-                      }
+                      slidBackEnabled:false,
                   });
-
                 },
                 goFindPwd:function(){
                   api.openWin({

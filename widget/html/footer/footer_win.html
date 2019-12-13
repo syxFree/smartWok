@@ -46,17 +46,17 @@
 <body>
     <div class="app">
         <footer>
-            <div class="footer-item" @click="toHomeType(0)" tapmode>
-                <img :src="currentIdx==0?home[1]:home[0]" alt="">
-                <span class="title" :class="{'on':currentIdx==0}">首页</span>
-            </div>
-            <div class="footer-item" @click="toHomeType(1)" tapmode>
-                <img :src="currentIdx==1?consult[1]:consult[0]" alt="">
-                <span class="title" :class="{'on':currentIdx==1}">资讯</span>
-            </div>
+          <div class="footer-item" @click="toHomeType(0)" tapmode>
+              <img :src="currentIdx==0?consult[1]:consult[0]" alt="">
+              <span class="title" :class="{'on':currentIdx==0}">资讯</span>
+          </div>
+          <div class="footer-item" @click="toHomeType(1)" tapmode>
+              <img :src="currentIdx==1?shop[1]:shop[0]" alt="">
+              <span class="title" :class="{'on':currentIdx==1}">商城</span>
+          </div>
             <div class="footer-item" @click="toHomeType(2)" tapmode>
-                <img :src="currentIdx==2?shop[1]:shop[0]" alt="">
-                <span class="title" :class="{'on':currentIdx==2}">商城</span>
+                <img :src="currentIdx==2?home[1]:home[0]" alt="">
+                <span class="title" :class="{'on':currentIdx==2}">设备</span>
             </div>
             <div class="footer-item" @click="toHomeType(3)" tapmode>
                 <img :src="currentIdx==3?mineImg[1]:mineImg[0]" alt="">
@@ -87,21 +87,21 @@
                 data() {
                     return {
                         currentIdx: 0,
-                        home: ['../../image/footer/home.png', '../../image/footer/home_true.png'],
+                        home: ['../../image/footer/equipment.png', '../../image/footer/equipment_true.png'],
                         consult: ['../../image/footer/consult.png', '../../image/footer/consult_true.png'],
                         shop: ['../../image/footer/shop.png', '../../image/footer/shop_true.png'],
                         mineImg: ['../../image/footer/my.png', '../../image/footer/my_true.png'],
                         framesArr: [
-                            {
+                          {
+                              name: 'information_list_win',
+                              url: '../information/information_list_win.html'
+                          }, {
+                              name: 'store_win',
+                              url: '../store/store_win.html'
+                          },{
                                 name: 'home_win',
                                 url: '../home/home_win.html'
-                            }, {
-                                name: 'information_list_win',
-                                url: '../information/information_list_win.html'
-                            }, {
-                                name: 'store_win',
-                                url: '../store/store_win.html'
-                            }, {
+                            },{
                                 name: '/my_win',
                                 url: '../my/my_win.html'
                             }]

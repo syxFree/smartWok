@@ -97,15 +97,15 @@
             font-weight: 600;
         }
         .list-btn{
-            width: 3.8rem;
+            width:7rem;
             height: 1rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: flex-end;
             font-size: .28rem;
-            position: relative;
-            left: 3.1rem;
-            flex-direction: row-reverse;
+        }
+        .list-btn div{
+          margin-left:.3rem;
         }
         .disActive{
             width: 1.8rem;
@@ -150,6 +150,7 @@
                 </div>
                 <div class="countPrice">共{{item.orderCount}}件，合计<span>￥{{item.price*item.orderCount}}</span></div>
                 <div class="list-btn">
+                    <div v-if="item.status=='待付款'" class="active" @click="invoice(index)">申请发票</div>
                     <div v-if="item.status=='待付款'" class="active" @click="pay(index)">立即付款</div>
                     <div v-if="item.status=='待发货'" class="active" @click="reminder">提醒发货</div>
                     <div v-if="item.status=='待收货'" class="active" @click="confirmGoods">确认收货</div>
@@ -228,6 +229,18 @@
                 ticketFlag:false,  //订单按钮选择状态
             },
             methods: {
+              invoice(index){
+                api.openWin({
+                    name: 'invoice_win',
+                    url: 'invoice_win.html',
+                    reload:true,
+                    slidBackEnabled:false,
+                    bounces:false,
+                    pageParam: {
+                      id:index,
+                    }
+              })
+            },
                 //立即付款
                 pay:function(index){
                   api.openWin({
