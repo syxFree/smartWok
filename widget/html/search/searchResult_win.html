@@ -56,6 +56,22 @@
     <script src="../../script/vue.min.js"></script>
     <script>
     apiready = function () {
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err){
+            if( ret ){
+                console.log("按下了返回键")
+                api.sendEvent({
+                    name: 'search',
+                    extra: {
+                    }
+                });
+                api.closeWin()
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+
         var text=api.pageParam.text
         console.log(text)
         var header = $api.dom('header'); // 获取 header 标签元素
@@ -76,6 +92,11 @@
             },
             methods: {
               back: function () {
+                  api.sendEvent({
+                      name: 'search',
+                      extra: {
+                      }
+                  });
                   api.closeWin()
               },
               keypress:function(e){

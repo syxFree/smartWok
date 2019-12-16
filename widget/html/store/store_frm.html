@@ -7,10 +7,12 @@
     <title>资讯详情</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
-        .app{
-            overflow: hidden;
+        html,body,.app{
             width: 100%;
-            min-height: 100vh;
+            height: 100%;
+        }
+        section{
+          height: 100%;
         }
         .search{
             width: 100%;
@@ -75,6 +77,9 @@
         }
         .goods{
             width: 90%;
+            height: calc(100% - 1.86rem);
+            padding-top: .3rem;
+            overflow: auto;
             display: flex;
             flex-wrap: wrap;
             margin: 0 auto;
@@ -231,7 +236,7 @@
                         url: '../search/search_win.html',
                         reload:true,
                         bounces:false,
-                        slidBackEnabled:false,
+                        slidBackEnabled:true,
                         pageParam: {
 
                         }
@@ -253,7 +258,7 @@
                         url: 'goods-details_win.html',
                         reload:true,
                         bounces:false,
-                        slidBackEnabled:false,
+                        slidBackEnabled:true,
                         pageParam: {
                             id:id
                         }

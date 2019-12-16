@@ -70,27 +70,27 @@
     <script src="../../script/fastclick.js"></script>
     <script>
         apiready = function() {
+          var index=api.pageParam.index
           api.addEventListener({
               name: 'keyback'
           }, function (ret, err) {
               api.closeWidget({});
           });
 
-          setTimeout(function () {
-              api.closeWin({
-                  name: 'login_win'
-              });
-              api.closeWin({
-                  name: 'register_win'
-              });
-              api.closeWin({
-                  name: 'find_password_win'
-              });
-              api.closeWin({
-                  name: 'find_password_next_win'
-              });
-          }, 1000);
-
+            setTimeout(function () {
+                api.closeWin({
+                    name: 'login_win'
+                });
+                api.closeWin({
+                    name: 'register_win'
+                });
+                api.closeWin({
+                    name: 'find_password_win'
+                });
+                api.closeWin({
+                    name: 'find_password_next_win'
+                });
+            }, 1000);
             var vue = new Vue({
                 el: '.app',
                 data() {
@@ -118,6 +118,10 @@
                 },
                 created: function () {
                     this.openHomeGroup();
+                    console.log(index)
+                    if(index){
+                      this.currentIdx=index
+                    }
                 },
                 mounted: function () {
                     this.toHomeType(0)

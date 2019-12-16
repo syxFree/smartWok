@@ -25,8 +25,10 @@ var interfaces = {
     setPwd:'/sw/auth/reset_pwd',    //修改密码
     loginId: '/jgj/worker/worker_type', // 判断用户登录身份
     logout: '/jgj/worker/logout',//退出登录
+    wxlogin:'/sw/auth/wx_auth',   //微信登录
     sendCode: '/api/common/send_code',//发送验证码
     checkCode:'/api/common/check_code', //校验验证码
+    getTcp:'/static_url/content',   //获取用户协议
     informationList:'/sw/news/list',  //咨询列表
     informationBanner:'/sw/news/brand/list',  //咨询轮播图
     informationDetail:'/sw/news',           //咨询详情
@@ -38,7 +40,10 @@ var interfaces = {
     createOrder:'/sw/order/create',  //创建订单
     getOrderList:'/sw/order',     //获取订单
     cancelOrder:'/sw/order/cancel',  //取消订单
+    remindOrder:'/sw/order/remind_ship',  //提醒发货
     getLogistics:'/sw/info/logistics',  //获取物流信息
+    deleteOrder:'/sw/order/delete',   //删除订单
+    receiptOrder:'/sw/order/receipt',  // 确认收货
     cookbookfun:'/sw/cookbook/functions',    //菜谱功能
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈
@@ -171,40 +176,6 @@ function fnPut(apiurl, data, callback) {
             },
             data: {
                 values: data
-            }
-        },
-        function (ret, err) {
-            api.hideProgress();
-            if (ret) {
-                if (ret.code == TOKEN_BEOVERDUE) {
-                    toLogin();
-                } else {
-                    callback(ret, err);
-                }
-            } else {
-                callback(null, err);
-                api.toast({
-                    msg: "服务器连接失败"
-                });
-            }
-        }
-    );
-}
-function fnHederPut(apiurl, data, callback) {
-    var nonceStr = guid();
-    var timeStamp = new Date().getTime();
-    var accessToken = $api.getStorage("accessToken");
-    api.showProgress();
-    api.ajax(
-        {
-            url: host + apiurl,
-            method: "put",
-            timeout: 10,
-            headers: {
-                nonceStr: nonceStr,
-                timeStamp: timeStamp,
-                'access-token': accessToken,
-                "Content-Type": APPLICATION_JSON_UTF8_VALUE
             }
         },
         function (ret, err) {

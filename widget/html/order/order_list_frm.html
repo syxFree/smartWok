@@ -9,7 +9,7 @@
     <style>
         html,body,.app{
             width: 100%;
-            height: 100%;
+            /*height: 100%;*/
             background-color: #f7f7f7;
         }
         section{
@@ -151,11 +151,11 @@
                 <div v-if="item.orderItems" class="countPrice">共{{item.orderItems[0].quantity}}件，合计：<span>￥{{item.orderItems[0].unitPrice*item.orderItems[0].quantity}}</span></div>
                 <div class="list-btn">
                     <div v-if="item.orderStatus==0" class="active" @click="pay(item.id)">立即付款</div>
-                    <div v-if="item.orderStatus==1" class="active" @click="reminder">提醒发货</div>
-                    <div v-if="item.orderStatus==2" class="active" @click="confirmGoods">确认收货</div>
-                    <div v-if="item.orderStatus==5 || item.orderStatus==3" class="disActive" @click="del">删除订单</div>
+                    <div v-if="item.orderStatus==1" class="active" @click="reminder(item.id)">提醒发货</div>
+                    <div v-if="item.orderStatus==2" class="active" @click="confirmGoods(item.id)">确认收货</div>
+                    <div v-if="item.orderStatus==5 || item.orderStatus==3" class="disActive" @click="del(item.id)">删除订单</div>
                     <div v-if="item.orderStatus==2 || item.orderStatus==3" class="disActive" @click="look(item.id)">查看物流</div>
-                    <div v-if="item.orderStatus==0" class="disActive" @click="cancel">取消订单</div>
+                    <div v-if="item.orderStatus==0" class="disActive" @click="cancel(item.id)">取消订单</div>
                 </div>
             </div>
         </section>
@@ -231,7 +231,7 @@
                 pageSize:10,
                 pageNum:1,
                 orderTime:[],
-                orderStatus:[]
+                orderStatus:[],
             },
             created(){
               this.getData()
@@ -241,6 +241,8 @@
                 //获取数据
                 getData(){
                   var vm=this
+                  vm.orderTime=[],
+                  vm.orderStatus=[]
                   var params={
                     pageSize:vm.pageSize,
                     pageNum:vm.pageNum
@@ -306,7 +308,7 @@
                       name: 'orderDetails',
                       url: 'orderDetails_win.html',
                       reload:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
                         shadeFlag:true,
@@ -314,15 +316,6 @@
                         // type:this.orderList[index].status
                       }
                   });
-                  // setTimeout(function(){
-                  //   api.sendEvent({
-                  //       name: 'orderImmediately',
-                  //       extra: {
-                  //           id:index
-                  //       }
-                  //   });
-                  // },300)
-
                 },
                 //跳转到订单详情页
                 goOrderDetails:function(index){
@@ -330,7 +323,7 @@
                         name: 'orderDetails',
                         url: 'orderDetails_win.html',
                         reload:true,
-                        slidBackEnabled:false,
+                        slidBackEnabled:true,
                         bounces:false,
                         pageParam: {
                           id:index
@@ -339,26 +332,74 @@
 
                 },
                 //提醒发货
-                reminder:function(){
+                reminder:function(value){
+                    var vm=this
+                    fnBodyPut(interfaces.remindOrder+'/'+value,{},function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                            api.toast({
+                                msg: '提醒成功',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            vm.remindOrder=false
+                        }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
 
+                        }
+                    })
                 },
-                //确认发货
-                confirmGoods:function(){
-
+                //确认收货
+                confirmGoods:function(index){
+                    var vm=this
+                    if(confirm("您确认收货吗？")){
+                      fnBodyPut(interfaces.receiptOrder+'/'+index,{},function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                            api.toast({
+                                msg: '确认收货成功',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            vm.getData()
+                          }
+                          else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                    }else{
+                      return
+                    }
                 },
                 //删除订单
-                del:function(){
-                  api.confirm({
-                      title: '您确认要取消订单吗？',
-                      // msg: 'testmsg',
-                      buttons: ['确定', '取消']
-                  }, function(ret, err){
-                      if( ret ){
-                          //  alert( JSON.stringify( ret ) );
-                      }else{
-                          //  alert( JSON.stringify( err ) );
-                      }
-                  });
+                del:function(index){
+                  var vm=this
+                  if(confirm("您确认要删除此订单吗？")){
+                      fnBodyPut(interfaces.deleteOrder+'/'+index,{},function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                              api.toast({
+                                  msg: '删除成功',
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                              vm.getData()
+                          }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                  }else{
+                    return
+                  }
                 },
                 //查看物流
                 look:function(index){
@@ -366,7 +407,7 @@
                       name: 'logistics_information',
                       url: '../logistics_information/logistics_info_win.html',
                       reload:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
                           id:index
@@ -374,34 +415,28 @@
                   });
                 },
                 //取消订单
-                cancel:function(){
-                  api.confirm({
-                      title: '删除提示',
-                      msg: '您确定要删除此订单吗',
-                      buttons: ['确定', '取消']
-                  }, function(ret, err){
-                      if( ret ){
-                        if(ret.buttonIndex==1){
-                            fnHederPut(interfaces.cancelOrder,params,function(ret,err){
-                              if(ret.code==RESPONSE_OK){
-                                api.toast({
-                                    msg: '取消成功',
-                                    duration: 2000,
-                                    location: 'bottom'
-                                });
-
-                              }
-                            })
-                        }
-                      }else{
-                          api.toast({
-                              msg: '您选择了取消',
-                              duration: 2000,
-                              location: 'bottom'
-                          });
-
-                      }
-                  });
+                cancel:function(index){
+                  var vm=this
+                  if(confirm("您确认取消订单吗？")){
+                      fnBodyPut(interfaces.cancelOrder+'/'+index,{},function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                              vm.getData()
+                              api.toast({
+                                  msg: '取消成功',
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                          }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                  }else{
+                      return
+                  }
                 }
             },
         })

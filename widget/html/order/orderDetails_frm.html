@@ -401,7 +401,7 @@
                 <span>{{goods.status}}</span>
             </div>
             <!-- 物流信息 -->
-            <div class="logistics" v-if="goods.status=='待收货' || goods.status=='已完成'" @click="goWuliu">
+            <div class="logistics" v-if="goods.status=='待收货' || goods.status=='已完成'" @click="goWuliu(orderInfo.id)">
                 <img class="car" src="../../image/orderDetails/logistics.png" alt="运输车">
                 <div class="logisticsInfo">
                     <p>{{logistics.address}}</p>
@@ -453,13 +453,13 @@
             </div>
             <div class="remiber">
                <div class="list-btn">
-                    <div v-if="goods.status=='待付款'" class="active" @click="pay">立即付款</div>
-                    <div v-if="goods.status=='待发货'" class="active" @click="reminder">提醒发货</div>
-                    <div v-if="goods.status=='待收货'" class="active" @click="confirmGoods">确认收货</div>
-                    <div v-if="goods.status=='已取消' || goods.status=='已完成'" class="disActive" @click="del">删除订单</div>
-                    <div v-if="goods.status=='已完成'" class="disActive" @click="look">查看物流</div>
-                    <div v-if="goods.status=='待付款'" class="disActive" @click="cancel">取消订单</div>
-                    <div v-if="goods.status=='待发货' || goods.status=='待收货' || goods.status== '已完成'" class="disActive" @click="ApplicationInvoice">申请发票</div>
+                    <div v-if="goods.status=='待付款'" class="active" @click="pay(orderInfo.id)">立即付款</div>
+                    <div v-if="goods.status=='待发货'" class="active" @click="reminder(orderInfo.id)">提醒发货</div>
+                    <div v-if="goods.status=='待收货'" class="active" @click="confirmGoods(orderInfo.id)">确认收货</div>
+                    <div v-if="goods.status=='已取消' || goods.status=='已完成'" class="disActive" @click="del(orderInfo.id)">删除订单</div>
+                    <!-- <div v-if="goods.status=='已完成'" class="disActive" @click="look(orderInfo.id)">查看物流</div> -->
+                    <div v-if="goods.status=='待付款'" class="disActive" @click="cancel(orderInfo.id)">取消订单</div>
+                    <div v-if="goods.status=='待发货' || goods.status=='待收货' || goods.status== '已完成'" class="disActive" @click="ApplicationInvoice(orderInfo.id)">申请发票</div>
                 </div>
             </div>
             <div class="shade" v-if="shadeFlag">
@@ -497,6 +497,7 @@
     apiready=function(){
         var shadeFlag=api.pageParam.shadeFlag
         var id=api.pageParam.id    //这里是传过来的id 获取该id的商品
+        // var cancelFlag=api.pageParam.cancel  //  判断是否传过来了取消
         var vm=new Vue({
             el:'.app',
             data:{
@@ -518,6 +519,7 @@
                     time:"2019-12-30 12:30:28"
                 },
                 orderInfo:{
+                    id:'',
                     no:132135468413216186,
                     createTime:'2019-11-23 12:24:30',
                     type:'微信支付',
@@ -525,21 +527,23 @@
                 },
                 orderCount:5,   //购买商品数量
                 shadeFlag:false,  //支付类型
-                payFlag:true
+                payFlag:true,
+                cancelFlag:false
             },
             created() {
                 if(this.goods.status=='已完成'|| this.goods.status=='待收货'){
                     document.getElementsByClassName("userInfo")[0].style.height="13%"
                     document.getElementsByClassName("goods-info")[0].style.height="34%"
                 }
-                // this.shadeFlag=shadeFlag
                 if(shadeFlag==true){
                   this.shadeFlag=shadeFlag
                   this.getData(id)
                 }else{
                     this.getData(id)
                 }
-                this.getData(id)
+                // if(cancelFlag==true){
+                //     this.cancel(id)
+                // }
             },
             computed: {
                 totalCount:function(){
@@ -563,6 +567,7 @@
                             vm.userInfo.userPhone=msg.receiptorPhone
                             vm.userInfo.address=msg.receiptorAddress
                             vm.orderInfo.no=msg.sn
+                            vm.orderInfo.id=msg.id
                             vm.orderInfo.createTime=vm.timeToDate(msg.createDate)
                             vm.orderInfo.payTime=vm.timeToDate(msg.payDate)
                             vm.orderInfo.type=vm.numToType(msg.payType)
@@ -645,45 +650,128 @@
                 ApplicationInvoice:function(){
                     alert("申请发票")
                 },
-                reminder:function(){
-                    console.log("提醒发货")
+                //提醒发货
+                reminder:function(value){
+                    var vm=this
+                    fnBodyPut(interfaces.remindOrder+'/'+value,{},function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                            api.toast({
+                                msg: '提醒成功',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            vm.remindOrder=false
+                        }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                        }
+                    })
                 },
+                //确认收货
                 confirmGoods:function(){
-                    console.log("确认收货")
+                  var vm=this
+                  if(confirm("您确认收货吗？")){
+                    fnBodyPut(interfaces.receiptOrder+'/'+index,{},function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          api.toast({
+                              msg: '确认收货成功',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          vm.getData()
+                        }
+                        else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                        }
+                    })
+                  }else{
+                    return
+                  }
                 },
-                del:function(){
-                    console.log("删除订单")
+                del:function(index){
+                  var vm=this
+                  if(confirm("您确认要删除此订单吗？")){
+                      fnBodyPut(interfaces.deleteOrder+'/'+index,{},function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                              api.toast({
+                                  msg: '删除成功',
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                              api.openWin({
+                                  name: 'orderList',
+                                  url: 'order_list_win.html',
+                                  reload:true,
+                                  pageParam: {
+                                      name: 'test'
+                                  }
+                              });
+                          }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                  }else{
+                    return
+                  }
                 },
-                look:function(){
+                //查看物流
+                look:function(index){
                     api.openWin({
                         name: 'logistics-information',
                         url: '../logistics_information/logistics_info_win.html',
                         reload:true,
-                        slidBackEnabled:false,
+                        slidBackEnabled:true,
                         bounces:false,
                         pageParam: {
-                            name: 'test'
+                            id:index
                         }
                     });
-
                 },
-                cancel:function(){
-                    //取消订单
+                //取消订单
+                cancel:function(index){
+                    var vm=this
                     if(confirm("您确认取消订单吗？")){
-                        console.log("取消")
+                        fnBodyPut(interfaces.cancelOrder+'/'+index,{},function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                                vm.getData(index)
+                                api.toast({
+                                    msg: '取消成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }else{
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                        })
                     }else{
                         return
                     }
                 },
-                goWuliu:function(){
+                //去物流页
+                goWuliu:function(index){
                   api.openWin({
                       name: 'wuliu',
                       url: '../logistics_information/logistics_info_win.html',
                       reload:true,
                       bounces:false,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       pageParam: {
-
+                          id:index
                       }
                   });
                 },

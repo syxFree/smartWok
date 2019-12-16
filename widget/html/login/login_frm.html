@@ -245,7 +245,7 @@
                             url: '../footer/footer_win.html',
                             reload: true,
                             bounces: false,
-                            slidBackEnabled: false,
+                            slidBackEnabled: true,
                             pageParam: {
 
                             }
@@ -265,7 +265,7 @@
                       url: '../register/register_win.html',
                       reload:true,
                       bounces:false,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       pageParam: {
 
                       }
@@ -278,7 +278,7 @@
                       url: '../find_password/find_password_win.html',
                       reload:true,
                       bounces:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       pageParam: {
                           name: 'test'
                       }
@@ -310,42 +310,41 @@
                     }
                 },
                 wxLogin:function(){
-                  var wx = api.require('wx');
-                  var code = '';
+                   var vm=this
+                   var wx = api.require('wx');
+                   var code = '';
                    wx.isInstalled(function(ret, err) {
                        if (!ret.installed) {
                            alert("当前设备未安装微信客户端");
                        } else {
                          wx.auth({
-                           apiKey: 'wx603bd0a4371ac81c'
+                           apiKey: 'wxd0d84bbf23b4a0e4'
                        }, function(ret, err) {
                            if (ret.status) {
                                wx.getToken({
-                               apiKey: 'wx603bd0a4371ac81c',
-                               apiSecret: '46ee73ffeff612877639698977a16df0',
+                               apiKey: 'wxd0d84bbf23b4a0e4',
+                               apiSecret: 'a354f72aa1b4c2b8eaad137ac81434cd',
                                code: ret.code
                            }, function(ret, err) {
                                if (ret.status) {
                                   api.showProgress({
-                                               style: 'default',
-                                               animationType: 'fade',
-                                               title: '授权成功',
-                                               text: '绑定处理中...',
-                                               modal: true
-                                           });
-                                            wx.getUserInfo({
-                                               accessToken: ret.accessToken,
-                                               openId: ret.openId
-                                           }, function(ret, err) {
-                                               if (ret.status) {
-                                                   // 绑定成功
-                                                   WXbindAccount(ret.openid);
-                                                   api.hideProgress();
-
-
-                                               }
-                                           });
-                               } else {
+                                       style: 'default',
+                                       animationType: 'fade',
+                                       title: '授权成功',
+                                       text: '绑定处理中...',
+                                       modal: true
+                                   });
+                                    wx.getUserInfo({
+                                       accessToken: ret.accessToken,
+                                       openId: ret.openId
+                                   }, function(ret, err) {
+                                       if (ret.status) {
+                                           // 绑定成功
+                                           vm.bindWx(ret.openid);
+                                           api.hideProgress();
+                                       }
+                                   });
+                               }else {
                                    alert(err.code);
                                }
                            });
@@ -353,9 +352,20 @@
                        });
                        }
                    });
-                }
-            },
-        })
+                 },
+                 bindWx:function(index){
+                     var vm=this
+                     var params={
+                       code:index
+                     }
+                     fnBodyPost(interfaces.wxlogin,params,function(ret,err){
+                         if(ret.code==RESPONSE_OK){
+                             console.log(JSON.stringify(ret.data))
+                         }
+                     })
+                 }
+              },
+          })
         }
     </script>
 </body>

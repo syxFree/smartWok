@@ -113,8 +113,23 @@
             this.getData()
         },
         methods:{
+          //微信分享
           shareWx:function(){
-              alert("分享到微信")
+            var wxPlus = api.require('wxPlus');
+            wxPlus.shareWebpage({
+                apiKey: '',
+                scene: 'session',
+                title: '测试标题',
+                description: '分享内容的描述',
+                thumb: '',
+                contentUrl: 'http://apicloud.com'
+            }, function(ret, err) {
+                if (ret.status) {
+                    alert('分享成功');
+                } else {
+                    alert(err.code);
+                }
+            });
           },
           shareFriend:function(){
               alert("分享到朋友圈")

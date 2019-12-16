@@ -129,7 +129,8 @@
   <script src="../../script/vue.min.js"></script>
   <script src="../../script/restful.js" charset="utf-8"></script>
   <script>
-    var vue = new Vue({
+  apiready=function(){
+    var vm = new Vue({
       el: '.app',
       data:{
         searchTxt:'',  //搜索框文本
@@ -198,7 +199,7 @@
                   name: 'searchResult',
                   url: 'searchResult_win.html',
                   reload:true,
-                  slidBackEnabled:false,
+                  slidBackEnabled:true,
                   bounces:false,
                   pageParam: {
                       text: vm.searchTxt
@@ -225,7 +226,7 @@
               name: 'searchResult',
               url: 'searchResult_win.html',
               reload:true,
-              slidBackEnabled:false,
+              slidBackEnabled:true,
               bounces:false,
               pageParam: {
                   text: value
@@ -246,6 +247,19 @@
         }
       },
     })
+    api.addEventListener({
+        name: 'search'
+    }, function(ret, err){
+        if( ret ){
+            console.log("捕捉到了search")
+            var item=$api.getStorage('search')
+            vm.records=item
+        }else{
+             alert( JSON.stringify( err ) );
+        }
+    });
+
+  }
   </script>
 </body>
 

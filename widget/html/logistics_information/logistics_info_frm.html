@@ -113,7 +113,7 @@
     <div class="app">
         <section>
             <div class="order-info">
-                <img :src="orderInfo.img" alt="">
+                <img :src="image" alt="">
                 <div class="right-info">
                     <p>运单号：{{orderInfo.logisticCode}}</p>
                     <p>国内承运人：{{orderInfo.logisticsName}}</p>
@@ -132,7 +132,7 @@
                 </div>
                 <div class="delivery-address">
                         <!-- <img src="../../image/orderDetails/delivery-address.png" alt=""> -->
-                        <span class="user-address">[收货地址]{{orderInfo.address}}</span>
+                        <span class="user-address">[收货地址]{{recepterAddress}}</span>
                         <div class="dot"></div>
                 </div>
             </div>
@@ -173,11 +173,14 @@
                     },
                 ],
                 time1:[],
-                time2:[]
+                time2:[],
+                recepterAddress:'',   // 收货地址
+                image:'',     //商品图片
             },
             created(){
                 console.log(id)
                 this.getData(id)
+                this.getRecepterAddress(id)
             },
             methods: {
                 //获取物流信息
@@ -196,6 +199,17 @@
                           }
                       }
                   })
+                },
+                //获取收货地址
+                getRecepterAddress:function(value){
+                    var vm=this
+                    fnGet(interfaces.getOrderList+'/'+value,{},true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                            vm.recepterAddress=ret.data.receiptorAddress
+                            vm.image=ret.data.orderItems[0].image
+                            console.log(JSON.stringify(vm.image))
+                        }
+                    })
                 },
                 timeToDate:function(timestamp){
                   if (!timestamp) {
