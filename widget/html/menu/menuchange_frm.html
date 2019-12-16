@@ -7,567 +7,532 @@
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
   <style>
-    .cover {
-      width: 6.9rem;
-      height: 3rem;
-      background: #FAFAFA;
-      border: 1px dashed #999999;
-      border-radius: 8px;
-      border-radius: 8px;
-      margin: .3rem;
-      text-align: center;
-    }
-
-    .cover .title {
-      margin-top: 1rem;
-      font-family: PingFang-SC-Medium;
-      font-size: .28rem;
-      color: #333333;
-    }
-
-    .cover .title img {
-      width: .33rem;
-      height: .33rem;
-    }
-
-    .cover .subtitle {
-      margin-top: .3rem;
-      font-family: PingFang-SC-Medium;
-      font-size: .28rem;
-      color: #FF8C46;
-    }
-
-    .menu-name {
-      margin: 0 .3rem;
-    }
-
-
-    .menu-name1 .title {
-      width: 1.68rem;
-      height: .48rem;
-      font-family: PingFang-SC-Bold;
-      font-size: .34rem;
-      color: #333333;
-      position: relative;
-      margin: 0 .3rem;
-    }
-
-    .menu-name1 .title span {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 10;
-    }
-
-    .menu-name1 .title:after {
-      content: "";
-      display: block;
-      height: 100%;
-      border-bottom: .1rem solid #FA844A;
-      position: absolute;
-      top: -0.13rem;
-      left: 0;
-      width: 100%;
-    }
-
-    .menu-name .title {
-      width: 1.4rem;
-      height: .48rem;
-      font-family: PingFang-SC-Bold;
-      font-size: .34rem;
-      color: #333333;
-      position: relative;
-    }
-
-    .menu-name .title span {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 10;
-    }
-
-    .menu-name .title:after {
-      content: "";
-      display: block;
-      height: 100%;
-      border-bottom: .1rem solid #FA844A;
-      position: absolute;
-      top: -0.13rem;
-      left: 0;
-      width: 100%;
-    }
-
-    .menu-name .name {
-      border-bottom: 1px solid #e0e0e0;
-      font-size: .28rem;
-      margin: .3rem 0;
-    }
-
-    .menu-name .name input:focus {
-      border: none;
-      outline: none;
-    }
-
-    .menu-name .name input {
-      padding-bottom: .2rem;
-      width: 100%;
-    }
-
-    .hrs {
-      width: 100%;
-      height: .2rem;
-      background-color: #F7F7F7;
-    }
-
-    .menu-magazine .name {
-      display: flex;
-    }
-
-    .menu-magazine .name span {
-      display: block;
-      width: 15%;
-      padding-bottom: .2rem;
-    }
-
-    .menu-magazine .name input {
-      width: 84%;
-    }
-
-    .cover-box {
-      width: 6.9rem;
-      height: 1rem;
-      border: 1px dashed #999999;
-      border-radius: 8px;
-      border-radius: 8px;
-      text-align: center;
-      margin: .3rem 0;
-      display: flex;
-      justify-content:space-between;
-      align-items: center;
-    }
-    .cover-left{
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      width: 80%;
-    }
-    .cover-box .num {
-      /*width: .42rem;
-      height: .42rem;*/
-      padding: .2rem ;
-      background: #FF8C46;
-      border-radius: 6px;
-      border-radius: 6px;
-      color: #ffffff;
-      text-align: center;
-      margin: 0 .1rem 0 .2rem;
-    }
-
-    .cover-box .ncontent {
-      font-family: PingFang-SC-Medium;
-      font-size: .28rem;
-      color: #999999;
-      width: ;
-      text-align: left;
-
-    }
-
-    .menu-name .add-box {
-      height: .4rem;
-      width: 100%;
-      text-align: center;
-      font-family: PingFang-SC-Bold;
-      font-size: .28rem;
-      color: #FF8C46;
-      margin: .3rem 0 .4rem 0;
-    }
-
-    .add-box img {
-      height: .3rem;
-      width: .3rem;
-      vertical-align: middle;
-      margin-bottom: .05rem;
-    }
-
-    .transfer {
-      display: flex;
-      justify-content: space-between;
-      padding: 0 .66rem;
-      height: .98rem;
-      align-items: center;
-    }
-
-    .transfer .del {
-      font-family: PingFang-SC-Bold;
-      font-size: .32rem;
-      color: #999999;
-    }
-
-    .transfer .save {
-      font-family: PingFang-SC-Bold;
-      font-size: .32rem;
-      color: #333333;
-    }
-
-    .transfer .fer {
-      width: 3.6rem;
-      height: .78rem;
-      background: #FF8C46;
-      border-radius: .44rem;
-      border-radius: .44rem;
-      text-align: center;
-      line-height: .78rem;
-      font-family: PingFang-SC-Bold;
-      font-size: .32rem;
-      color: #ffffff;
-    }
-
-    .move {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 12;
-    }
-
-    .move-box {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 70vh;
-      background-color: #fff;
-      border-radius: 20px 20px 0 0;
-      overflow: auto;
-    }
-
-    .close-box {
-      padding: .3rem;
-      font-family: PingFang-SC-Bold;
-      font-size: .34rem;
-      color: #333333;
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    .close-box img {
-      width: .3rem;
-      height: .3rem;
-    }
-
-    .move .move-content {
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #333333;
-      margin-top: .4rem;
-      margin-left: .75rem;
-    }
-
-    .cross-box {
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    .cross {
-      display: flex;
-      overflow: auto;
-      padding-bottom: .4rem;
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #333333;
-      margin-top: .3rem;
-
-    }
-
-    ::-webkit-scrollbar {
-      /*隐藏滚轮*/
-      display: none;
-    }
-
-    .cross-child {
-      font-family: PingFang-SC-Medium;
-      font-size: .30rem;
-      color: #999999;
-      margin: 0 0.5rem;
-    }
-
-    .temperature,
-    .timeouth {
-      margin-top: 0.5rem;
-    }
-
-    .chekcolor {
-      color: #FF8C46;
-    }
-
-    .openblue {
-      width: 4rem;
-      height: .8rem;
-      margin: 0 auto;
-      text-align: center;
-      line-height: .8rem;
-      color: #ffffff;
-      font-size: 16px;
-      background: #FF8C46;
-      border-radius: 44px;
-      border-radius: 44px;
-      margin-top: .5rem;
-      margin-bottom: .3rem;
-    }
-
-    .cross-box p {
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #333333;
-      margin-left: .3rem;
-    }
-
-    /* 返回保存 */
-    .move1 {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      background: rgba(0, 0, 0, .6);
-      z-index: 12;
-    }
-
-    .move-box1 {
-      position: fixed;
-      top: 3rem;
-      left: 1.25rem;
-      width: 5rem;
-      background-color: #ffffff;
-      border-radius: 12px;
-      border-radius: 12px;
-    }
-
-    .close-box1 {
-      text-align: right;
-    }
-
-    .move-box1 .close {
-      width: .3rem;
-      height: .3rem;
-      text-align: right;
-      padding: .2rem .2rem 0 0;
-    }
-
-    .move-box1 .bluetooth {
-      width: 2rem;
-      height: 2.2rem;
-      margin: .25rem 0;
-    }
-
-    .bluetooth-box {
-      text-align: center;
-    }
-
-    .move-title {
-      text-align: center;
-    }
-
-    .move-title b {
-      display: block;
-      font-size: 22px;
-      margin: .2rem 0;
-    }
-
-    .move-title p {
-      font-size: .24rem;
-      color: #666666;
-    }
-
-    .move1 .choose-btn {
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #999999;
-      text-align: center;
-      display: flex;
-      margin-top: .55rem;
-      border-top: 1px solid #d8d8d8;
-    }
-
-    .move1 .choose-btn p {
-      width: 51%;
-      border-right: 1px solid #d8d8d8;
-      padding: .25rem 0;
-    }
-
-    .close-boxtype img {
-      width: .4rem;
-      height: .4rem;
-      vertical-align: middle;
-      animation: mymove 3s linear infinite;
-    }
-
-    @keyframes mymove {
-      0% {
-        transform: rotate(0deg);
-        -ms-transform: rotate(0deg);
-        /* Internet Explorer */
-        -moz-transform: rotate(0deg);
-        /* Firefox */
-        -webkit-transform: rotate(0deg);
-        /* Safari 和 Chrome */
-        -o-transform: rotate(0deg);
-        /* Opera */
-        transform-origin: center;
-      }
-
-      25% {
-        transform: rotate(90deg);
-        -ms-transform: rotate(90deg);
-        /* Internet Explorer */
-        -moz-transform: rotate(90deg);
-        /* Firefox */
-        -webkit-transform: rotate(90deg);
-        /* Safari 和 Chrome */
-        -o-transform: rotate(90deg);
-        /* Opera */
-      }
-
-      50% {
-        transform: rotate(180deg);
-        -ms-transform: rotate(180deg);
-        /* Internet Explorer */
-        -moz-transform: rotate(180deg);
-        /* Firefox */
-        -webkit-transform: rotate(180deg);
-        /* Safari 和 Chrome */
-        -o-transform: rotate(180deg);
-        /* Opera */
-      }
-
-      75% {
-        transform: rotate(270deg);
-        -ms-transform: rotate(270deg);
-        /* Internet Explorer */
-        -moz-transform: rotate(270deg);
-        /* Firefox */
-        -webkit-transform: rotate(270deg);
-        /* Safari 和 Chrome */
-        -o-transform: rotate(270deg);
-        /* Opera */
-      }
-
-      100% {
-        transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        /* Internet Explorer */
-        -moz-transform: rotate(360deg);
-        /* Firefox */
-        -webkit-transform: rotate(360deg);
-        /* Safari 和 Chrome */
-        -o-transform: rotate(360deg);
-        /* Opera */
-      }
-    }
-
-    .bluesearch {
-      border: 2px solid #FF8C46;
-      border-radius: 44px;
-      border-radius: 44px;
-      color: '#FF8C46';
-      width: 3rem;
-      height: .66rem;
-      line-height: .66rem;
-      text-align: center;
-      margin: 0 auto;
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #FF8C46;
-      text-align: center;
-      margin-top: .8rem;
-      margin-bottom: .6rem;
-    }
-
-    .move-bluetooth {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #fff;
-      border-radius: 20px 20px 0 0;
-      overflow: auto;
-    }
-    .list-box {
-      background-color: #ffffff;
-      border-bottom: 1px solid #e0e0ee;
-      padding: 0 .3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .list-box p {
-      font-family: PingFang-SC-Medium;
-      font-size: .34rem;
-      color: #333333;
-      margin-bottom: .1rem;
-      margin-top: .2rem;
-    }
-
-    .list-box span {
-      font-family: PingFang-SC-Medium;
-      font-size: .28rem;
-      color: #999999;
-      margin-bottom: .2rem;
-    }
-
-    .list-box .wait {
-      width: .4rem;
-      height: .4rem;
-      vertical-align: middle;
-      animation: mymove 3s linear infinite;
-    }
-
-    .list-box .success {
-      width: .4rem;
-      height: .4rem;
-    }
-    .covershow{
-      width: 6.9rem;
-      height: 3rem;
-      background: #FAFAFA;
-      border-radius: 8px;
-      border-radius: 8px;
-      margin: .3rem;
-      text-align: center;
-      position: relative;
-
-    }
-    .covershow img{
-      width: 100%;
-      height: 100%;
-    }
-    .del-pic {
-      position: absolute;
-      right: -.1rem;
-      top: -.1rem;
-      width: .3rem !important;
-      height: .3rem !important;
-    }
-    .cover-right{
-      width: .38rem;
-      height: .38rem;
-      margin-right: .3rem;
-    }
-    .mb1{
-      margin-bottom:1rem;
-    }
-    .transfer-box{
-      position: fixed;
-      bottom: 0;
-      background: #fff;
-      width:7.5rem;
-    }
+  .cover {
+    width: 6.9rem;
+    height: 3rem;
+    background: #FAFAFA;
+    border: 1px dashed #999999;
+    border-radius: 8px;
+    border-radius: 8px;
+    margin: .3rem;
+    text-align: center;
+  }
+
+  .cover .title {
+    margin-top: 1rem;
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #333333;
+  }
+
+  .cover .title img {
+    width: .33rem;
+    height: .33rem;
+  }
+
+  .cover .subtitle {
+    margin-top: .3rem;
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #FF8C46;
+  }
+
+  .menu-name {
+    margin: 0 .3rem;
+  }
+
+
+  .menu-name1 .title {
+    height: .48rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .34rem;
+    color: #333333;
+    margin: 0 .3rem;
+    border-bottom: .1rem solid #FA844A;
+  }
+
+
+
+  .menu-name .title {
+    height: .48rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .34rem;
+    color: #333333;
+    border-bottom: .1rem solid #FA844A;
+  }
+
+
+  .menu-name .name {
+    border-bottom: 1px solid #e0e0e0;
+    font-size: .28rem;
+    margin: .3rem 0;
+  }
+
+  .menu-name .name input:focus {
+    border: none;
+    outline: none;
+  }
+
+  .menu-name .name input {
+    padding-bottom: .2rem;
+    width: 100%;
+  }
+
+  .hrs {
+    width: 100%;
+    height: .2rem;
+    background-color: #F7F7F7;
+  }
+
+  .menu-magazine .name {
+    display: flex;
+  }
+
+  .menu-magazine .name span {
+    display: block;
+    width: 15%;
+    padding-bottom: .2rem;
+  }
+
+  .menu-magazine .name input {
+    width: 84%;
+  }
+
+  .cover-box {
+    width: 6.9rem;
+    height: 1rem;
+    border: 1px dashed #999999;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+    margin: .3rem 0;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+  }
+  .cover-left{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80%;
+  }
+  .cover-box .num {
+    /*width: .42rem;
+    height: .42rem;*/
+    padding: .2rem ;
+    background: #FF8C46;
+    border-radius: 6px;
+    border-radius: 6px;
+    color: #ffffff;
+    text-align: center;
+    margin: 0 .1rem 0 .2rem;
+  }
+
+  .cover-box .ncontent {
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #999999;
+    width: ;
+    text-align: left;
+
+  }
+
+  .menu-name .add-box {
+    height: .4rem;
+    width: 100%;
+    text-align: center;
+    font-family: PingFang-SC-Bold;
+    font-size: .28rem;
+    color: #FF8C46;
+    margin: .3rem 0 .4rem 0;
+  }
+
+  .add-box img {
+    height: .3rem;
+    width: .3rem;
+    vertical-align: middle;
+    margin-bottom: .05rem;
+  }
+
+  .transfer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 .66rem;
+    height: .98rem;
+    align-items: center;
+  }
+
+  .transfer .del {
+    font-family: PingFang-SC-Bold;
+    font-size: .32rem;
+    color: #999999;
+  }
+
+  .transfer .save {
+    font-family: PingFang-SC-Bold;
+    font-size: .32rem;
+    color: #333333;
+  }
+
+  .transfer .fer {
+    width: 3.6rem;
+    height: .78rem;
+    background: #FF8C46;
+    border-radius: .44rem;
+    border-radius: .44rem;
+    text-align: center;
+    line-height: .78rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .32rem;
+    color: #ffffff;
+  }
+
+  .move {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 12;
+  }
+
+  .move-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70vh;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    overflow: auto;
+  }
+
+  .close-box {
+    padding: .3rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .34rem;
+    color: #333333;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .close-box img {
+    width: .3rem;
+    height: .3rem;
+  }
+
+  .move .move-content {
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #333333;
+    margin-top: .4rem;
+    margin-left: .75rem;
+  }
+
+  .cross-box {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .cross {
+    display: flex;
+    overflow: auto;
+    padding-bottom: .4rem;
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #333333;
+    margin-top: .3rem;
+
+  }
+
+  ::-webkit-scrollbar {
+    /*隐藏滚轮*/
+    display: none;
+  }
+
+  .cross-child {
+    font-family: PingFang-SC-Medium;
+    font-size: .30rem;
+    color: #999999;
+    margin: 0 0.5rem;
+  }
+
+  .temperature,
+  .timeouth {
+    margin-top: 0.5rem;
+  }
+
+  .chekcolor {
+    color: #FF8C46;
+  }
+
+  .openblue {
+    width: 4rem;
+    height: .8rem;
+    margin: 0 auto;
+    text-align: center;
+    line-height: .8rem;
+    color: #ffffff;
+    font-size: 16px;
+    background: #FF8C46;
+    border-radius: 44px;
+    border-radius: 44px;
+    margin-top: .5rem;
+    margin-bottom: .3rem;
+  }
+
+  .cross-box p {
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #333333;
+    margin-left: .3rem;
+  }
+
+  /* 返回保存 */
+  .move1 {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .6);
+    z-index: 12;
+  }
+
+  .move-box1 {
+    position: fixed;
+    top: 3rem;
+    left: 1.25rem;
+    width: 5rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    border-radius: 12px;
+  }
+
+  .close-box1 {
+    text-align: right;
+  }
+
+  .move-box1 .close {
+    width: .3rem;
+    height: .3rem;
+    text-align: right;
+    padding: .2rem .2rem 0 0;
+  }
+
+  .move-box1 .bluetooth {
+    width: 2rem;
+    height: 2.2rem;
+    margin: .25rem 0;
+  }
+
+  .bluetooth-box {
+    text-align: center;
+  }
+
+  .move-title {
+    text-align: center;
+  }
+
+  .move-title b {
+    display: block;
+    font-size: 22px;
+    margin: .2rem 0;
+  }
+
+  .move-title p {
+    font-size: .24rem;
+    color: #666666;
+  }
+
+  .move1 .choose-btn {
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #999999;
+    text-align: center;
+    display: flex;
+    margin-top: .55rem;
+    border-top: 1px solid #d8d8d8;
+  }
+
+  .move1 .choose-btn p {
+    width: 51%;
+    border-right: 1px solid #d8d8d8;
+    padding: .25rem 0;
+  }
+
+  .close-boxtype img {
+    width: .4rem;
+    height: .4rem;
+    vertical-align: middle;
+    animation: mymove 3s linear infinite;
+  }
+
+  @keyframes mymove {
+    0% {
+      transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(0deg);
+      /* Firefox */
+      -webkit-transform: rotate(0deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(0deg);
+      /* Opera */
+      transform-origin: center;
+    }
+
+    25% {
+      transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(90deg);
+      /* Firefox */
+      -webkit-transform: rotate(90deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(90deg);
+      /* Opera */
+    }
+
+    50% {
+      transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(180deg);
+      /* Firefox */
+      -webkit-transform: rotate(180deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(180deg);
+      /* Opera */
+    }
+
+    75% {
+      transform: rotate(270deg);
+      -ms-transform: rotate(270deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(270deg);
+      /* Firefox */
+      -webkit-transform: rotate(270deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(270deg);
+      /* Opera */
+    }
+
+    100% {
+      transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(360deg);
+      /* Firefox */
+      -webkit-transform: rotate(360deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(360deg);
+      /* Opera */
+    }
+  }
+
+  .bluesearch {
+    border: 2px solid #FF8C46;
+    border-radius: 44px;
+    border-radius: 44px;
+    color: '#FF8C46';
+    width: 3rem;
+    height: .66rem;
+    line-height: .66rem;
+    text-align: center;
+    margin: 0 auto;
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #FF8C46;
+    text-align: center;
+    margin-top: .8rem;
+    margin-bottom: .6rem;
+  }
+
+  .move-bluetooth {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    overflow: auto;
+  }
+  .list-box {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0ee;
+    padding: 0 .3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .list-box p {
+    font-family: PingFang-SC-Medium;
+    font-size: .34rem;
+    color: #333333;
+    margin-bottom: .1rem;
+    margin-top: .2rem;
+  }
+
+  .list-box span {
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #999999;
+    margin-bottom: .2rem;
+  }
+
+  .list-box .wait {
+    width: .4rem;
+    height: .4rem;
+    vertical-align: middle;
+    animation: mymove 3s linear infinite;
+  }
+
+  .list-box .success {
+    width: .4rem;
+    height: .4rem;
+  }
+  .covershow{
+    width: 6.9rem;
+    height: 3rem;
+    background: #FAFAFA;
+    border-radius: 8px;
+    border-radius: 8px;
+    margin: .3rem;
+    text-align: center;
+    position: relative;
+
+  }
+  .covershow img{
+    width: 100%;
+    height: 100%;
+  }
+  .del-pic {
+    position: absolute;
+    right: -.1rem;
+    top: -.1rem;
+    width: .3rem !important;
+    height: .3rem !important;
+  }
+  .cover-right{
+    width: .38rem;
+    height: .38rem;
+    margin-right: .3rem;
+  }
+  .mb1{
+    margin-bottom:1rem;
+  }
+  .transfer-box{
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    width:7.5rem;
+  }
   </style>
 </head>
 
@@ -586,40 +551,34 @@
       <img src="../../image/my/del-pic.png" alt="" class="del-pic" @click="handledelpic">
     </div>
     <div class="menu-name">
-      <div class="title">
-        <span>菜谱名称</span>
-      </div>
-      <div class="name"><input type="text" placeholder="请输入菜谱名字" v-model="name"></div>
+        <span class="title">菜谱名称</span>
+      <div class="name"><input type="text" placeholder="请输入菜谱名字" v-model="name" maxlength="8"></div>
     </div>
     <div class="hrs"></div>
     <!-- 料盒 -->
     <div class="menu-name menu-magazine">
-      <div class="title" style="width:.7rem">
-        <span>料盒</span>
-      </div>
+        <span class="title">料盒</span>
       <div class="name">
         <span>料盒1</span>
-        <input type="text" placeholder="针对料盒内物品命名，如：盐" v-model="seasoningBox1">
+        <input type="text" placeholder="针对料盒内物品命名，如：盐" v-model="seasoningBox1" maxlength="8">
       </div>
       <div class="name">
         <span>料盒2</span>
-        <input type="text" v-model="seasoningBox2">
+        <input type="text" v-model="seasoningBox2" maxlength="8">
       </div>
       <div class="name">
         <span>料盒2</span>
-        <input type="text" v-model="seasoningBox3">
+        <input type="text" v-model="seasoningBox3" maxlength="8">
       </div>
       <div class="name">
         <span>料盒4</span>
-        <input type="text" v-model="seasoningBox4">
+        <input type="text" v-model="seasoningBox4" maxlength="8">
       </div>
     </div>
     <div class="hrs"></div>
     <!--程序  -->
     <div class="menu-name">
-      <div class="title" style="width:.7rem">
-        <span>程序</span>
-      </div>
+        <span class="title">程序</span>
       <div class="cover-box" v-for="(item,index) in stepslist" :key="item.num" >
         <div class="cover-left" @click.prevent="getmove(index+1)">
           <div class="num">{{index+1}}</div>
@@ -679,9 +638,7 @@
         <div>
           <!-- 参数 -->
           <div class="menu-name1">
-            <div class="title" style="width:.7rem">
-              <span>参数</span>
-            </div>
+              <span class="title">参数</span>
             <div class="cross-box">
               <div class="cross">
                 <div class="cross-child" :class="parameterBox === index ?'chekcolor':''" @click="handleparameter(index)"
@@ -692,9 +649,7 @@
           </div>
           <!-- 温度 -->
           <div class="menu-name1 temperature">
-            <div class="title" style="width:1.4rem">
-              <span>温度(℃)</span>
-            </div>
+              <span  class="title">温度(℃)</span>
             <div class="cross-box">
               <div class="cross">
                 <div class="cross-child" :class="temperatureBox === index ?'chekcolor':''"
@@ -704,9 +659,7 @@
           </div>
           <!-- 事件 -->
           <div class="menu-name1 timeouth">
-            <div class="title" style="width:.7rem">
-              <span>时间</span>
-            </div>
+              <span  class="title">时间</span>
             <div class="cross-box">
               <p>时</p>
               <div class="cross">
@@ -792,11 +745,11 @@
             movenum: 0,
             movebox: true, //控制显示第几个盒子
             content: "",
-            temperature: ['30', '40', '50', '60', '70', '80', '90', '100'], //温度
+            temperature: ['60', '70', '80', '90', '100','110', '120', '130', '140','150', '160', '170', '180','190', '200', '210', '220','230'], //温度
             parameter: '', //参数
-            timeouth: ['0', '2', '3', '4', '5', '6'], //时
-            timeoutm: ['0', '10', '20', '30', '40', '50'], //分
-            timeouts: ['0', '10', '20', '30', '40', '50'], //秒
+            timeouth: ['0', '1', '2'], //时
+            timeoutm: ['0', '1', '2', '3', '4', '5','6', '7', '8', '9', '10','11', '12', '13', '14', '15','16', '17', '18', '19','20'],
+            timeouts: ['0', '5', '10', '15', '20', '25','30','35','40','45','50','55'], //秒
             temperatureBox: 0,
             parameterBox: 0,
             timeouthBox: 0,
@@ -820,8 +773,8 @@
         mounted() {
           this.temperaturecon = this.temperature[0]
           this.parametercon = this.parameter[0]
-          this.timeHnum= this.timeouth[0] * 60 * 60
-          this.timeMnum= this.timeoutm[0] * 60
+          this.timeHnum= this.timeouth[0]
+          this.timeMnum= this.timeoutm[0]
           this.timeSnum= this.timeouts[0]
           this.getFeature();
           this.getcookdetail()
@@ -887,6 +840,7 @@
                   }else if(j==1){
                     vm.temperlist.push(options[j].optionValue)
                   }else{
+                    console.log(options[j].optionValue)
                     vm.timelist.push(options[j].optionValue)
                   }
               }
@@ -904,10 +858,10 @@
                }else{
                  if(this.stepslist[i-1]=='停顿'){
                   //  console.log(JSON.stringify(this.timelist))
-                  this.stepslist[i]=this.itemname[i-1] + '：' + this.paramelist[i-1].optionName+'，温度：'+this.temperlist[i-1]+'℃，时间：'+this.timelist[i-1]+'s'
+                  this.stepslist[i]=this.itemname[i-1] + '：' + this.paramelist[i-1].optionName+'，温度：'+this.temperlist[i-1]+'℃，时间：'+this.timelist[i-1]
                 }else {
                   console.log(JSON.stringify(this.timelist))
-                 this.stepslist[i]=this.itemname[i] + '：' + this.paramelist[i].optionName+'，温度：'+this.temperlist[i]+'℃，时间：'+this.timelist[i]+'s'
+                 this.stepslist[i]=this.itemname[i] + '：' + this.paramelist[i].optionName+'，温度：'+this.temperlist[i]+'℃，时间：'+this.timelist[i]
                 }
 
                }
@@ -1032,7 +986,7 @@
             console.log(index)
             for (let i = 0; i < this.timeouth.length; i++) {
               if (index === i) {
-                  this.timeHnum= this.timeouth[i] * 60 * 60
+                  this.timeHnum= this.timeouth[i]
 
               }
             }
@@ -1042,7 +996,7 @@
             console.log(index)
             for (let i = 0; i < this.timeoutm.length; i++) {
               if (index === i) {
-              this.timeMnum= this.timeoutm[i] * 60
+              this.timeMnum= this.timeoutm[i]
               }
             }
           },
@@ -1056,7 +1010,21 @@
             }
           },
           handlestepslist() {
-            this.timeoutcon= Number(this.timeSnum)+Number(this.timeMnum)+Number(this.timeHnum)
+            if(this.timeHnum!=0 && this.timeMnum!=0 && this.timeSnum!=0){
+                this.timeoutcon=this.timeHnum+'时'+this.timeMnum+'分'+this.timeSnum+'秒'
+            }else if(this.timeSnum!=0 && this.timeMnum!=0 &&this.timeHnum==0) {
+                this.timeoutcon=this.timeMnum+'分'+this.timeSnum+'秒'
+            }else if(this.timeSnum==0 && this.timeMnum!=0 &&this.timeHnum!=0){
+                this.timeoutcon=this.timeHnum+'时'+this.timeMnum+'分'
+            }else if(this.timeSnum!=0 && this.timeMnum==0 &&this.timeHnum!=0){
+                this.timeoutcon=this.timeHnum+'时'+this.timeSnum+'秒'
+            }else if(this.timeSnum==0 && this.timeMnum==0 &&this.timeHnum!=0){
+                this.timeoutcon=this.timeHnum+'时'
+            }else if(this.timeSnum==0 && this.timeMnum!=0 &&this.timeHnum==0){
+                this.timeoutcon=this.timeMnum+'分'
+            }else{
+                this.timeoutcon=this.timeSnum+'秒'
+            }
             for (let i = 0; i < this.stepslist.length; i++) {
               if (this.movenum === Number([i+1])) {
                 if(this.content==='停顿'){
@@ -1064,7 +1032,7 @@
                     this.stepslist[i]= this.content
                 }else{
                   this.parameterconValue.push(this.parametercon.optionOrdinal)
-                  this.stepslist[i] = this.content + '：' + this.parametercon.optionName+'，温度：'+this.temperaturecon+'℃，时间：'+this.timeoutcon+'s'
+                  this.stepslist[i] = this.content + '：' + this.parametercon.optionName+'，温度：'+this.temperaturecon+'℃，时间：'+this.timeoutcon
                 }
               }
             }
@@ -1188,7 +1156,6 @@
               let arr1=arr[1].split('，')
               let arr2=arr[2].split('，')
               arr2=arr2[0].split('℃')
-              arr3=arr[3].split('s')
               for(let j=0;j<3;j++){
                 const obj={}
                 if(j==0){
@@ -1199,7 +1166,7 @@
                   obj.optionValue=Number(arr2[0])
                 }else{
                   obj.group=2
-                  obj.optionValue=Number(arr3[0])
+                  obj.optionValue=arr[3]
                 }
                 options.push(obj)
               }
@@ -1213,6 +1180,7 @@
             CookbookParam.seasoningBox2=vm.seasoningBox2
             CookbookParam.seasoningBox3=vm.seasoningBox3
             CookbookParam.seasoningBox4=vm.seasoningBox4
+            CookbookParam.id=vm.id
             CookbookParam.functions=functions
             // console.log(JSON.stringify(CookbookParam))
             return CookbookParam
@@ -1228,7 +1196,11 @@
                         duration: 2000,
                         location: 'bottom'
                     });
+                    api.sendEvent({
+                        name: 'changemenu',
+                    });
                   console.log(JSON.stringify(ret))
+                  setTimeout(function(){api.closeWin()}, 1000);
                 }else{
                   console.log(JSON.stringify(err))
                 }

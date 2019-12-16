@@ -139,25 +139,28 @@
           phone:'',
           detail:'',
           addressId:'',
+          addindex:[],
         }
       },
       mounted(){
         this.getaddress()
+        this.changehome()
       },
       methods: {
         // 开始获取所有收货地址截取第一个
         getaddress(){
           let vm=this
+          console.log(this.id)
           fnGet(interfaces.address, {}, true, function(ret,err){
             if(ret.code==RESPONSE_OK){
               // console.log(JSON.stringify(ret.data))
               // vm.addresslist=ret.data
               let array=ret.data
               for (var i = 0; i < array.length; i++) {
-                console.log(JSON.stringify(array[i]))
+                // console.log(JSON.stringify(array[i]))
                 if(array[i].id===vm.id){
                   // 获取选择地址
-                  vm.changehome(array[i])
+                  vm.changearea(array[i])
                 }
               }
             }else{
@@ -165,57 +168,123 @@
             }
           })
         },
-        changehome(item){
-          // console.log(item)
+        // 获取下标来进行回显
+        // 用areaall里面数据循环
+        changearea(item){
+          let vm=this
+            console.log(JSON.stringify(item))
+           let treePath=item.treePath
+           let arrtreePath=treePath.split(',')
+          arrtreePath.splice(0,1)
+           let arrtreePathlength=arrtreePath.length
+             fnGet(interfaces.areaone, {}, true, function(ret,err){
+               if(ret.code==RESPONSE_OK){
+                 let array=ret.data
+                 for (var j = 0; j < array.length; j++) {
+                   if(arrtreePath[0]===array[j].id){
+                       console.log(JSON.stringify(array[j]))
+                        console.log(j)
+                        vm.addindex.push(j)
+                        fnGet(interfaces.areaone, {parentId:arrtreePath[0]}, true, function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                            let array=ret.data
+                            for (var k = 0; k < array.length; k++) {
+                              if(arrtreePath[1]===array[k].id){
+                                console.log(JSON.stringify(array[k]))
+                                   console.log(k)
+                                   vm.addindex.push(k)
+                                   if (arrtreePathlength>2) {
+                                     fnGet(interfaces.areaone, {parentId:arrtreePath[1]}, true, function(ret,err){
+                                       if(ret.code==RESPONSE_OK){
+                                         let array=ret.data
+                                         for (var l = 0; l < array.length; l++) {
+                                           if(arrtreePath[2]===array[l].id){
+                                                 console.log(JSON.stringify(array[l]))
+                                                console.log(l)
+                                                vm.addindex.push(l)
+                                                if(arrtreePathlength>3){
+                                                  fnGet(interfaces.areaone, {parentId:arrtreePath[2]}, true, function(ret,err){
+                                                    if(ret.code==RESPONSE_OK){
+                                                      let array=ret.data
+                                                      console.log(arrtreePath[3])
+                                                      for (var m = 0; m < array.length; m++) {
+                                                        if(arrtreePath[3]===array[l].id){
+                                                             console.log(m)
+                                                          vm.addindex.push(m)
+                                                          console.log(vm.addindex)
+                                                        }
+                                                      }
+                                                    }else{
+                                                      console.log(JSON.stringify(err))
+                                                    }
+                                                  })
+                                                }else {
+                                                  console.log(vm.addindex)
+                                                }
+                                           }
+                                         }
+                                       }else{
+                                         console.log(JSON.stringify(err))
+                                       }
+                                     })
+                                   }else {
+                                    console.log(vm.addindex)
+                                   }
+                              }
+                            }
+                          }else{
+                            console.log(JSON.stringify(err))
+                          }
+                        })
+                   }
+                 }
+               }else{
+                 console.log(JSON.stringify(err))
+               }
+             })
+
+        },
+      //获取所有地址
+        changehome(){
           let vm=this;
           fnGet(interfaces.area,{},true,function(ret, err) {
               if (ret.code == RESPONSE_OK) {
-                  for(var j=0;j<ret.data.length;j++){
-                    if(item.areaId==ret.data[j].id){
-                      vm.addressId=ret.data[j].id
-                      vm.address=ret.data[j].name
-                      vm.name=item.receiptorName
-                      vm.phone=item.receiptorPhone
-                      vm.detail=item.address
-                      vm.switchcase=item.def
-                      vm.changeaddress(j,ret.data)
-                    }
-                  }
+                  vm.changeaddress(ret.data)
               }else{
                 console.log(JSON.stringify(err))
               }
             })
         },
         // 创建选择地址
-        changeaddress(index,data){
+        changeaddress(data){
+
           let vm=this
-          var keyMap = {
-              "name" : "value",
-          };
-          for (var i = 0; i < data.length; i++) {
-             var obj = data[i];
-             for(var key in obj){
-                var newKey = keyMap[key];
-                if(newKey){
-                      obj[newKey] = obj[key];
-                      delete obj[key];
-               }
+          console.log(vm.addindex)
+          console.log(JSON.stringify(data))
+            var mobileSelect1 = new MobileSelect({
+            trigger: '#address',
+            title: '所在地区',
+            wheels: [
+              {
+                data:data,
+              }
+            ],
+            position:vm.addindex,
+            callback: function (indexArr, data) {
+              vm.address=''
+              console.log(JSON.stringify(data));
+              console.log(JSON.stringify(indexArr));
+              for(var i=0 ;i<data.length;i++){
+                vm.address+=data[i].value
+                vm.address+=" "
+                vm.addressId=data[i].id
+              }
+              console.log(JSON.stringify(vm.address))
+              console.log(vm.addressId)
+              //  vm.address=data[0].value+" "+data[1].value+" "+data[2].value
+
             }
-          }
-          var mobileSelect1 = new MobileSelect({
-          trigger: '#address',
-          title: '所在地区',
-          wheels: [
-            {
-              data: data
-            }
-          ],
-          position: [index],
-          callback: function (indexArr, data) {
-            vm.address=data[0].value
-            vm.addressId=data[0].id
-          }
-        });
+          });
         },
         handleswitchcase() {
           console.log(this.id)
