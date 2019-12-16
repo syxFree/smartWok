@@ -12,7 +12,7 @@
             /* height: 11rem; */
             /*margin-top: 0.88rem;*/
             margin-bottom: 1rem;
-            /* overflow: auto; */
+           -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */ 
         }
         ::-webkit-scrollbar{
             display: none;
@@ -41,6 +41,7 @@
         .food-item{
             width: 100%;
             margin-top: 60%;
+           -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */
         }
         .food-item .item{
             width: 6.9rem;
@@ -115,7 +116,7 @@
                     </div>
                 </div>
             </div>
-            <div class="item-bottom">
+            <div class="item-bottom" v-if="bottomFlag">
                 <span></span>
                 <p>一不小心到底了</p>
                 <span></span>
@@ -126,6 +127,7 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
     apiready=function(){
       var vm=new Vue({
@@ -149,12 +151,20 @@
                       info:'看没事大赛有哪些美食广受好评',
                       detail:'关于红烧排骨怎么上色最好看，组要从一下几点说起。首先是油温的控制'
                   }
-              ]
+              ],
+              pageNum:1,
+              pageSize:1,
+              isLastPage:false,
+              bottomFlag:false
           },
           created(){
               this.getBannerData()
-              this.getData()
-              // this.banner()
+              var params={
+                pageSize:this.pageSize,
+                pageNum:this.pageNum
+              }
+              this.getData(params)
+              console.log($api.getStorage("accessToken"))
           },
           methods:{
             //获取轮播图数据
@@ -183,21 +193,24 @@
               })
             },
             //获取列表数据
-            getData:function(){
+            getData:function(params,value){
               var vm=this
-              var params={
-                pageSize:10,
-                pageNum:1
-              }
               fnGet(interfaces.informationList,params,true,function(ret,err){
-                // if (refresh = 'refresh') {
-                //     api.refreshHeaderLoadDone()
-                // }
+                if (value = 'refresh') {
+                    api.refreshHeaderLoadDone()  //加了之后刷新才可以取消掉
+                }
                 if (ret) {
                     if (ret.code == RESPONSE_OK) {
-                      // console.log(JSON.stringify(ret.data.list))
-                        vm.list=ret.data.list
-                        // console.log(JSON.stringify(vm.list))
+                        if(vm.pageNum==1){
+                            vm.list=ret.data.list
+                        }
+                        else{
+                            console.log(JSON.stringify(ret.data.list))
+                            vm.list=vm.list.concat(ret.data.list)
+                            console.log(JSON.stringify(vm.list))
+                        }
+                        vm.isLastPage=ret.data.lastPage
+                        vm.bottomFlag=ret.data.lastPage
                     } else {
                         if (ret.subMsg || ret.msg) {
                             api.toast({
@@ -218,7 +231,7 @@
                     url: 'information_detail_win.html',
                     reload:true,
                     bounces:false,
-                    slidBackEnabled:false,
+                    slidBackEnabled:true,
                     pageParam: {
                         id: id
                     }
@@ -294,6 +307,43 @@
             }
           }
       })
+      // 上拉加载
+      api.addEventListener({
+          name: 'scrolltobottom',
+          extra: {
+              threshold: -10
+          }
+      }, function (ret, err) {
+          if (vm.isLastPage != 'true' && vm.isLastPage != true) {
+            console.log("上拉加载更多")
+              vm.pageNum++;
+              var params={
+                pageSize:vm.pageSize,
+                pageNum:vm.pageNum
+              }
+              vm.getData(params);
+          } else {
+              api.toast({
+                  msg: '没有更多了~',
+                  location: 'middle',
+                  duration: 800,
+              });
+          }
+      });
+      // 下拉刷新
+      api.setRefreshHeaderInfo({
+          bgColor: '#fff'
+      }, function (ret, err) {
+          vm.pageNum = 1;
+          vm.pageSize=1;
+          vm.isLastPage = false;
+          vm.list = null;
+          var params={
+            pageSize:vm.pageSize,
+            pageNum:vm.pageNum,
+          }
+          vm.getData(params,'refresh')
+      });
     }
 
 

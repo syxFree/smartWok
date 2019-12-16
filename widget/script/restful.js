@@ -38,6 +38,7 @@ var interfaces = {
     call:'/sw/shop/phone',    //获取客服电话
     getAdress:'/sw/info/address/def',  //获取默认地址
     createOrder:'/sw/order/create',  //创建订单
+    payNow:'/sw/order/pay_now',    //立即支付
     getOrderList:'/sw/order',     //获取订单
     cancelOrder:'/sw/order/cancel',  //取消订单
     remindOrder:'/sw/order/remind_ship',  //提醒发货

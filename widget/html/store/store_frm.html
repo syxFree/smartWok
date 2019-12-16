@@ -14,76 +14,17 @@
         section{
           height: 100%;
         }
-        .search{
-            width: 100%;
-            height: .96rem;
-            border-bottom: 1px solid #E0E0E0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .search-content{
-            width: 6.9rem;
-            height: .6rem;
-            background-color: rgba(0, 0, 0, 0.05);
-            color: #999;
-            border-radius: .6rem;
-            display: flex;
-            align-items: center;
-            padding-left: .2rem;
-            font-size: .28rem;
-            box-sizing: border-box;
-        }
-        .search-content img{
-            width: .28rem;
-            height: .28rem;
-        }
-        .search-content span{
-            margin-left: 0.05rem;
-        }
-        .nav-box{
-          overflow: hidden;
-          display: flex;
-        }
-        .nav{
-            width: 9rem;
-            box-sizing: border-box;
-            padding: 0 .3rem;
-            overflow:auto;
-            height: .9rem;
-            display: flex;
-            flex: 1;
-            justify-content: space-around;
-            align-items: center;
-            font-size: .3rem;
-            color: rgba(0, 0, 0, 0.58);
-        }
-        .nav .nav-item{
-            /*margin: 0 .5rem;*/
-            /*display: flex;
-            box-sizing: border-box;
-            padding: 0 .5rem;
-            width: auto;
-            height: .2rem;*/
-        }
-        .nav .nav-item-active{
-          /*margin: 0 .5rem;*/
-            /*width: auto;
-            height: .2rem;*/
-            font-weight: 600;
-            color: #333;
-            border-bottom: 3px solid #FF8C46;
-            /*margin:0 .3rem*/
-        }
+
         .goods{
             width: 90%;
-            height: calc(100% - 1.86rem);
+            /*height: calc(100% - 1.86rem);*/
             padding-top: .3rem;
             overflow: auto;
             display: flex;
             flex-wrap: wrap;
             margin: 0 auto;
             justify-content: space-between;
+            -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */ 
         }
         .goods-item{
             width: 3.2rem;
@@ -117,23 +58,7 @@
 <body>
     <div class="app">
        <section>
-           <div class="search">
-               <div class="search-content" @click="goSearch">
-                   <img src="../../image/store/search.png" alt="搜索框">
-                   <span>搜索</span>
-               </div>
-           </div>
-           <div class="nav-box">
-             <div class="nav">
-                  <div
-                  :class="[navIndex==index?'nav-item-active':'nav-item']"
-                  v-for="(item, index) in nav"
-                  :key="item.id"
-                  @click="navChange(index,item.id)">
-                      {{item.name}}
-                  </div>
-             </div>
-           </div>
+
            <div class="goods">
                <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails(item.id)">
                     <img :src="img[index]" alt="图片">
@@ -147,13 +72,12 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
     apiready=function(){
         var vm=new Vue({
             el:'.app',
             data:{
-                navIndex:0,  //导航列表索引
-                nav:['全部','炒锅系列','电火锅','电饭煲','火锅'],
                 pageNum:1,
                 pageSize:3,
                 img:[],
@@ -182,38 +106,22 @@
                 ]
             },
             created(){
-                this.getCategory()
                 this.getGoodsList()
             },
             methods:{
-              //获取分类列表
-                getCategory:function(){
-                    var vm=this
-                    fnGet(interfaces.goodsCategory,{},true,function(ret,err){
-                        if(ret.code==RESPONSE_OK){
-                          vm.nav=ret.data
-                        }else{
-                          api.toast({
-                              msg: ret.msg,
-                              duration: 2000,
-                              location: 'bottom'
-                          });
-                        }
-                    })
-                },
                 getGoodsList:function(value){
                   // console.log(JSON.stringify(this.nav))
-                  console.log("111111111")
-                    if(value=='10'){
+                  console.log("商城页获取数据")
+                    if(value=='15'){   //这里做全部的一个操作
                       value=''
                     }
                     var vm=this
                     var params={
                       pageSize:vm.pageSize,
                       pageNum:vm.pageNum,
-                      categoryId:value
+                      categoryId:value=='refresh'?'':value
                     }
-                    // console.log(JSON.stringify(params))
+                    console.log(JSON.stringify(params))
                     fnGet(interfaces.goodsList,params,true,function(ret,err){
                         if (value = 'refresh') {
                             api.refreshHeaderLoadDone()
@@ -228,7 +136,7 @@
                           for(var i=0;i<vm.goods.length;i++){
                             vm.img.push(vm.goods[i].images.split(',')[0])
                           }
-                          // vm.isLastPage=ret.data.lastPage
+                          vm.isLastPage=ret.data.lastPage
                         }
                         else{
                           api.toast({
@@ -239,29 +147,6 @@
 
                         }
                     })
-                },
-                //跳转到搜索页面
-                goSearch:function(){
-                    api.openWin({
-                        name: 'search',
-                        url: '../search/search_win.html',
-                        reload:true,
-                        bounces:false,
-                        slidBackEnabled:true,
-                        pageParam: {
-
-                        }
-                    });
-
-                },
-                //切换导航栏状态
-                navChange:function(index,id){
-                    this.navIndex=index
-                    vm.pageNum=1
-                    vm.pageSize=3
-                    console.log(id)
-                    this.getGoodsList(id)
-                    console.log(JSON.stringify(this.goods))
                 },
                 //跳转到商品详情页
                 goGoodsDetails:function(id){
@@ -278,6 +163,18 @@
                 }
             }
         })
+        //导航点击获取数据
+        api.addEventListener({
+            name: 'getGoodsList'
+        }, function(ret, err){
+            if( ret ){
+                  vm.pageSize=3
+                  vm.pageNum=1
+                 vm.getGoodsList(ret.value.id)
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
         // 上拉加载
         api.addEventListener({
             name: 'scrolltobottom',

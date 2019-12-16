@@ -103,7 +103,7 @@
     <section>
       <div class="search-box">
         <div class="search">
-            <input type="text" placeholder="搜索" v-model="searchTxt" @input="showSearch" @focus="inputFocus" @keypress="keypress">
+            <input type="text" id="search" placeholder="搜索" v-model="searchTxt" @input="showSearch" @focus="inputFocus" @keypress="keypress" ref="search">
             <img v-if="flag" src="../../image/search/selece-inputDel.png" alt="删除" @click="del">
             <div class="searchContent" v-if="searchFlag">
               <ul>
@@ -128,6 +128,7 @@
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script src="../../script/restful.js" charset="utf-8"></script>
+  <script src="../../script/fastclick.js" charset="utf-8"></script>
   <script>
   apiready=function(){
     var vm = new Vue({
@@ -151,6 +152,11 @@
       created(){
           var item=$api.getStorage('search')
           this.records=item
+          this.keyCode()
+      },
+      mounted:function(){
+        var vm=this
+        vm.$refs.search.focus()
       },
       methods: {
         //删除输入框的文本
@@ -162,6 +168,11 @@
         cancel:function(){
           api.closeWin()
 
+        },
+        //键盘收起
+        keyCode:function(){
+          var softInput = api.require('softInputMgr');
+          softInput.toggleKeyboard();
         },
         //点击搜索跳转页面
         keypress:function(e){
@@ -236,13 +247,30 @@
         },
         //清空已搜索内容
         clearRecords:function(){
+          var vm=this
+          console.log(JSON.stringify(vm.records))
           //这里做的是清空缓存 用api的内置方法
-          var con=confirm("您确认要清空搜索内容吗?")
-          if(con){
-            $api.rmStorage('search');
-            this.records=''
-          }else{
+          if(vm.records==''){
+            api.toast({
+                msg: '没有可以清理的内容~',
+                duration: 2000,
+                location: 'bottom'
+            });
             return
+          }
+          else{
+            api.confirm({
+                msg: '您确认要清空搜索内容吗',
+                buttons: ['确定', '取消']
+            }, function(ret, err){
+                if( ret.buttonIndex==1 ){
+                  console.log("清空")
+                  $api.rmStorage('search');
+                  vm.records=''
+                }else{
+                     return
+                }
+            });
           }
         }
       },
