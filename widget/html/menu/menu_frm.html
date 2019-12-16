@@ -589,7 +589,7 @@
       <div class="title">
         <span>菜谱名称</span>
       </div>
-      <div class="name"><input type="text" placeholder="请输入菜谱名字" v-model="name"></div>
+      <div class="name"><input type="text" placeholder="请输入菜谱名字" v-model="name" maxlength="8" ></div>
     </div>
     <div class="hrs"></div>
     <!-- 料盒 -->
@@ -599,19 +599,19 @@
       </div>
       <div class="name">
         <span>料盒1</span>
-        <input type="text" placeholder="针对料盒内物品命名，如：盐" v-model="seasoningBox1">
+        <input type="text" placeholder="针对料盒内物品命名，如：盐" v-model="seasoningBox1" maxlength="8" >
       </div>
       <div class="name">
         <span>料盒2</span>
-        <input type="text" v-model="seasoningBox2">
+        <input type="text" v-model="seasoningBox2" maxlength="8" >
       </div>
       <div class="name">
         <span>料盒2</span>
-        <input type="text" v-model="seasoningBox3">
+        <input type="text" v-model="seasoningBox3" maxlength="8" >
       </div>
       <div class="name">
         <span>料盒4</span>
-        <input type="text" v-model="seasoningBox4">
+        <input type="text" v-model="seasoningBox4" maxlength="5" >
       </div>
     </div>
     <div class="hrs"></div>
@@ -625,7 +625,7 @@
           <div class="num">{{index+1}}</div>
           <div class="ncontent">{{item}}</div>
         </div>
-        <img src="../../image/menu/shanchu.png" alt="" class="cover-right" v-if="item !== '请选择一个程序'" @click="deleteprocedure(index)">
+        <img src="../../image/menu/shanchu.png" alt="" class="cover-right"  @click="deleteprocedure(index)">
       </div>
       <div class="add-box" @click="addbox">
         <img src="../../image/menu/create-orange.png" alt="添加">
@@ -823,6 +823,7 @@
             let vm=this
             fnGet(interfaces.cookbookfun,{},true,function(ret, err) {
               if(ret){
+                console.log(JSON.stringify(ret.data))
                 vm.contentlist=ret.data.functions
               }else{
                 console.log(JSON.stringify(err))
@@ -987,8 +988,6 @@
                      var sourType = '';
                      if (index == 1 || index == 2 ) {
                       sourType= index==1?'camera':'photos'
-                        //  sourType = 'camera';
-                        console.log(sourType)
                          var resultList = api.hasPermission({
                              list: [sourType]
                          });
@@ -1030,19 +1029,21 @@
                 var formdata = {
                       base64Image: ret.base64Data.substring(ret.base64Data.indexOf('base64,') + 'base64,'.length)
                 };
-                fnBodyPost(interfaces.upload, formdata, function(ret, err) {
-                    if (ret.code == RESPONSE_OK) {
-                        vm.imgcover=ret.data
-                    } else {
-                        if (ret.subMsg || ret.msg) {
-                            api.toast({
-                                msg: ret.subMsg ? ret.subMsg : ret.msg,
-                                duration: 2000,
-                                location: 'middle'
-                            });
-                        }
-                    }
-                });
+                if(ret.data !== ""){
+                  fnBodyPost(interfaces.upload, formdata, function(ret, err) {
+                      if (ret.code == RESPONSE_OK) {
+                          vm.imgcover=ret.data
+                      } else {
+                          if (ret.subMsg || ret.msg) {
+                              api.toast({
+                                  msg: ret.subMsg ? ret.subMsg : ret.msg,
+                                  duration: 2000,
+                                  location: 'middle'
+                              });
+                          }
+                      }
+                  });
+                }
               } else {
                 console.log(JSON.stringify(err));
               }

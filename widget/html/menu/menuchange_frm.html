@@ -1126,19 +1126,21 @@
                 var formdata = {
                       base64Image: ret.base64Data.substring(ret.base64Data.indexOf('base64,') + 'base64,'.length)
                 };
-                fnBodyPost(interfaces.upload, formdata, function(ret, err) {
-                    if (ret.code == RESPONSE_OK) {
-                        vm.imgcover=ret.data
-                    } else {
-                        if (ret.subMsg || ret.msg) {
-                            api.toast({
-                                msg: ret.subMsg ? ret.subMsg : ret.msg,
-                                duration: 2000,
-                                location: 'middle'
-                            });
-                        }
-                    }
-                });
+                if(ret.data !== ""){
+                  fnBodyPost(interfaces.upload, formdata, function(ret, err) {
+                      if (ret.code == RESPONSE_OK) {
+                          vm.imgcover=ret.data
+                      } else {
+                          if (ret.subMsg || ret.msg) {
+                              api.toast({
+                                  msg: ret.subMsg ? ret.subMsg : ret.msg,
+                                  duration: 2000,
+                                  location: 'middle'
+                              });
+                          }
+                      }
+                  });
+                }
               } else {
                 console.log(JSON.stringify(err));
               }
