@@ -35,7 +35,6 @@
         }
 
         .top-font .font-one {
-            width: 1.32rem;
             height: 0.62rem;
             margin-left: 0.6rem;
             margin-top: 0.9rem;
@@ -43,7 +42,7 @@
         }
 
         .top-font .font-two {
-            width: 1.76rem;
+            width: 2.75rem;
             height: 0.52rem;
             margin-left: 0.6rem;
             /* font-weight: bolder; */
@@ -52,9 +51,9 @@
 
         .info {
             width: 100%;
-            height: 3rem;
             margin-top: 0.8rem;
             font-size: 0.32rem;
+            margin-bottom: 1.1rem;
         }
 
         .info .login-info {
@@ -65,6 +64,11 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #D8D8D8;
+        }
+        .info .info-name{
+            width: 84%;
+            margin: 0 auto;
+            margin-top: .3rem;
         }
 
         .info .login-info img {
@@ -167,6 +171,16 @@
             height: .25rem;
             text-align: right;
         }
+
+        .info-name {
+            font-family: PingFang-SC-Medium;
+            font-size: .3rem;
+            color: #666666;
+        }
+        .info-name img{
+            width: .3rem;
+            height: .3rem;
+        }
     </style>
 </head>
 
@@ -177,36 +191,30 @@
         </header>
         <section>
             <div class="top-font">
-                <div class="font-one">您好,</div>
-                <div class="font-two">欢迎注册</div>
+                <div class="font-one">请填写，</div>
+                <div class="font-two">以下注册信息</div>
             </div>
             <div class="info">
-                <div class="login-info">
-                    <input type="text"  placeholder="请选择注册类型" v-model="type">
-                    <img src="../../image/my/unfold.png" alt="" class="unfold" id="type">
+                <div class="info-name">
+                    <img src="../../image/register/company.png" alt="">
+                    <span>公司名称</span>
                 </div>
                 <div class="login-info">
-                    <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
+                    <input type="text" placeholder="请选择注册类型" v-model="type" v-model="company">
+                </div>
+                <div class="info-name">
+                    <img src="../../image/register/Registration.png" alt="" >
+                    <span>注册编号</span>
                 </div>
                 <div class="login-info">
-                    <input type="password" @input="codeInput" placeholder="请输入验证码" v-model="code">
-                    <div class="code" v-if="sendCodeFlag" @click="changeCodeFlag">获取验证码</div>
-                    <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
+                    <input type="text" @blur="phoneJudge" placeholder="请输入公司注册编号" v-model="Registration">
                 </div>
-                <div class="TCp">
-                    <div style="margin-right: .08rem;">
-                        <img src="../../image/register/defaucheck.png" alt="" v-if="ckeckTCP" @click="ckeckTCP=false">
-                        <img src="../../image/register/check.png" alt="" v-if="ckeckTCP === false"
-                            @click="ckeckTCP=true">
-                    </div>
-
-                    <div>
-                        我已阅读并同意
-                        <span>《网络服务协议》</span>
-                        和
-                        <span>《隐私政策》</span>
-                    </div>
-
+                <div class="info-name">
+                    <img src="../../image/register/name.png" alt="">
+                    <span>委托人姓名</span>
+                </div>
+                <div class="login-info">
+                    <input type="text" @blur="phoneJudge" placeholder="请输入委托人姓名" v-model="mandator">
                 </div>
             </div>
 
@@ -218,7 +226,6 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
-    <script src="../../script/mobileSelect.js"></script>
     <script>
         var apiready
         apiready = function () {
@@ -228,95 +235,66 @@
             var vm = new Vue({
                 el: '.app',
                 data: {
-                    phone: '',  //手机号
-                    phoneFlag: false, //判断手机号是否合法
-                    code: '',  //验证码
                     btnFlag: false,   //按钮是否可点击
                     sendCode: 59,    //验证码倒计时
                     sendCodeFlag: true,   //刚开始验证码的状态
                     sendStatus: false,   //发送验证码按钮状态
                     ckeckTCP: true,
-                    type:''
+                    type: '',
+                    company:'',
+                    Registration:'',
+                    mandator:''
+
                 },
-                watch: {
-                    //监听输入手机号，动态显示删除按钮
-                    phone: function () {
-                        if (this.phone != '') {
-                            this.imgFlag = true
-                        }
-                        else if (this.phone == '') {
-                            this.imgFlag = false
-                        }
-                    }
-                },
-                mounted(){
-                    let vm=this;
-                    var mobileSelect1 = new MobileSelect({
-                    trigger: '#type',
-                    wheels: [
-                        {
-                            data: [
-                                { 'id': 0, 'value': '个人' },
-                                { 'id': 1, 'value': '企业' },
-                                { 'id': 2, 'value': '经销商' }
-                            ]
-                        }
-                    ],
-                    position: [0],
-                    callback: function (indexArr, data) {
-                        console.log(data[0].value)
-                        vm.type=data[0].value
-                    }
-                });
+                mounted() {
                 },
                 methods: {
-                //手机号输入框失去焦点
-                phoneJudge: function () {
-                    var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
-                    if (!phoneReg.test(this.phone)) {
-                        alert("请输入正确的手机号")
-                        this.phoneFlag = false
-                    } else {
-                        this.phoneFlag = true
-                    }
-                },
-                //验证码输入事件
-                codeInput: function () {
-                    if (this.code.length >= 1) {
-                        this.btnFlag = true
-                    }
-                    else {
-                        this.btnFlag = false
-                    }
-                },
-                //点击获取验证码，改变内容
-                changeCodeFlag: function () {
-                    if (this.phone == '') {
-                        alert("请先输入手机号")
-                        return
-                    }
-                    if (this.phoneFlag == false) {
-                        alert("请输入合法的手机号")
-                        return
-                    }
-                    this.sendCodeFlag = false
-                    // 发送验证码倒计时
-                    var vm = this;
-                    var s = 5;
-                    var countInterval = setInterval(function () {
-                        if (vm.sendCode > 0) {
-                            s--;
-                            vm.sendCode = s;
+                    //手机号输入框失去焦点
+                    phoneJudge: function () {
+                        var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+                        if (!phoneReg.test(this.phone)) {
+                             this.phoneFlag = false
                         } else {
-                            vm.sendCodeFlag = true
-                            clearInterval(countInterval);
-                            vm.sendCode = 59;
-                            // vm.sendStatus = 'before';
+                            this.phoneFlag = true
                         }
-                    }, 1000);
-                    vm.countInterval = countInterval;
-                }
-            },
+                    },
+                    //验证码输入事件
+                    codeInput: function () {
+                        if (this.code.length >= 1) {
+                            this.btnFlag = true
+                        }
+                        else {
+                            this.btnFlag = false
+                        }
+                    },
+                    //点击获取验证码，改变内容
+                    changeCodeFlag: function () {
+                        if (this.phone == '') {
+                            alert("请先输入手机号")
+                            return
+                        }
+                        if (this.phoneFlag == false) {
+                            alert("请输入合法的手机号")
+                            return
+                        }
+                        this.sendCodeFlag = false
+                        // 发送验证码倒计时
+                        var vm = this;
+                        var s = 5;
+                        var countInterval = setInterval(function () {
+                            if (vm.sendCode > 0) {
+                                s--;
+                                vm.sendCode = s;
+                            } else {
+                                vm.sendCodeFlag = true
+                                clearInterval(countInterval);
+                                vm.sendCode = 59;
+                                // vm.sendStatus = 'before';
+                            }
+                        }, 1000);
+                        vm.countInterval = countInterval;
+                    }
+                },
                 //点击下一步进入输入面页
                 // goNext:function(){
                 //     //这里做手机号验证，如果手机号填写正确，向后台发送的验证码也正确的话，则进行下一步操作

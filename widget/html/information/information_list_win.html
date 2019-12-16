@@ -43,7 +43,8 @@
         api.addEventListener({
             name: 'footerIndexMarket'
         }, function (ret, err) {
-            if (ret.value.index != 1) {
+              alert(JSON.stringify(ret))
+            if (ret.value.index != 0) {
                 api.setFrameAttr({
                     name: 'information_list_frm',
                     hidden: true
@@ -53,6 +54,7 @@
                     name: 'information_list_frm',
                     hidden: false
                 });
+
                 api.openFrame({
                     name: 'information_list_frm',
                     url: 'information_list_frm.html',
@@ -75,8 +77,8 @@
             }
         });
         // api.openFrame({
-        //     name: 'information-list_frm',
-        //     url: 'information-list_frm.html',
+        //     name: 'information_list_frm',
+        //     url: 'information_list_frm.html',
         //     rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
         //         marginTop: headerH, // main页面距离win顶部的高度
         //         marginBottom: api.pageParam.footerH, // main页面距离win底部的高度
