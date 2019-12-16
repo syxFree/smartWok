@@ -9,12 +9,11 @@ var AES_KEY = "logalliance_fac1";
 var RESPONSE_OK = 20000;
 var TOKEN_BEOVERDUE = 40001; // token过期
 /** 接口主机地址 */
-// var host = "http://192.168.1.10:8083";
-// var host = "http://192.168.1.28:99";
 
 
 // var host = 'http://192.168.1.28:9102';
-var host = 'http://106.15.102.116:9902'
+var host = 'http://106.15.102.116:9902'    //线
+// var host = 'http://192.168.1.106:9102'   //崔
 
 //外网测试地址
 // var host = "http://whale123.free.idcfengye.com";
@@ -49,7 +48,8 @@ var interfaces = {
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈
     upload: '/api/common/upload_image', //上传图片
-    area:  '/sw/area' ,  //获取地址
+    area:  '/sw/area/all' ,  //获取地址
+    areaone:  '/sw/area' ,  //获取地址
     address:'/sw/info/address' , //新增或更改地址
     info:'/sw/info', //获取个人信息
     aboutus:'/static_url/content', //获取关于我们富文本

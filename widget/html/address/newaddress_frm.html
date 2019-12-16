@@ -36,8 +36,7 @@
     }
 
     .content input {
-      margin-left: .88rem;
-      width: 50%;
+     width: 50%;
     }
 
     .unfold {
@@ -67,6 +66,8 @@
     .content-detail textarea {
       font-size: .28rem;
       color: #333333;
+      box-sizing: border-box;
+      padding: .1rem;
     }
 
     .switch {
@@ -87,6 +88,11 @@
       width: .9rem;
       height: .55rem;
     }
+    #address{
+      display: flex;
+      justify-content: space-between;
+      width: 75%;
+    }
   </style>
 </head>
 
@@ -95,18 +101,20 @@
     <div class="content-box">
       <div class="content">
         <span>收货人</span>
-        <input type="text" placeholder="请填写姓名" v-model="name">
+        <input type="text" placeholder="请填写姓名" v-model="name" style="margin-left: .8rem;">
       </div>
       <div class="content">
         <span>手机号码</span>
-        <input type="text" placeholder="手机号码" style="margin-left: .60rem;" v-model="phone">
+        <input type="text" placeholder="手机号码" style="margin-left: .55rem;" v-model="phone">
       </div>
-      <div class="content contentflex"  >
+      <div class="content contentflex" >
         <div >
           <span>所在地区</span>
-          <input type="text" placeholder="请输入" style="margin-left: .60rem;" v-model="address" disabled="true" >
         </div>
-        <img src="../../image/my/unfold.png" alt="" class="unfold" id="address">
+        <div id="address">
+          <input type="text" placeholder="请输入"  v-model="address" disabled="true" >
+          <img src="../../image/my/unfold.png" alt="" class="unfold"  >
+        </div>
       </div>
       <div class="content-detail">
         <span>详细地址</span>
@@ -150,65 +158,30 @@
           let vm=this;
           fnGet(interfaces.area,{},true,function(ret, err) {
               if (ret.code == RESPONSE_OK) {
-                console.log(JSON.stringify(ret.data))
+                // console.log(JSON.stringify(ret.data))
                 let array=ret.data
-                var keyMap = {
-                    "name" : "value",
-                };
-                for (var i = 0; i < array.length; i++) {
-                   var obj = array[i];
-                   for(var key in obj){
-                      var newKey = keyMap[key];
-                      if(newKey){
-                            obj[newKey] = obj[key];
-                            delete obj[key];
-                     }
-                  }
-                }
                   var mobileSelect1 = new MobileSelect({
                   trigger: '#address',
                   title: '所在地区',
                   wheels: [
                     {
-                      data:[
-                      {
-                          id:'1',
-                          value:'附近',
-                          childs:[
-                              {id:'1',value:'1000米'},
-                              {id:'2',value:'2000米'},
-                              {id:'3',value:'3000米'},
-                              {id:'4',value:'5000米'},
-                              {id:'5',value:'10000米'}
-                          ]
-                      },
-                      {id:'2',value:'上城区',
-                      childs:[
-                          {id:'1',
-                          value:'1000米',
-                          childs:[
-                              {id:'1',value:'1000米'},
-                              {id:'2',value:'2000米'},
-                              {id:'3',value:'3000米'},
-                              {id:'4',value:'5000米'},
-                              {id:'5',value:'10000米'}
-                          ]},
-                          {id:'2',value:'2000米'},
-                          {id:'3',value:'3000米'},
-                          {id:'4',value:'5000米'},
-                          {id:'5',value:'10000米'}
-                      ]},
-                      {id:'3',value:'下城区'},
-                      {id:'4',value:'江干区'},
-                      {id:'5',value:'拱墅区'},
-                      {id:'6',value:'西湖区'}
-                  ]
+                      data:array,
                     }
                   ],
                   position: [0],
                   callback: function (indexArr, data) {
-                    vm.address=data[0].value
-                    vm.addressId=data[0].id
+                    vm.address=''
+                    console.log(JSON.stringify(data));
+                    console.log(JSON.stringify(indexArr));
+                    for(var i=0 ;i<data.length;i++){
+                      vm.address+=data[i].value
+                      vm.address+=" "
+                      vm.addressId=data[i].id
+                    }
+                    console.log(JSON.stringify(vm.address))
+                    console.log(vm.addressId)
+                    //  vm.address=data[0].value+" "+data[1].value+" "+data[2].value
+
                   }
                 });
               } else {
@@ -228,7 +201,16 @@
           }
           if(this.phone=== ""){
             api.toast({
-                msg: '电话不能为空',
+                msg: '手机号码不能为空',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+          }
+          var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+          if (!phoneReg.test(this.phone)) {
+              api.toast({
+                msg: '手机号码不正确',
                 duration: 2000,
                 location: 'bottom'
             });

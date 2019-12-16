@@ -102,9 +102,9 @@
         <!-- 有菜谱 -->
         <div class="menu-boxs" v-if="cooklist.length>0">
             <div class="menu-box" v-for="(item,index) in cooklist">
-                <div class="menu-bleft" @click="toMenuchange(item.id)">
-                    <img :src="item.image" alt="" >
-                    <div class="menu-bleft-box" >
+                <div class="menu-bleft" >
+                    <img :src="item.image" alt="" @click="toMenuchange(item.id)">
+                    <div class="menu-bleft-box" @click="toMenuchange(item.id)">
                         <p>{{item.name}}</p>
                         <div>{{item.time}}</div>
                     </div>

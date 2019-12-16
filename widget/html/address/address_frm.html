@@ -124,7 +124,7 @@
           <span class="name">{{item.receiptorName}}</span>
           <span class="phone">{{item.receiptorPhone}}</span>
         </div>
-        <p class="address-res">{{item.home}}&nbsp;{{item.address}}</p>
+        <p class="address-res">{{item.areaName}}&nbsp;{{item.address}}</p>
         <div class="address-bottom" >
           <div v-show="item.def===true">
             <img src="../../image/my/de-address.png" alt="">
@@ -183,37 +183,38 @@
       methods: {
         // 获取地址
         // 获取地址
-        gethome(home){
-          let vm=this;
-          fnGet(interfaces.area,{},true,function(ret, err) {
-              if (ret.code == RESPONSE_OK) {
-                for(var i =0;i<home.length;i++){
-                  for(var j=0;j<ret.data.length;j++){
-                    if(home[i].areaId ==ret.data[j].id){
-                      home[i].home=ret.data[j].name
-                    }
-                  }
-                }
-                console.log(JSON.stringify(home))
-                vm.addresslist=home
-              }else{
-                console.log(JSON.stringify(err))
-              }
-            })
-        },
+        // gethome(home){
+        //   let vm=this;
+        //   fnGet(interfaces.area,{parentId:home.treePath},true,function(ret, err) {
+        //       if (ret.code == RESPONSE_OK) {
+        //         console.log(JSON.stringify(ret.data))
+        //         for(var i =0;i<home.length;i++){
+        //           for(var j=0;j<ret.data.length;j++){
+        //             if(home[i].areaId ==ret.data[j].id){
+        //               home[i].home=ret.data[j].name
+        //             }
+        //           }
+        //         }
+        //         console.log(JSON.stringify(home))
+        //         vm.addresslist=home
+        //       }else{
+        //         console.log(JSON.stringify(err))
+        //       }
+        //     })
+        // },
         // 获取收获地址
         getaddress(){
           let vm=this
           fnGet(interfaces.address, {}, true, function(ret,err){
             if(ret.code==RESPONSE_OK){
-              // console.log(JSON.stringify(ret.data))
+              console.log(JSON.stringify(ret.data))
               // vm.addresslist=ret.data
               if(ret.data.length == 0){
               vm.hasaddress=false
             }else{
               vm.hasaddress=true
             }
-              vm.gethome(ret.data)
+               vm.addresslist=ret.data
             }else{
               console.log(JSON.stringify(err))
             }
