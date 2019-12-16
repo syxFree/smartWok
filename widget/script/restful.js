@@ -13,8 +13,8 @@ var TOKEN_BEOVERDUE = 40001; // token过期
 // var host = "http://192.168.1.28:99";
 
 
-var host = 'http://192.168.1.28:9102';
-// var host = 'http://192.168.1.106:9102'
+// var host = 'http://192.168.1.28:9102';
+var host = 'http://106.15.102.116:9902'
 
 //外网测试地址
 // var host = "http://whale123.free.idcfengye.com";

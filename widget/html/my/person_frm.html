@@ -77,26 +77,26 @@
           <img src="../../image/my/unfold.png" alt="" class="unfold">
         </div>
       </div>
-      <div class="content-name" >
+      <div class="content-name" @click="tonickname()">
         <span>昵称</span>
         <div>
           <span class="name" v-if="pers.nickname">{{pers.nickname}}</span>
           <span class="name" v-else>{{pers.username}}</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" @click="tonickname()">
+          <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
-      <div class="content-name">
+      <div class="content-name" >
         <span>性别</span>
-        <div>
+        <div id="sex">
           <span class="name">男</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" id="sex">
+          <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
-      <div class="content-name">
+      <div class="content-name" >
         <span>所在地</span>
-        <div>
+        <div id="address">
           <span class="name">{{address}}</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" id="address">
+          <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
     </div>
@@ -298,20 +298,22 @@
             var formdata = {
                   base64Image: ret.base64Data.substring(ret.base64Data.indexOf('base64,') + 'base64,'.length)
             };
-            fnBodyPost(interfaces.upload, formdata, function(ret, err) {
-                if (ret.code == RESPONSE_OK) {
-                  vm.pers.avater=ret.data
-                  vm.saveperson()
-                } else {
-                    if (ret.subMsg || ret.msg) {
-                        api.toast({
-                            msg: ret.subMsg ? ret.subMsg : ret.msg,
-                            duration: 2000,
-                            location: 'middle'
-                        });
-                    }
-                }
-            });
+            if(ret.data !== ""){
+              fnBodyPost(interfaces.upload, formdata, function(ret, err) {
+                  if (ret.code == RESPONSE_OK) {
+                    vm.pers.avater=ret.data
+                    vm.saveperson()
+                  } else {
+                      if (ret.subMsg || ret.msg) {
+                          api.toast({
+                              msg: ret.subMsg ? ret.subMsg : ret.msg,
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                      }
+                  }
+              });
+            }
           } else {
             console.log(JSON.stringify(err));
           }
