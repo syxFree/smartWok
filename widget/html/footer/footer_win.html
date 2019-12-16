@@ -146,40 +146,41 @@
                       var headerH = '';
                       var footerH = '';
                       setTimeout(function () {
-                          var header = $api.dom('header'); // 获取 header 标签元素
-                          var footer = $api.dom('footer'); // 获取 footer 标签元素
-                          headerH = $api.fixStatusBar(header);
-                          footerH = $api.fixTabBar(footer);
-                          for (var i = 0; i < that.framesArr.length; i++) {
-                              if (i != that.framesArr.length) {
-                                  that.framesArr[i].pageParam = {footerH: footerH}
-                              }
-                          }
-                          api.openFrameGroup({
-                              name: 'home-group',
-                              index: 0,
-                              rect: {
-                                  x: 0,
-                                  y: 0,
-                                  w: 'auto',
-                                  h: 'auto',
-                                  marginTop: 0, // main页面距离win顶部的高度
-                                  marginBottom: footerH // main页面距离win底部的高度
-                              },
-                              scrollEnabled: false,
-                              preload: 5,
-                              frames: that.framesArr
-                          }, function (ret, err) {
-                              var index = ret.index;
-                              that.currentIdx = index;
-                              api.sendEvent({
-                                  name: 'footerIndexMarket',
-                                  extra: {
-                                      index: index
-                                  }
-                              })
-                          });
-                      }, 300);
+                        var header = $api.dom('header'); // 获取 header 标签元素
+                        var footer = $api.dom('footer'); // 获取 footer 标签元素
+                        headerH = $api.fixStatusBar(header);
+                        footerH = $api.fixTabBar(footer);
+                        for (var i = 0; i < that.framesArr.length; i++) {
+                            if (i != that.framesArr.length) {
+                                that.framesArr[i].pageParam = {footerH: footerH}
+                            }
+                        }
+                        api.openFrameGroup({
+                            name: 'home-group',
+                            index: 0,
+                            rect: {
+                                x: 0,
+                                y: 0,
+                                w: 'auto',
+                                h: 'auto',
+                                marginTop: 0, // main页面距离win顶部的高度
+                                marginBottom: footerH // main页面距离win底部的高度
+                            },
+                            scrollEnabled: false,
+                            preload: 5,
+                            frames: that.framesArr
+                        }, function (ret, err) {
+                            var index = ret.index;
+                            that.currentIdx = index;
+                            api.sendEvent({
+                                name: 'footerIndexMarket',
+                                extra: {
+                                    index: index
+                                }
+                            })
+                        });
+
+                      }, 60);
                   },
 
                 },

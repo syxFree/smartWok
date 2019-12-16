@@ -154,10 +154,10 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
+                    <input type="number" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
                 </div>
                 <div class="login-info">
-                    <input type="password" @input="codeInput" placeholder="请输入验证码" v-model="code">
+                    <input type="password" @input="codeInput" placeholder="请输入验证码" v-model="code" ref="code">
                     <div class="code" v-if="sendCodeFlag" @click="changeCodeFlag">获取验证码</div>
                     <div v-else class="codeDisabled">重新发送({{sendCode}})</div>
                 </div>
@@ -210,6 +210,14 @@
                         }
                         else if (this.phone == '') {
                             this.imgFlag = false
+                        }
+                        if(this.phone.length>11){
+                          api.toast({
+                              msg: '请输入正确的手机号',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
                         }
                     }
                 },
@@ -278,6 +286,7 @@
                           phone:this.phone,
                           type:0
                         }
+                        this.$refs.code.focus()
                         console.log(interfaces.sendCode)
                         fnBodyPost(interfaces.sendCode,params,function(ret,err){
                             if(ret.code==RESPONSE_OK){

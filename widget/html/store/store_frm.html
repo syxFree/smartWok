@@ -155,8 +155,9 @@
                 navIndex:0,  //导航列表索引
                 nav:['全部','炒锅系列','电火锅','电饭煲','火锅'],
                 pageNum:1,
-                pageSize:10,
+                pageSize:3,
                 img:[],
+                isLastPage:false,
                 goods:[
                     {
                         img:'../../image/store/one.jpg',
@@ -214,12 +215,22 @@
                     }
                     // console.log(JSON.stringify(params))
                     fnGet(interfaces.goodsList,params,true,function(ret,err){
+                        if (value = 'refresh') {
+                            api.refreshHeaderLoadDone()
+                        }
                         if(ret.code==RESPONSE_OK){
-                          vm.goods=ret.data.list
+                          if(vm.pageNum==1){
+                              vm.goods=ret.data.list
+                          }
+                          else{
+                              vm.goods=vm.goods.concat(ret.data.list)
+                          }
                           for(var i=0;i<vm.goods.length;i++){
                             vm.img.push(vm.goods[i].images.split(',')[0])
                           }
-                        }else{
+                          // vm.isLastPage=ret.data.lastPage
+                        }
+                        else{
                           api.toast({
                               msg: ret.msg,
                               duration: 2000,
@@ -246,7 +257,8 @@
                 //切换导航栏状态
                 navChange:function(index,id){
                     this.navIndex=index
-
+                    vm.pageNum=1
+                    vm.pageSize=3
                     console.log(id)
                     this.getGoodsList(id)
                     console.log(JSON.stringify(this.goods))
@@ -263,10 +275,38 @@
                             id:id
                         }
                     });
-
                 }
             }
         })
+        // 上拉加载
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: -10
+            }
+        }, function (ret, err) {
+            if (vm.isLastPage != 'true' && vm.isLastPage != true) {
+              console.log("上拉加载更多")
+                vm.pageNum++;
+                vm.getGoodsList();
+            } else {
+                api.toast({
+                    msg: '没有更多了~',
+                    location: 'middle',
+                    duration: 800,
+                });
+            }
+        });
+        // 下拉刷新
+        api.setRefreshHeaderInfo({
+            bgColor: '#fff'
+        }, function (ret, err) {
+            vm.pageNum = 1;
+            vm.pageSize=3;
+            vm.isLastPage = false;
+            vm.goods = null;
+            vm.getGoodsList('refresh')
+        });
       }
     </script>
 </body>
