@@ -576,7 +576,10 @@
                             vm.orderInfo.payTime=vm.timeToDate(msg.payDate)
                             vm.orderInfo.type=vm.numToType(msg.payType)
                             // console.log(JSON.stringify(ret.data))
-                            vm.getLogistics(msg.id)
+                            if(vm.goods.status=='待收货' || vm.goods.status=='已完成'){
+                              vm.getLogistics(msg.id)
+                            }
+
                         }else{
                           api.toast({
                               msg: ret.msg,
@@ -652,7 +655,14 @@
                 },
                 //申请发票
                 ApplicationInvoice:function(){
-                    alert("申请发票")
+                    api.openWin({
+                        name: 'invoice',
+                        url: 'invoice_win.html',
+                        reload:true,
+                        pageParam: {
+                            name: 'test'
+                        }
+                    });
                 },
                 //提醒发货
                 reminder:function(value){
