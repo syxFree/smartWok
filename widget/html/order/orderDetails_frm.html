@@ -485,7 +485,7 @@
                             <img class="payFlag" v-else src="../../image/submitOrder/choose-active.png" alt="">
                         </div>
                     </div>
-                    <div class="order-btn" @click="payOrder">确定</div>
+                    <div class="order-btn" @click="payOrder(orderInfo.id)">确定</div>
                 </div>
             </div>
         </section>
@@ -530,7 +530,7 @@
                 orderCount:5,   //购买商品数量
                 shadeFlag:false,  //支付类型
                 payFlag:true,
-                cancelFlag:false
+                cancelFlag:false,
             },
             created() {
                 if(this.goods.status=='已完成'|| this.goods.status=='待收货'){
@@ -795,9 +795,83 @@
                     e.preventDefault();
                 },
                 //确认付款
-                payOrder:function(){
-
-                }
+                payOrder:function(id){
+                    var vm=this
+                    var type=0
+                    if(vm.payOrder){
+                      type=0   //代表支付宝支付
+                      // vm.aliPay()
+                    }
+                    else{
+                      type=1   //代表微信支付
+                    }
+                    var params={
+                        orderId:id,
+                        payType:type
+                    }
+                    fnBodyPost(interfaces.payNow,params,function(ret,err){
+                      if(ret.code==RESPONSE_OK){
+                          console.log(JSON.stringify(ret.data))
+                          if(type==0){
+                            vm.aliPay(ret.data.paySign)
+                          }
+                          else if(type==1){
+                            vm.wxPay(ret.data)
+                          }
+                      }else{
+                        api.toast({
+                            msg: ret.msg,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                      }
+                    })
+                },
+                //微信支付
+                wxPay:function(params){
+                  console.log(JSON.stringify(params))
+                  var wxPayPlus = api.require('wxPayPlus');
+                  wxPayPlus.payOrder({
+                      apiKey: params.appId,
+                      orderId: params.orderId,
+                      mchId: params.partnerId,
+                      nonceStr: params.nonceStr,
+                      timeStamp: params.timeStamp,
+                      package: params.packageStr,
+                      sign: params.paySign
+                  }, function(ret, err) {
+                      if (ret.status) {
+                        vm.paySuccess()
+                      } else {
+                          alert(err.code);
+                      }
+                  });
+                },
+                //支付宝支付
+                aliPay:function(value){
+                  var vm=this
+                  var aliPayPlus = api.require('aliPayPlus');
+                  aliPayPlus.payOrder({
+                    orderInfo: value   //这里是后台返回的一个字段
+                  }, function(ret, err) {
+                    if(ret.code==9000){
+                      vm.paySuccess()
+                    }
+                  });
+                },
+                //付款成功后的状态
+                paySuccess:function(){
+                  api.openWin({
+                      name: 'orderSuccess',
+                      url: 'order_success_win.html',
+                      reload:true,
+                      slidBackEnabled:true,
+                      bounces:false,
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
+                },
             },
         })
         api.addEventListener({

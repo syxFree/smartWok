@@ -71,17 +71,21 @@
           methods: {
               //返回按钮 这里返回支付界面
               back:function(){
-                  api.openWin({
-                      name: 'order',
-                      url: '../order/order_list_win.html',
-                      reload:true,
-                      slidBackEnabled:true,
-                      bounces:false,
-                      pageParam: {
-                          name: 'test'
-                      }
+                  // api.openWin({
+                  //     name: 'order',
+                  //     url: '../order/order_list_win.html',
+                  //     reload:true,
+                  //     slidBackEnabled:true,
+                  //     bounces:false,
+                  //     pageParam: {
+                  //         name: 'test'
+                  //     }
+                  // });
+                  // api.closeWin()
+                  api.closeToWin({
+                      name: 'my_order_list'
                   });
-                  api.closeWin()
+
 
               },
           },
