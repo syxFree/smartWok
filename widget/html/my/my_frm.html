@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name = "format-detection" content = "telephone=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
@@ -79,7 +80,7 @@
       <img src="../../image/my/default-head.png" alt=""  @click="tosomewhere('person_win','person_win.html')" v-if="!information.avater">
       <p @click="tosomewhere('person_win','person_win.html')" v-if="information.nickname">{{information.nickname}}</p>
       <p @click="tosomewhere('person_win','person_win.html')" v-if="!information.nickname">{{information.username}}</p>
-      <span>{{information.areaName}}</span>
+      <span>{{address}}</span>
     </div>
     <div class="content-box content-position">
       <div class="content" @click="tosomewhere('my_order_list','../order/order_list_win.html')">
@@ -140,32 +141,54 @@
           let vm=this
           fnGet(interfaces.info, {}, true, function(ret,err){
               if(ret.code==RESPONSE_OK){
-                console.log(JSON.stringify(ret.data))
-                 vm.information=ret.data
+                 vm.getaddress(ret.data)
               }else{
                 console.log(JSON.stringify(err))
               }
           })
         },
         // 获取地址
-        // gethome(home){
-        //   let vm=this;
-        //      console.log(JSON.stringify( home))
-        //   fnGet(interfaces.area,{},true,function(ret, err) {
-        //     console.log(JSON.stringify( ret))
-        //       if (ret.code == RESPONSE_OK) {
-        //           for(var j=0;j<ret.data.length;j++){
-        //             if(home.areaId ==ret.data[j].id){
-        //                vm.address=ret.data[j].name
-        //                vm.information=home
-        //                console.log(JSON.stringify( vm.information))
-        //             }
-        //           }
-        //       }else{
-        //         console.log(JSON.stringify(err))
-        //       }
-        //     })
-        // },
+        getaddress(person){
+          let vm=this;
+          let treePath = person.treePath
+          let arrtreePath = treePath.split(',')
+          arrtreePath.splice(0, 1)
+          let arrtreePathlength = arrtreePath.length
+          fnGet(interfaces.area, {}, true, function(ret, err) {
+              if (ret.code == RESPONSE_OK) {
+                  let array = ret.data
+                  for (var i = 0; i < array.length; i++) {
+                      if (array[i].id == arrtreePath[0]) {
+                          // console.log(JSON.stringify(array[i]))
+                          let city = array[i].childs
+                          if(arrtreePathlength ==1){
+                              vm.addindex.push(i)
+                              vm.address=array[i].value
+                                vm.information=person
+                          }
+                          for (var j = 0; j < city.length; j++) {
+                              if (city[j].id == arrtreePath[1]) {
+                                  let area = city[j].childs
+                                  if (arrtreePathlength > 2) {
+                                      for (var k = 0; k < area.length; k++) {
+                                          if (area[k].id == arrtreePath[2]) {
+                                              vm.address=array[i].value+' '+city[j].value+" "+area[k].value
+                                                vm.information=person
+                                          }
+                                      }
+                                  } else {
+                                      vm.address=array[i].value+' '+city[j].value
+                                        vm.information=person
+                                  }
+                              }
+                          }
+                      }
+                  }
+              } else {
+                  console.log(JSON.stringify(err))
+              }
+          })
+        },
 
         tosomewhere:function(name,url){
           api.openWin({

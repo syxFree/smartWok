@@ -101,11 +101,11 @@
         <div class="content-box">
             <div class="content">
                 <span>收货人</span>
-                <input type="text" placeholder="请填写姓名" v-model="name" style="margin-left:.88rem;">
+                <input type="text" placeholder="请填写姓名" v-model="name" style="margin-left:.88rem;" maxlength="8">
             </div>
             <div class="content">
                 <span>手机号码</span>
-                <input type="text" placeholder="手机号码" style="margin-left: .60rem;" v-model="phone">
+                <input type="tel" placeholder="手机号码" style="margin-left: .60rem;" v-model="phone" maxlength="11">
             </div>
             <div class="content contentflex">
                 <div>
