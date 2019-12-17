@@ -109,9 +109,9 @@
         .wx-login{
             width: 100%;
             height: 3rem;
-            margin-top: 43%;
-            /*position: fixed;*/
-            /*bottom:.5rem;*/
+            /*margin-top: 3.5rem;*/
+            position: fixed;
+            bottom:.5rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -288,10 +288,20 @@
                   });
                 },
                 phoneFocus:function(){
+                  // this.changeStyle()
                   document.body.addEventListener('touchmove', this.scroll
                   , {passive:false});
                 },
+                changeStyle:function(){
+                    document.getElementsByClassName('wx-login')[0].style.position='absolute'
+                    document.getElementsByClassName('wx-login')[0].style.bottom='-3rem'
+                },
+                resizeStyle:function(){
+                  document.getElementsByClassName('wx-login')[0].style.position='fixed'
+                  document.getElementsByClassName('wx-login')[0].style.bottom='.5rem'
+                },
                 pwdBlur:function(){
+                  // this.resizeStyle()
                   document.body.removeEventListener('touchmove', this.scroll
                   ,{passive:false});
                 },
@@ -335,48 +345,24 @@
                     }
                 },
                 wxLogin:function(){
-                   var vm=this
-                   var wx = api.require('wx');
-                   var code = '';
-                   wx.isInstalled(function(ret, err) {
-                       if (!ret.installed) {
-                           alert("当前设备未安装微信客户端");
-                       } else {
-                         wx.auth({
-                           apiKey: 'wxd0d84bbf23b4a0e4'
-                       }, function(ret, err) {
-                           if (ret.status) {
-                               wx.getToken({
-                               apiKey: 'wxd0d84bbf23b4a0e4',
-                               apiSecret: 'a354f72aa1b4c2b8eaad137ac81434cd',
-                               code: ret.code
-                           }, function(ret, err) {
-                               if (ret.status) {
-                                  api.showProgress({
-                                       style: 'default',
-                                       animationType: 'fade',
-                                       title: '授权成功',
-                                       text: '绑定处理中...',
-                                       modal: true
-                                   });
-                                    wx.getUserInfo({
-                                       accessToken: ret.accessToken,
-                                       openId: ret.openId
-                                   }, function(ret, err) {
-                                       if (ret.status) {
-                                           // 绑定成功
-                                           vm.bindWx(ret.openid);
-                                           api.hideProgress();
-                                       }
-                                   });
-                               }else {
-                                   alert(err.code);
-                               }
-                           });
-                         }
-                       });
-                       }
-                   });
+                    var vm=this
+                    var wx = api.require('wx');
+                    wx.isInstalled(function(ret, err) {
+                        if (ret.installed) {
+                            console.log("安装了")
+                            wx.auth({
+                                apiKey: 'wxb989b47d3af39aca'
+                            }, function(ret, err){
+                                if(ret.status){
+                                    alert(JSON.stringify(ret));
+                                }else{
+                                    alert(err.code);
+                                }
+                            });
+                        } else {
+                            alert('当前设备未安装微信客户端');
+                        }
+                    });
                  },
                  bindWx:function(index){
                      var vm=this
@@ -391,6 +377,17 @@
                  }
               },
           })
+          //键盘弹出和收回时对微信登录的设置
+          var height=document.body.clientHeight
+          window.onresize=function(){
+            var heightNow= document.body.clientHeight
+            if(height-heightNow>140){
+              vm.changeStyle()
+            }
+            else{
+              vm.resizeStyle()
+            }
+          }
         }
     </script>
 </body>
