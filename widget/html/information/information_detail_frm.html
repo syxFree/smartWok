@@ -46,6 +46,7 @@
         background-color: white;
         display: flex;
         align-items: center;
+        justify-content: center;
     }
     .share-img{
         width: 2rem;
@@ -77,10 +78,10 @@
                   <img src="../../image/information/share_wx.png" alt="">
                   <span>微信好友</span>
               </div>
-              <div class="share-img" @click.stop="shareFriend">
+              <!-- <div class="share-img" @click.stop="shareFriend">
                    <img src="../../image/information/share_friend.png" alt="">
                    <span>朋友圈</span>
-              </div>
+              </div> -->
           </div>
       </div>
     </div>
@@ -88,6 +89,7 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js"></script>
     <script type="text/javascript">
     apiready=function(){
       var id=api.pageParam.id

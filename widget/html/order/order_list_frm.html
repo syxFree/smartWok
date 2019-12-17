@@ -126,12 +126,33 @@
             color: white;
             background-color: #FF8C46;
         }
+        .empty{
+          width: 100%;
+          height: 100%;
+          background-color: rgb(247, 247, 247);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          color: #999;
+          font-size: .28rem;
+        }
+        .empty img{
+          width: 4.6rem;
+          height: 3.5rem;
+          margin-top: 2rem;
+          margin-bottom: .3rem;
+        }
     </style>
 </head>
 <body>
     <div class="app">
         <section>
-            <div class="list" v-for="(item, index) in orderList" :key="index">
+            <div class="empty" v-if="emptyFlag">
+              <img src="../../image/orderDetails/empty.png" alt="">
+              <span>当前还没有订单</span>
+            </div>
+            <div v-else class="list" v-for="(item, index) in orderList" :key="index">
                 <div class="order-time">
                     <span>{{orderTime[index]}}</span>
                     <span v-if="item.orderStatus==0" class="activeRed">{{orderStatus[index]}}</span>
@@ -165,6 +186,7 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
     apiready=function(){
         var vm=new Vue({
@@ -231,16 +253,28 @@
                 ticketFlag:false,  //订单按钮选择状态
                 pageSize:10,
                 pageNum:1,
+                isLastPage:false,
                 orderTime:[],
                 orderStatus:[],
+                emptyFlag:true
             },
             created(){
               this.getData()
               // console.log(this.timeToDate(1575354633000))
             },
+            watch:{
+              emptyFlag:function(){
+                if(vm.orderList.length>0){
+                  vm.emptyFlag=false
+                }
+                else{
+                  vm.emptyFlag=true
+                }
+              }
+            },
             methods: {
                 //获取数据
-                getData(){
+                getData(value){
                   var vm=this
                   vm.orderTime=[],
                   vm.orderStatus=[]
@@ -250,8 +284,24 @@
                   }
                   console.log(JSON.stringify(params))
                   fnGet(interfaces.getOrderList,params,true,function(ret,err){
+                      if (value = 'refresh') {
+                          api.refreshHeaderLoadDone()
+                      }
                       if(ret.code==RESPONSE_OK){
-                        vm.orderList=ret.data.list
+                        if(vm.pageNum==1){
+                            vm.orderList=ret.data.list
+                        }
+                        else{
+                          vm.orderList=vm.orderList.concat(ret.data.list)
+                        }
+                        if(vm.orderList.length>0){
+                          vm.emptyFlag=false
+                        }
+                        else{
+                          vm.emptyFlag=true
+                        }
+                        vm.isLastPage=ret.data.lastPage
+                        console.log(JSON.stringify(vm.orderList))
                         for(var i=0;i<vm.orderList.length;i++){
                           vm.orderTime.push(vm.timeToDate(vm.orderList[i].createDate))
                           vm.orderStatus.push(vm.numsToStatus(vm.orderList[i].orderStatus))
@@ -302,18 +352,18 @@
                   // s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds());
                   return Y + M + D + h + m + s;
                 },
-              invoice(index){
-                api.openWin({
-                    name: 'invoice_win',
-                    url: 'invoice_win.html',
-                    reload:true,
-                    slidBackEnabled:false,
-                    bounces:false,
-                    pageParam: {
-                      id:index,
-                    }
-              })
-            },
+                  invoice(index){
+                    api.openWin({
+                        name: 'invoice_win',
+                        url: 'invoice_win.html',
+                        reload:true,
+                        slidBackEnabled:false,
+                        bounces:false,
+                        pageParam: {
+                          id:index,
+                        }
+                  })
+                },
                 //立即付款
                 pay:function(index){
                   console.log(index)
@@ -453,6 +503,35 @@
                 }
             },
         })
+        // 上拉加载
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: -10
+            }
+        }, function (ret, err) {
+            if (vm.isLastPage != 'true' && vm.isLastPage != true) {
+              console.log("上拉加载更多")
+                vm.pageNum++;
+                vm.getData();
+            } else {
+                api.toast({
+                    msg: '没有更多了~',
+                    location: 'middle',
+                    duration: 800,
+                });
+            }
+        });
+        // 下拉刷新
+        api.setRefreshHeaderInfo({
+            bgColor: '#fff'
+        }, function (ret, err) {
+            vm.pageNum = 1;
+            vm.pageSize=3;
+            vm.isLastPage = false;
+            vm.orderList = null;
+            vm.getData('refresh')
+        });
       }
     </script>
 </body>
