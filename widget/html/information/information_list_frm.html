@@ -12,7 +12,7 @@
             /* height: 11rem; */
             /*margin-top: 0.88rem;*/
             margin-bottom: 1rem;
-           -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */ 
+           -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */
         }
         ::-webkit-scrollbar{
             display: none;
@@ -40,7 +40,7 @@
         }
         .food-item{
             width: 100%;
-            margin-top: 60%;
+            /*margin-top: 60%;*/
            -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */
         }
         .food-item .item{
@@ -307,11 +307,14 @@
             }
           }
       })
+      // console.log(document.getElementsByClassName('food-item')[0].style.marginTop)
+      //获取轮播图占的高度
+      document.getElementsByClassName('food-item')[0].style.marginTop=api.winHeight/3.5+'px'
       // 上拉加载
       api.addEventListener({
           name: 'scrolltobottom',
           extra: {
-              threshold: -10
+              threshold: -10   //距离底部的距离
           }
       }, function (ret, err) {
           if (vm.isLastPage != 'true' && vm.isLastPage != true) {
