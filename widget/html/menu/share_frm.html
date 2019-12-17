@@ -128,7 +128,12 @@
                       value: vm.html
                   }, function(ret, err) {
                       if (ret) {
-                          alert(JSON.stringify(ret));
+                          api.toast({
+                              msg: '已经复制剪切板，去微信发送给好友吧',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
                       } else {
                           alert(JSON.stringify(err));
                       }

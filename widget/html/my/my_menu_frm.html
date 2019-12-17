@@ -103,7 +103,8 @@
         <div class="menu-boxs" v-if="cooklist.length>0">
             <div class="menu-box" v-for="(item,index) in cooklist">
                 <div class="menu-bleft">
-                    <img :src="item.image" alt="" @click="toMenuchange(item.id)">
+                    <img src="../../image/menu/defaultmenu.png" alt="" @click="toMenuchange(item.id)" v-if="item.image== '' ">
+                    <img :src="item.image" alt="" @click="toMenuchange(item.id)"  v-if="item.image">
                     <div class="menu-bleft-box" @click="toMenuchange(item.id)">
                         <p>{{item.name}}</p>
                         <div>{{item.time}}</div>
@@ -152,8 +153,9 @@
             api.setRefreshHeaderInfo({
                 bgColor: '#fff'
             }, function(ret, err) {
-                vue.getdata()
                 vue.pageNum=1
+                vue.cooklist=[]
+                vue.getdata()
                 api.refreshHeaderLoadDone();
             });
             // 上啦加载

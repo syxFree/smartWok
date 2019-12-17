@@ -1079,6 +1079,14 @@
                 alldata.options=options
                 functions.push(alldata)
             }
+            if(vm.name== ''){
+              api.toast({
+                  msg: '菜谱名字不能为空',
+                  duration: 2000,
+                  location: 'bottom'
+              });
+              return;
+            }
             CookbookParam.name=vm.name
             CookbookParam.image=vm.imgcover
             CookbookParam.seasoningBox1=vm.seasoningBox1
@@ -1093,22 +1101,22 @@
             savemenu(){
               let CookbookParam=this.menuData()
               console.log(JSON.stringify(CookbookParam))
-              fnBodyPost(interfaces.cookbookpost, CookbookParam, function(ret,err){
-                if(ret.code == RESPONSE_OK){
-                    api.toast({
-                        msg: '保存成功',
-                        duration: 2000,
-                        location: 'bottom'
-                    });
-                    api.sendEvent({
-                        name: 'changemenu',
-                    });
-                    setTimeout(function(){api.closeWin()}, 1000);
-                  console.log(JSON.stringify(ret))
-                }else{
-                  console.log(JSON.stringify(err))
-                }
-              })
+              // fnBodyPost(interfaces.cookbookpost, CookbookParam, function(ret,err){
+              //   if(ret.code == RESPONSE_OK){
+              //       api.toast({
+              //           msg: '保存成功',
+              //           duration: 2000,
+              //           location: 'bottom'
+              //       });
+              //       api.sendEvent({
+              //           name: 'changemenu',
+              //       });
+              //       setTimeout(function(){api.closeWin()}, 1000);
+              //     console.log(JSON.stringify(ret))
+              //   }else{
+              //     console.log(JSON.stringify(err))
+              //   }
+              // })
             }
 
         },

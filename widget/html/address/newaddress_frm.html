@@ -8,6 +8,25 @@
   <link rel="stylesheet" href="../../css/api.css">
     <link rel="stylesheet" href="../../css/mobileSelect.css">
   <style>
+    ::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color:   #999999;
+    }
+
+    :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color:  #999999;
+    }
+
+    ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #999999;
+    }
+
+    :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #999999;
+    }
 
     .btn {
       width: 6.9rem;
@@ -115,7 +134,7 @@
           <span>所在地区</span>
         </div>
         <div id="address">
-          <input type="text" placeholder="请输入"  v-model="address" disabled="true" >
+          <input type="text" placeholder="请输入"  v-model="address" readonly="readonly" >
           <img src="../../image/my/unfold.png" alt="" class="unfold"  >
         </div>
       </div>
@@ -160,7 +179,7 @@
         // 获取地址
         getaddress(){
           let vm=this;
-          fnGet(interfaces.area,{},true,function(ret, err) {
+          fnGet(interfaces.area,{},false,function(ret, err) {
               if (ret.code == RESPONSE_OK) {
                 // console.log(JSON.stringify(ret.data))
                 let array=ret.data

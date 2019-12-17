@@ -1175,6 +1175,14 @@
                 alldata.options=options
                 functions.push(alldata)
             }
+            if(vm.name== ''){
+              api.toast({
+                  msg: '菜谱名字不能为空',
+                  duration: 2000,
+                  location: 'bottom'
+              });
+              return;
+            }
             CookbookParam.name=vm.name
             CookbookParam.image=vm.imgcover
             CookbookParam.seasoningBox1=vm.seasoningBox1

@@ -56,7 +56,8 @@ var interfaces = {
     cooklist:'/sw/cookbook/list', //获取菜谱列表
     cookdetail:'/sw/cookbook/detail', //获取菜谱详情
     shareCode:'/sw/cookbook/share_code/', //生成分享码
-    infoout:'/sw/info/logout'
+    infoout:'/sw/info/logout',    //登出
+    shopshareCode:'/sw/cookbook/share_code/cookbookId'  //根据分享吗获取商品
 
 };
 

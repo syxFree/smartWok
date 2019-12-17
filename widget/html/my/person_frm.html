@@ -92,7 +92,7 @@
       <div class="content-name" >
         <span>性别</span>
         <div id="sex">
-          <span class="name">男</span>
+          <span class="name">{{sex}}</span>
           <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
@@ -133,13 +133,13 @@
       vue.person()
     });
     // 下拉刷新
-
-    api.setRefreshHeaderInfo({
-        bgColor: '#fff'
-    }, function (ret, err) {
-        vue.person()
-        api.refreshHeaderLoadDone();
-    });
+    //
+    // api.setRefreshHeaderInfo({
+    //     bgColor: '#fff'
+    // }, function (ret, err) {
+    //     vue.person()
+    //     api.refreshHeaderLoadDone();
+    // });
 
 
     var vue = new Vue({
@@ -178,6 +178,8 @@
                           let city = array[i].childs
                           if(arrtreePathlength ==1){
                               vm.addindex.push(i)
+                              vm.addressId = array[i].id
+                                vm.address=array[i].value
                           }
                           for (var j = 0; j < city.length; j++) {
                               if (city[j].id == arrtreePath[1]) {
@@ -188,11 +190,15 @@
                                               vm.addindex.push(i)
                                               vm.addindex.push(j)
                                               vm.addindex.push(k)
+                                              vm.addressId = area[k].id
+                                              vm.address=array[i].value+' '+city[j].value+" "+area[k].value
                                           }
                                       }
                                   } else {
                                       vm.addindex.push(i)
                                       vm.addindex.push(j)
+                                      vm.address=array[i].value+' '+city[j].value
+                                      vm.addressId = city[j].id
                                   }
                               }
                           }
@@ -233,10 +239,10 @@
           title: '性别',
           wheels: [
             {
-              data:this.data
+              data:vm.data
             }
           ],
-          position: [0],
+          position: [vm.sexId],
           callback: function (indexArr, data) {
             vm.sex=data[0].value
             vm.sexId=data[0].id
@@ -252,6 +258,12 @@
                 console.log(JSON.stringify(ret.data))
                 vm.pers=ret.data
                 vm.address=ret.data.areaName
+                vm.sexId=ret.data.sex
+                if(ret.data.sex ==0){
+                  vm.sex='男'
+                }else{
+                  vm.sex='女'
+                }
                 vm.getaddress(ret.data)
               }else{
                 console.log(JSON.stringify(err))
