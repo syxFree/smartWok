@@ -126,6 +126,45 @@
       margin-top: .5rem;
       margin-bottom: .3rem;
     }
+    .shera .close-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #666666;
+    text-align: center;
+  }
+
+  .shera .move-body {
+      font-family: PingFang-SC-Bold;
+      font-size: .36rem;
+      color: #333333;
+      text-align: center;
+      margin-top: .3rem;
+  }
+
+  .shera .move-body img {
+      margin-top: .2rem;
+      width: 2.68rem;
+      height: 2.68rem;
+      margin-bottom: .7rem;
+  }
+  .shera .btn{
+    text-align: center;
+    padding-bottom: .32rem;
+  }
+  .shera .btn button {
+      width: 3.8rem;
+      height: .8rem;
+      background: #FF8C46;
+      border-radius: 44px;
+      border-radius: 44px;
+      font-family: PingFang-SC-Bold;
+      font-size:.3rem;
+      color: #FFFFFF;
+      text-align: center;
+  }
   </style>
 </head>
 
@@ -155,36 +194,140 @@
         </div>
       </div>
     </div>
+        <!-- 监听剪切板东西来展示菜谱 -->
+    <div class="shera move" v-if="shera">
+        <div class="move-box">
+            <div class="close-box">
+                <span style="width:15%"></span>
+                <span style="width:70%;margin-top:.2rem;">{{nickname}}分享的菜谱</span>
+                <div  style="width:15%">
+                    <img src="../../image/home/close.png" alt="" class="close" @click="closeshera">
+                </div>
+
+            </div>
+            <div class="move-body">
+                <p>{{name}}</p>
+                <img src="../../image/menu/defaultmenu.png" alt="" @click="toMenuchange(item.id)" v-if="image== '' ">
+                <img :src="image" alt="" v-if="image">
+            </div>
+            <div class="btn">
+                <button @click="addmenu">确认添加</button>
+            </div>
+        </div>
+    </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/restful.js"></script>
   <script src="../../script/fastclick.js"></script>
   <script>
     apiready = function () {
+      // 获取剪切板内容
+      var clipBoard = api.require('clipBoard');
+    clipBoard.get(function(ret, err) {
+        if (ret) {
+            vue.getclipBoard(ret.value)
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
     var vue = new Vue({
       el: '.app',
       data() {
         return {
           link: false,
-          openbluetooth: false
+          openbluetooth: false,
+          shera:false,
+          name:'',
+          image:'',
+          nickname:'',
+          menu:'',
+          menuid:'',
         }
       },
       created(){
-        console.log($api.getStorage('accessToken'))
-        if(!$api.getStorage('accessToken')){
-          api.openWin({
-              name: 'page1',
-              url: '../login/login_win.html',
-              pageParam: {
-                  name: 'test'
-              }
-          });
-        }
+        // console.log($api.getStorage('accessToken'))
+        // if(!$api.getStorage('accessToken')){
+        //   api.openWin({
+        //       name: 'page1',
+        //       url: '../login/login_win.html',
+        //       pageParam: {
+        //           name: 'test'
+        //       }
+        //   });
+        // }
+
 
 
       },
       methods: {
+        getclipBoard(item){
+          console.log(item)
+          let vm=this
+          fnGet(interfaces.shopshareCode, {shareCode:item}, false, function(ret, err) {
+              if(ret){
+                console.log(JSON.stringify(ret))
+                vm.name=ret.data.cookbookName
+                vm.image=ret.data.image
+                vm.nickname=ret.data.nickname
+                vm.menuid=ret.data.id
+                fnGet(interfaces.info, {}, true, function(ret,err){
+                    if(ret.code==RESPONSE_OK){
+                      if(vm.nickname!=ret.data.nickname){
+                          vm.shera=true
+                          vm.getcookdetail()
+                      }
+                    }else{
+                      console.log(JSON.stringify(err))
+                    }
+                })
+
+                // if(ret.code==RESPONSE_OK){
+                //   vm.getcookdetail(ret.data.id)
+                // }
+              }else{
+                console.log(JSON.stringify(err))
+              }
+          })
+        },
+        getcookdetail(){
+            let vm=this
+            fnGet(interfaces.cookdetail,{id:vm.menuid},true,function(ret, err) {
+              if(ret){
+                console.log(JSON.stringify(ret))
+                vm.menu=ret.data
+              }else{
+                console.log(JSON.stringify(ret))
+              }
+            })
+        },
+        addmenu(){
+          let vm=this
+          fnBodyPost(interfaces.cookbookpost, vm.menu, function(ret,err){
+            if(ret.code == RESPONSE_OK){
+                api.toast({
+                    msg: '保存成功',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+              setTimeout(function(){
+                api.openWin({
+                    name: 'menuchange_win',
+                    url: '../menu/menuchange_win.html',
+                    reload: true,
+                    bounces: false,
+                    slidBackEnabled: true,
+                    pageParam: {
+                        id: vm.menuid
+                    }
+                });
+              }, 1000);
+            }else{
+              console.log(JSON.stringify(err))
+            }
+          })
+        },
         getopenbluetooth() {
           this.openbluetooth = !this.openbluetooth;
         },

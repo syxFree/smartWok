@@ -99,20 +99,20 @@
                     },
                     // 清除缓存
                     deleCacheSize() {
-                      let vm=this
+                        let vm = this
                         api.confirm({
                             title: '警告',
-                            msg: '确认清除缓存,内容即将丢失',
+                            msg: '请确认是否清除缓存',
                             buttons: ['确定', '取消']
                         }, function(ret, err) {
                             var index = ret.buttonIndex;
-                            if(index=== 1){
-                              api.clearCache(function() {
-                                  api.toast({
-                                      msg: '清除完成'
-                                  });
-                                vm.getCacheSize()
-                              });
+                            if (index === 1) {
+                                api.clearCache(function() {
+                                    api.toast({
+                                        msg: '清除完成'
+                                    });
+                                    vm.getCacheSize()
+                                });
                             }
                         });
 
@@ -127,6 +127,7 @@
                         });
                     },
                     rmlogin() {
+<<<<<<< HEAD
                         $api.rmStorage('accessToken')
                         if (!$api.getStorage('accessToken')) {
                             api.openWin({
@@ -143,6 +144,32 @@
                                 console.log("执行关闭页面")
                             },300)
                         }
+=======
+
+                        // let url = interfaces.infoout
+                        // fnDelete(url, true, function(ret, err) {
+                        //         if (ret.code == RESPONSE_OK) {
+                        //             api.sendEvent({
+                        //                 name: 'logoutAccountMarket',
+                        //                 extra: {}
+                        //             });
+                        //             toLogin();
+                        //         } else {
+                        //             console.log(JSON.stringify(err))
+                        //         }
+                        //     })
+                            $api.rmStorage('accessToken')
+                            if (!$api.getStorage('accessToken')) {
+                                api.openWin({
+                                    name: 'login_win',
+                                    url: '../login/login_win.html',
+                                    reload: true,
+                                    bounces: false,
+                                    slidBackEnabled: true,
+                                });
+                            }
+
+>>>>>>> 9ec18d15b316dfcc95cff9c32a2f111931940b4e
                     },
 
                 },
