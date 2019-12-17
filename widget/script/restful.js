@@ -334,11 +334,27 @@ function fnBodyPost(apiurl, formdata, callback) {
 
 // 去登录
 function toLogin() {
-    var jsfun = 'jumpLogin()';
-    api.execScript({
+    // var jsfun = 'jumpLogin()';
+    // api.execScript({
+    //     name: 'root',
+    //     script: jsfun
+    // });
+    // $api.rmStorage('accessToken')
+    // console.log("跳转到首页")
+    api.openWin({
         name: 'root',
-        script: jsfun
+        url: '../login/login_win.html',
+        reload:true,
+        pageParam: {
+            name: 'test'
+        }
     });
+    setTimeout(function(){
+      api.closeToWin({
+          name: 'root'
+      });
+    },300)
+
 }
 
 /**

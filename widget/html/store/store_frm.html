@@ -80,6 +80,7 @@
             data:{
                 pageNum:1,
                 pageSize:4,
+                id:'',
                 img:[],
                 isLastPage:false,
                 goods:[
@@ -119,13 +120,13 @@
                     var params={
                       pageSize:vm.pageSize,
                       pageNum:vm.pageNum,
-                      categoryId:value=='refresh'?'':value
+                      categoryId:value
                     }
                     console.log(JSON.stringify(params))
                     fnGet(interfaces.goodsList,params,true,function(ret,err){
-                        if (value = 'refresh') {
+                        // if (value = 'refresh') {
                             api.refreshHeaderLoadDone()
-                        }
+                        // }
                         if(ret.code==RESPONSE_OK){
                           if(vm.pageNum==1){
                               vm.goods=ret.data.list
@@ -168,9 +169,10 @@
             name: 'getGoodsList'
         }, function(ret, err){
             if( ret ){
-                  vm.pageSize=3
-                  vm.pageNum=1
-                 vm.getGoodsList(ret.value.id)
+                vm.pageSize=4
+                vm.pageNum=1
+                vm.id=ret.value.id
+                vm.getGoodsList(ret.value.id)
             }else{
                  alert( JSON.stringify( err ) );
             }
@@ -202,7 +204,7 @@
             vm.pageSize=4;
             vm.isLastPage = false;
             vm.goods = null;
-            vm.getGoodsList('refresh')
+            vm.getGoodsList(vm.id)
         });
       }
     </script>

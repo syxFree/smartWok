@@ -264,6 +264,7 @@
             background-color: white;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
           #shade .share-img{
             width: 1.7rem;
@@ -343,7 +344,7 @@
             </div>
             <div class="order" @click="order">立即购买</div>
         </footer>
-        <div class="shade" v-if="shadeFlag">
+        <div id="shadeOrder" class="shade" v-if="shadeFlag">
             <div class="choose">
                 <div class="close-img" @click="closeShade">
                     <img src="../../image/store/store-close.png" alt="关闭">
@@ -374,10 +375,10 @@
                     <img src="../../image/information/share_wx.png" alt="">
                     微信好友
                 </div>
-                <div class="share-img" @click.stop="shareFriend">
+                <!-- <div class="share-img" @click.stop="shareFriend">
                      <img src="../../image/information/share_friend.png" alt="">
                      朋友圈
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -388,7 +389,10 @@
     <script>
     apiready=function(){
       var id=api.pageParam.id
-
+      //兼容iphonex
+      $api.fixTabBar($api.dom('footer'))
+      $api.fixTabBar($api.byId('shadeOrder'))
+      $api.fixTabBar($api.byId('shade'))
       console.log(id)
         var vm=new Vue({
             el:'.app',
@@ -506,13 +510,13 @@
                 },
                 //分享到微信
                 shareWx:function(){
-                  var wxPlus = api.require('wxPlus');
-                  wxPlus.shareWebpage({
+                  var wx = api.require('wx');
+                  wx.shareWebpage({
                       apiKey: '',
-                      scene: 'session',
+                      scene: 'timeline',
                       title: '测试标题',
                       description: '分享内容的描述',
-                      thumb: '',
+                      thumb: 'widget://a.jpg',
                       contentUrl: 'http://apicloud.com'
                   }, function(ret, err) {
                       if (ret.status) {
@@ -521,9 +525,6 @@
                           alert(err.code);
                       }
                   });
-                },
-                shareFriend:function(){
-                    alert("分享到朋友圈")
                 },
                 //联系按钮
                 call:function(){

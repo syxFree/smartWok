@@ -345,7 +345,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bottom">
+            <div class="bottom" id="bottom">
                 <span>共{{goods.count}}件</span>
                 <div class="count">合计：<span>￥{{totalCount}}</span></div>
                 <div class="submit" @click="submit">提交订单</div>
@@ -367,6 +367,7 @@
             },100)
           }
         })
+        $api.fixTabBar($api.byId('bottom'))
         var vm=new Vue({
             el:'.app',
             data:{

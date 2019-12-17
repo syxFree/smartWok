@@ -86,7 +86,7 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="password" placeholder="请输入密码" v-model='password'>
+                    <input type="password" placeholder="请输入密码" v-model='password' @blur="Judge">
                 </div>
                 <div class="login-info">
                     <input type="password"
@@ -118,12 +118,37 @@
                 password:'', //第一遍输入密码
                 passwordAgain:'',  //第二遍输入密码
                 btnFlag:false,   //按钮的状态
-                nextFlag:false   //是否能跳转到下一页
+                nextFlag:false,   //是否能跳转到下一页
+                inputFlag:false,  //第一个输入框的状态 输入正确才能为true
             },
             watch: {
-
+                password:function(){
+                  if(this.password.length>16){
+                    api.toast({
+                        msg: '请输入6-16位的数字加字母',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                    return
+                  }
+                }
             },
             methods: {
+                //密码格式校验
+                Judge:function(){
+                    var reg=/^[0-9a-zA-a-Z]{6,16}$/
+                    if(!reg.test(this.password)){
+                      api.toast({
+                          msg: '请输入6-16位的数字加字母',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      this.inputFlag=false
+                    }
+                    else{
+                      this.inputFlag=true
+                    }
+                },
                 //确认密码
                 confirmPwd:function(){
                     if(this.password==''){
@@ -156,7 +181,7 @@
                     password:this.password,
                   }
                   console.log(JSON.stringify(params))
-                    if(this.nextFlag){
+                    if(this.nextFlag && this.inputFlag){
                       fnBodyPost(interfaces.register,params,function(ret,err){
                         console.log(JSON.stringify(ret))
                         if(ret.code==RESPONSE_OK){

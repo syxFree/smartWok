@@ -136,6 +136,12 @@
                                 bounces: false,
                                 slidBackEnabled: true,
                             });
+                            setTimeout(function(){
+                                api.closeToWin({
+                                    name: 'root'
+                                });
+                                console.log("执行关闭页面")
+                            },300)
                         }
                     },
 

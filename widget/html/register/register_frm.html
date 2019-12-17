@@ -175,14 +175,14 @@
                 </div>
                 <div class="TCp">
                     <div style="margin-right: .08rem;">
-                        <img src="../../image/register/defaucheck.png" alt="" v-if="ckeckTCP" @click="ckeckTCP=false">
-                        <img src="../../image/register/check.png" alt="" v-if="!ckeckTCP" @click="ckeckTCP=true">
+                        <img src="../../image/register/defaucheck.png" alt="" v-if="checkTCP" @click="checkTCP=false">
+                        <img src="../../image/register/check.png" alt="" v-if="!checkTCP" @click="checkTCP=true">
                     </div>
 
                     <div>
                         我已阅读并同意
-                        <span>《网络服务协议》</span> 和
-                        <span>《隐私政策》</span>
+                        <span @click="goTcp(0,'网络服务协议')">《网络服务协议》</span> 和
+                        <span @click="goTcp(1,'隐私政策')">《隐私政策》</span>
                     </div>
 
                 </div>
@@ -214,7 +214,7 @@
                     sendCode: 59, //验证码倒计时
                     sendCodeFlag: true, //刚开始验证码的状态
                     sendStatus: false, //发送验证码按钮状态
-                    ckeckTCP: false,
+                    checkTCP: false,
                     type: '',
                     typeid: ''
                 },
@@ -253,9 +253,45 @@
                     });
                 },
                 methods: {
+                    //前往协议页面
+                    goTcp:function(value1,value2){
+                        api.openWin({
+                            name: 'tcp',
+                            url: 'tcp_win.html',
+                            pageParam: {
+                                type:value1,
+                                title:value2
+                            }
+                        });
+
+                    },
                     handleto() {
                         let vm = this
-                        if (this.typeid === 0 && this.phone&&this.code) {
+                        if(vm.phone==''){
+                          api.toast({
+                              msg: '请先输入手机号',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          return
+                        }
+                        else if(vm.code==''){
+                          api.toast({
+                              msg: '请先输入验证码',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          return
+                        }
+                        else if(!vm.checkTCP){
+                          api.toast({
+                              msg: '请先勾选协议',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          return
+                        }
+                        else if (this.typeid === 0 && this.phone && this.code && this.checkTCP) {
                             api.openWin({
                                 name: 'setPwd_win',
                                 url: 'setPwd_win.html',
@@ -267,7 +303,7 @@
                                     code: vm.code
                                 }
                             });
-                        } else if(this.typeid === 1 || this.typeid === 2 && this.phone&&this.code){
+                        } else if(this.typeid === 1 || this.typeid === 2 && this.phone && this.code && this.checkTCP){
                             api.openWin({
                                 name: 'register_firm_win',
                                 url: 'register_firm_win.html',
@@ -339,7 +375,12 @@
                                 vm.countInterval = countInterval;
 
                             } else {
-                                console.log(JSON.stringify(err));
+                                api.toast({
+                                    msg: ret.msg,
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+
                             }
                         })
 
