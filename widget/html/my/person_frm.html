@@ -150,39 +150,6 @@
         // 地址
         getaddress(person){
           let vm=this;
-          fnGet(interfaces.area,{},true,function(ret, err) {
-              if (ret.code == RESPONSE_OK) {
-                let array=ret.data
-                var keyMap = {
-                    "name" : "value",
-                };
-                for (var i = 0; i < array.length; i++) {
-                   var obj = array[i];
-                   for(var key in obj){
-                      var newKey = keyMap[key];
-                      if(newKey){
-                            obj[newKey] = obj[key];
-                            delete obj[key];
-                     }
-                  }
-                }
-                // 来循环判断让第一个显示自己的地址
-                for(var j= 0; j < array.length; j++){
-                   console.log(JSON.stringify(array[j]))
-                   if(person.areaId==array[j].id){
-                       vm.address=array[j].value
-                       vm.addressId=array[j].id
-                      vm.pers=person
-                      vm.getmobileSelect1(j,array)
-                      vm.getmobileSelect2()
-                   break;
-                   }
-                }
-                console.log(JSON.stringify( vm.pers))
-              }
-
-            })
-
         },
         getmobileSelect1(index,array){
           let vm=this
@@ -225,7 +192,7 @@
           let vm=this
           fnGet(interfaces.info, {}, true, function(ret,err){
               if(ret.code==RESPONSE_OK){
-                // console.log(JSON.stringify(ret.data))
+                console.log(JSON.stringify(ret.data))
                 vm.getaddress(ret.data)
               }else{
                 console.log(JSON.stringify(err))
