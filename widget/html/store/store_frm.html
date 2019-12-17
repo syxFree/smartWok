@@ -24,7 +24,7 @@
             flex-wrap: wrap;
             margin: 0 auto;
             justify-content: space-between;
-            -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */ 
+            -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */
         }
         .goods-item{
             width: 3.2rem;
@@ -79,7 +79,7 @@
             el:'.app',
             data:{
                 pageNum:1,
-                pageSize:3,
+                pageSize:4,
                 img:[],
                 isLastPage:false,
                 goods:[
@@ -199,7 +199,7 @@
             bgColor: '#fff'
         }, function (ret, err) {
             vm.pageNum = 1;
-            vm.pageSize=3;
+            vm.pageSize=4;
             vm.isLastPage = false;
             vm.goods = null;
             vm.getGoodsList('refresh')
