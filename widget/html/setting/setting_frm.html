@@ -127,7 +127,6 @@
                         });
                     },
                     rmlogin() {
-<<<<<<< HEAD
                         $api.rmStorage('accessToken')
                         if (!$api.getStorage('accessToken')) {
                             api.openWin({
@@ -144,32 +143,6 @@
                                 console.log("执行关闭页面")
                             },300)
                         }
-=======
-
-                        // let url = interfaces.infoout
-                        // fnDelete(url, true, function(ret, err) {
-                        //         if (ret.code == RESPONSE_OK) {
-                        //             api.sendEvent({
-                        //                 name: 'logoutAccountMarket',
-                        //                 extra: {}
-                        //             });
-                        //             toLogin();
-                        //         } else {
-                        //             console.log(JSON.stringify(err))
-                        //         }
-                        //     })
-                            $api.rmStorage('accessToken')
-                            if (!$api.getStorage('accessToken')) {
-                                api.openWin({
-                                    name: 'login_win',
-                                    url: '../login/login_win.html',
-                                    reload: true,
-                                    bounces: false,
-                                    slidBackEnabled: true,
-                                });
-                            }
-
->>>>>>> 9ec18d15b316dfcc95cff9c32a2f111931940b4e
                     },
 
                 },
