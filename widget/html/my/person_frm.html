@@ -63,6 +63,10 @@
     .mobileSelect .content {
       left: -.3rem;
     }
+    #address,#sex{
+      width: 70%;
+      text-align: right;
+    }
   </style>
 </head>
 
@@ -80,8 +84,8 @@
       <div class="content-name" @click="tonickname()">
         <span>昵称</span>
         <div>
-          <span class="name" v-if="pers.nickname">{{pers.nickname}}</span>
-          <span class="name" v-else>{{pers.username}}</span>
+          <span class="name" v-if="pers.nickname !=null">{{pers.nickname}}</span>
+          <span class="name" v-if="pers.nickname ==null">{{pers.username}}</span>
           <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
@@ -119,6 +123,7 @@
   <script src="../../script/vue.min.js"></script>
   <script src="../../script/mobileSelect.js"></script>
   <script src="../../script/restful.js" charset="utf-8"></script>
+  <script src="../../script/fastclick.js"></script>
   <script>
   apiready = function() {
     api.addEventListener({
@@ -127,6 +132,15 @@
       console.log(JSON.stringify(ret))
       vue.person()
     });
+    // 下拉刷新
+
+    api.setRefreshHeaderInfo({
+        bgColor: '#fff'
+    }, function (ret, err) {
+        vue.person()
+        api.refreshHeaderLoadDone();
+    });
+
 
     var vue = new Vue({
       el: '.app',
@@ -140,6 +154,7 @@
           address:'',
           addressId:'',
           pers:'',
+          addindex:[],
         }
       },
       mounted() {
@@ -150,8 +165,47 @@
         // 地址
         getaddress(person){
           let vm=this;
+          let treePath = person.treePath
+          let arrtreePath = treePath.split(',')
+          arrtreePath.splice(0, 1)
+          let arrtreePathlength = arrtreePath.length
+          fnGet(interfaces.area, {}, true, function(ret, err) {
+              if (ret.code == RESPONSE_OK) {
+                  let array = ret.data
+                  for (var i = 0; i < array.length; i++) {
+                      if (array[i].id == arrtreePath[0]) {
+                          // console.log(JSON.stringify(array[i]))
+                          let city = array[i].childs
+                          if(arrtreePathlength ==1){
+                              vm.addindex.push(i)
+                          }
+                          for (var j = 0; j < city.length; j++) {
+                              if (city[j].id == arrtreePath[1]) {
+                                  let area = city[j].childs
+                                  if (arrtreePathlength > 2) {
+                                      for (var k = 0; k < area.length; k++) {
+                                          if (area[k].id == arrtreePath[2]) {
+                                              vm.addindex.push(i)
+                                              vm.addindex.push(j)
+                                              vm.addindex.push(k)
+                                          }
+                                      }
+                                  } else {
+                                      vm.addindex.push(i)
+                                      vm.addindex.push(j)
+                                  }
+                              }
+                          }
+                      }
+                  }
+                  vm.getmobileSelect1(ret.data) //创建选择(ret.data)
+                  vm.getmobileSelect2()
+              } else {
+                  console.log(JSON.stringify(err))
+              }
+          })
         },
-        getmobileSelect1(index,array){
+        getmobileSelect1(array){
           let vm=this
           var mobileSelect1 = new MobileSelect({
           trigger: '#address',
@@ -161,10 +215,13 @@
               data: array
             }
           ],
-          position: [index],
+          position: vm.addindex,
           callback: function (indexArr, data) {
-            vm.address=data[0].value
-            vm.addressId=data[0].id
+            for (var i = 0; i < data.length; i++) {
+                vm.address += data[i].value
+                vm.address += " "
+                vm.addressId = data[i].id
+            }
             vm.saveperson()
           }
         });
@@ -193,6 +250,8 @@
           fnGet(interfaces.info, {}, true, function(ret,err){
               if(ret.code==RESPONSE_OK){
                 console.log(JSON.stringify(ret.data))
+                vm.pers=ret.data
+                vm.address=ret.data.areaName
                 vm.getaddress(ret.data)
               }else{
                 console.log(JSON.stringify(err))

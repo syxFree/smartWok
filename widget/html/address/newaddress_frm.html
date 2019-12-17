@@ -138,6 +138,7 @@
   <script src="../../script/vue.min.js"></script>
   <script src="../../script/restful.js"></script>
     <script src="../../script/mobileSelect.js"></script>
+    <script src="../../script/fastclick.js"></script>
   <script>
   apiready = function() {
     var vue = new Vue({
@@ -251,6 +252,14 @@
           }
           fnBodyPost(interfaces.address, param, function(ret,err){
             console.log(JSON.stringify(ret))
+            if(ret.code===40068){
+              api.toast({
+                  msg: ret.msg,
+                  duration: 2000,
+                  location: 'bottom'
+              });
+
+            }
             if(ret.code==RESPONSE_OK){
               api.toast({
                   msg: '新增地址创建成功',
@@ -260,7 +269,6 @@
               api.sendEvent({
                   name: 'changeaddress',
               });
-
               api.closeWin()
 
             }else {

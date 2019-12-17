@@ -58,7 +58,7 @@
       <p>昵称</p>
       <div class="nickinput">
         <input type="text" v-model="nickname">
-        <img src="../../image/my/del-pic.png" alt="">
+        <img src="../../image/my/del-pic.png" alt="" @click="delname">
       </div>
     </div>
     <div style="text-align: center;margin-top: 1.3rem;">
@@ -69,6 +69,7 @@
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js"></script>
   <script>
     apiready = function() {
     var vue = new Vue({
@@ -99,10 +100,20 @@
               }
           })
         },
-
+        delname(){
+            this.nickname = ''
+        },
         // 提交
         savechange(){
           let vm=this
+          if(vm.nickname=== ''){
+            api.toast({
+                msg: '昵称不能为空',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+          }
            let param={
              "areaId": vm.persons.areaId,
              "nickname": vm.nickname,

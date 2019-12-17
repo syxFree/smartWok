@@ -102,7 +102,7 @@
         <!-- 有菜谱 -->
         <div class="menu-boxs" v-if="cooklist.length>0">
             <div class="menu-box" v-for="(item,index) in cooklist">
-                <div class="menu-bleft" >
+                <div class="menu-bleft">
                     <img :src="item.image" alt="" @click="toMenuchange(item.id)">
                     <div class="menu-bleft-box" @click="toMenuchange(item.id)">
                         <p>{{item.name}}</p>
@@ -131,108 +131,150 @@
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js"></script>
     <script src="../../script/moment.js"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
-      apiready = function () {
-        api.addEventListener({
-          name: 'changemenu'
-        }, function(ret, err) {
-          vue.getdata()
-        });
-        var vue = new Vue({
-            el: '.app',
-            data() {
-                return {
-                    hasmenu: true,
-                    ulright: false,
-                    cooklist:[],
-                    ulrightindex:-1,
+        apiready = function() {
+            api.addEventListener({
+                name: 'changemenu'
+            }, function(ret, err) {
+                vue.getdata()
+            });
+            api.addEventListener({
+                name: 'scrolltobottom',
+                extra: {
+                    threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
                 }
-            },
-            mounted(){
-                this.getdata()
-            },
-            methods: {
-                getdata(){
-                  let vm=this
-                  fnGet(interfaces.cooklist, {}, true, function(ret,err){
-                      if(ret.code==RESPONSE_OK){
-                        let list =ret.data.list
-                        for (var i = 0; i < list.length; i++) {
-                          let time=moment(list[i].createDate).format('YYYY-MM-DD HH:mm:ss');
-                          list[i].time=time
+            }, function(ret, err) {
+                vue.pageNum++;
+                vue.getdata()
+            });
+            // 下拉刷新
+            api.setRefreshHeaderInfo({
+                bgColor: '#fff'
+            }, function(ret, err) {
+                vue.getdata()
+                vue.pageNum=1
+                api.refreshHeaderLoadDone();
+            });
+            // 上啦加载
+            var vue = new Vue({
+                el: '.app',
+                data() {
+                    return {
+                        hasmenu: true,
+                        ulright: false,
+                        cooklist: [],
+                        ulrightindex: -1,
+                        pageNum:1,
+                        pageSize:2,
+                    }
+                },
+                mounted() {
+                    this.getdata()
+                },
+                methods: {
+                    getdata() {
+                        let vm = this
+                              console.log(vm.pageNum)
+                        let param={
+                          pageNum:vm.pageNum,
+                          pageSize:vm.pageSize
                         }
-                        vm.cooklist=list
-                          console.log(JSON.stringify(vm.cooklist))
-                      }else{
-                        console.log(JSON.stringify(err))
-                      }
-                  })
+                        fnGet(interfaces.cooklist, param, true, function(ret, err) {
+                            if (ret.code == RESPONSE_OK) {
+                              if(vm.cooklist.length===0){
+                                let list = ret.data.list
+                                for (var i = 0; i < list.length; i++) {
+                                    let time = moment(list[i].createDate).format('YYYY-MM-DD HH:mm:ss');
+                                    list[i].time = time
+                                }
+                                vm.cooklist = list
+                              }else{
+                                let list = ret.data.list
+                                if(list.length===0){
+                                  api.toast({
+                                      msg: '没有更多数据',
+                                      duration: 2000,
+                                      location: 'bottom'
+                                  });
+                                  return;
+                                }
+                                for (var i = 0; i < list.length; i++) {
+                                    let time = moment(list[i].createDate).format('YYYY-MM-DD HH:mm:ss');
+                                    list[i].time = time
+                                }
+                                vm.cooklist=vm.cooklist.concat(list)
+                              }
+                            } else {
+                                console.log(JSON.stringify(err))
+                            }
+                        })
+                    },
+                    handledetail(index) {
+                        this.ulright = !this.ulright;
+                        this.ulrightindex = index
+                    },
+                    share(id) {
+                        api.openWin({
+                            name: 'share_win',
+                            url: '../menu/share_win.html',
+                            reload: true,
+                            bounces: false,
+                            slidBackEnabled: true,
+                            pageParam: {
+                                id: id
+                            }
+                        });
+                    },
+                    deleteMenu(item, index) {
+                        // 点击先询问 如果是删除
+                        let vm = this
+                        api.confirm({
+                            title: '警告',
+                            msg: '您确认要删除该菜谱么',
+                            buttons: ['确定', '取消']
+                        }, function(ret, err) {
+                            var btn = ret.buttonIndex;
+                            // 因为index为1点击确定删除
+                            if (btn === 1) {
+                                let url = interfaces.cookbookpost + '?id=' + item.id
+                                fnDelete(url, true, function(ret, err) {
+                                    console.log(JSON.stringify(ret))
+                                    if (ret.code == RESPONSE_OK) {
+                                        console.log(JSON.stringify(ret))
+                                        vm.ulrightindex = -1
+                                        vm.cooklist.splice(index, 1)
+                                    } else {
+                                        console.log(JSON.stringify(err))
+                                    }
+                                })
+                            }
+                        });
+                    },
+                    toMenuchange: function(id) {
+                        api.openWin({
+                            name: 'menuchange_win',
+                            url: '../menu/menuchange_win.html',
+                            reload: true,
+                            bounces: false,
+                            slidBackEnabled: true,
+                            pageParam: {
+                                id: id
+                            }
+                        });
+                    },
+                    toMenu: function() {
+                        api.openWin({
+                            name: 'menu_win',
+                            url: '../menu/menu_win.html',
+                            reload: true,
+                            bounces: false,
+                            slidBackEnabled: true,
+                        });
+                    },
                 },
-                handledetail(index) {
-                    this.ulright = !this.ulright;
-                    this.ulrightindex=index
-                },
-                share(id){
-                  api.openWin({
-                      name: 'share_win',
-                      url: '../menu/share_win.html',
-                      reload: true,
-                      bounces: false,
-                      slidBackEnabled: true,
-                      pageParam:{
-                        id:id
-                      }
-                  });
-                },
-                deleteMenu(item,index){
-                  // 点击先询问 如果是删除
-                  let vm=this
-                  api.confirm({
-                      title: '警告',
-                      msg: '您确认要删除该菜谱么',
-                      buttons: ['确定', '取消']
-                  }, function(ret, err) {
-                      var btn = ret.buttonIndex;
-                      // 因为index为1点击确定删除
-                      if(btn===1){
-                      let url=interfaces.cookbookpost+'?id='+item.id
-                      fnDelete(url,true, function(ret,err){
-                      console.log(JSON.stringify(ret))
-                        if(ret.code==RESPONSE_OK){
-                          console.log(JSON.stringify(ret))
-                            vm.ulrightindex=-1
-                           vm.cooklist.splice(index,1)
-                        }else{
-                          console.log(JSON.stringify(err))
-                        }
-                    })
-                      }
-                  });
-                },
-                toMenuchange:function(id){
-                  api.openWin({
-                      name: 'menuchange_win',
-                      url: '../menu/menuchange_win.html',
-                      reload: true,
-                      bounces: false,
-                      slidBackEnabled: true,
-                      pageParam:{
-                        id:id
-                      }
-                  });
-                },
-                toMenu: function() {
-                    api.openWin({
-                        name: 'menu_win',
-                        url: '../menu/menu_win.html',
-                        reload: true,
-                        bounces: false,
-                        slidBackEnabled: true,
-                    });
-                },
-            },
-        })
-      }
+            })
+        }
     </script>
 
 </body>

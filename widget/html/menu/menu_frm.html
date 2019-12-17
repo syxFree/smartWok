@@ -726,6 +726,7 @@
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
       apiready = function () {
       var vue = new Vue({
@@ -1098,6 +1099,9 @@
                         msg: '保存成功',
                         duration: 2000,
                         location: 'bottom'
+                    });
+                    api.sendEvent({
+                        name: 'changemenu',
                     });
                     setTimeout(function(){api.closeWin()}, 1000);
                   console.log(JSON.stringify(ret))
