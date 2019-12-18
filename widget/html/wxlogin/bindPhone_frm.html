@@ -42,7 +42,7 @@
         .info .login-info {
             width: 84%;
             height: 0.8rem;
-            margin: 0 auto;
+            margin: .2rem auto 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -169,7 +169,7 @@
                     <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
                 </div>
                 <div class="login-info">
-                    <input type="password" @input="codeInput" placeholder="请输入验证码" v-model="code">
+                    <input type="text" @input="codeInput" placeholder="请输入验证码" v-model="code">
                     <div class="code" v-if="sendCodeFlag" @click="changeCodeFlag">获取验证码</div>
                     <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
                 </div>
@@ -257,7 +257,7 @@
                     goTcp:function(value1,value2){
                         api.openWin({
                             name: 'tcp',
-                            url: 'tcp_win.html',
+                            url: '../register/tcp_win.html',
                             pageParam: {
                                 type:value1,
                                 title:value2
@@ -301,7 +301,7 @@
                             if(ret.code==RESPONSE_OK){
                               api.openWin({
                                   name: 'setPwd_win',
-                                  url: 'setPwd_win.html',
+                                  url: '../register/setPwd_win.html',
                                   reload: true,
                                   bounces: false,
                                   slidBackEnabled: true,
@@ -326,14 +326,15 @@
                             if(ret.code==RESPONSE_OK){
                               api.openWin({
                                   name: 'register_firm_win',
-                                  url: 'register_firm_win.html',
+                                  url: '../register/register_firm_win.html',
                                   reload: true,
                                   bounces: false,
                                   slidBackEnabled: true,
                                   pageParam: {
                                       username: vm.phone,
                                       code: vm.code,
-                                      type:vm.typeid
+                                      type:vm.typeid,
+                                      flag:true
                                   }
                               });
                             }

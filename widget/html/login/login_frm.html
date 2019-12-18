@@ -47,7 +47,7 @@
         .info .login-info{
             width: 84%;
             height: 0.8rem;
-            margin: 0 auto;
+            margin: .2rem auto 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -145,7 +145,7 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="number" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone' size="11" @focus="phoneFocus">
+                    <input type="number" @blur="phoneJudge" placeholder="请输入手机号" v-model='phone' size="11" @focus="phoneFocus">
                     <img src="../../image/login/delete.png" alt="删除" v-if="imgFlag" @click='deletePhone'>
                 </div>
                 <div class="login-info">
@@ -368,35 +368,36 @@
                     }
                 },
                 wxLogin:function(){
-                    console.log("触发了微信登录")
-                    var vm=this
+                  api.openWin({
+                      name: 'bindPhone',
+                      url: '../wxlogin/bindPhone_win.html',
+                      reload:true,
+                      pageParam: {
+                          // openId:ret.data
+                      }
+                  });
+                    // console.log("触发了微信登录")
+                    // var vm=this
                     // var wx = api.require('wxPlus');
-                    var wxPlus = api.require('wxPlus');
-                    wxPlus.auth({
-                        apiKey: ''
-                    }, function(ret, err) {
-                        if (ret.status) {
-                            console.log(JSON.stringify(ret.status))
-                            alert(JSON.stringify(ret));
-                        } else {
-                            alert(err.code);
-                        }
-                    });
                     // wx.isInstalled(function(ret, err) {
                     //     if (ret.installed) {
                     //         console.log("安装了")
                     //         wx.auth({
-                    //             apiKey: ''
+                    //             // apiKey: ''
                     //         }, function(ret, err){
                     //             if(ret.status){
                     //                 console.log("======");
+                    //                 console.log(ret.code)
+                    //                 // alert(JSON.stringify(ret));
                     //                 var params={
                     //                   code:ret.code
                     //                 }
+                    //                 console.log()
                     //                 fnBodyPost(interfaces.wxlogin,params,function(){
                     //                     if(ret.code==RESPONSE_OK){
+                    //                       console.log("成功")
                     //                       api.openWin({
-                    //                           name: 'binPhone',
+                    //                           name: 'bindPhone',
                     //                           url: '../register/register_win.html',
                     //                           reload:true,
                     //                           pageParam: {
@@ -406,8 +407,7 @@
                     //
                     //                     }
                     //                 })
-                    //                 console.log(ret.code)
-                    //                 alert(JSON.stringify(ret));
+                    //
                     //             }else{
                     //                 console.log("-------")
                     //                 alert(err.code);

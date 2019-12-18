@@ -12,8 +12,8 @@ var TOKEN_BEOVERDUE = 40001; // token过期
 
 
 // var host = 'http://192.168.1.28:9102';
-// var host = 'http://106.15.102.116:9902'    //线
-var host = 'http://192.168.1.106:9102'   //崔
+var host = 'http://106.15.102.116:9902'    //线
+// var host = 'http://192.168.1.106:9102'   //崔
 
 //外网测试地址
 // var host = "http://whale123.free.idcfengye.com";
@@ -35,7 +35,8 @@ var interfaces = {
     goodsDetails:'/sw/shop/detial',    //商品详情
     goodsCategory:'/sw/shop/category',    //分类列表
     call:'/sw/shop/phone',    //获取客服电话
-    getAdress:'/sw/info/address/def',  //获取默认地址
+    getAddress:'/sw/info/address/def',  //获取默认地址
+    getAddressById:'/sw/info/address',  //根据id获取地址
     createOrder:'/sw/order/create',  //创建订单
     payNow:'/sw/order/pay_now',    //立即支付
     getOrderList:'/sw/order',     //获取订单
@@ -344,7 +345,7 @@ function toLogin() {
     // $api.rmStorage('accessToken')
     // console.log("跳转到首页")
     api.openWin({
-        name: 'root',
+        name: 'login_win',
         url: '../login/login_win.html',
         reload:true,
         pageParam: {

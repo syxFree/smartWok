@@ -76,21 +76,27 @@
           }, function (ret, err) {
               api.closeWidget({});
           });
+          setTimeout(function () {
+              api.closeWin({
+                  name: 'login_win'
+              });
+              api.closeWin({
+                  name: 'register'
+              });
+              api.closeWin({
+                  name: 'register_firm_win'
+              });
+              api.closeWin({
+                  name: 'setPwd_win'
+              });
+              api.closeWin({
+                  name: 'findPwd'
+              });
+              api.closeWin({
+                  name: 'findPasswordNext'
+              });
 
-            setTimeout(function () {
-                api.closeWin({
-                    name: 'login_win'
-                });
-                api.closeWin({
-                    name: 'register_win'
-                });
-                api.closeWin({
-                    name: 'find_password_win'
-                });
-                api.closeWin({
-                    name: 'find_password_next_win'
-                });
-            }, 300);
+          }, 2000);
             var vue = new Vue({
                 el: '.app',
                 data() {

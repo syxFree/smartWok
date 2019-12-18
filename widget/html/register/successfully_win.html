@@ -77,9 +77,11 @@
               }
           });
           setTimeout(function(){
-              api.closeWin();
+              api.closeToWin({
+                  name: 'root'
+              });
+              console.log("执行关闭页面")
           },300)
-
         }
       },
     })

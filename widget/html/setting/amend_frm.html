@@ -163,11 +163,13 @@
                         return;
                     }
                     //
-                    let param = {
+                    var param = {
                         code: this.code,
                         newPassword:this.password,
-                        username: this.phonenum
+                        username: this.phonenum,
+                        type:2
                     }
+                    console.log(JSON.stringify(param))
                     fnBodyPut(interfaces.setPwd, param, function(ret, err) {
                         if (ret.code === 20000) {
                             api.toast({
@@ -175,6 +177,19 @@
                                 duration: 2000,
                                 location: 'bottom'
                             });
+                            api.openWin({
+                                name: 'login_win',
+                                url: '../login/login_win.html',
+                                reload:true,
+                                pageParam: {
+                                    name: 'test'
+                                }
+                            });
+                            setTimeout(function(){
+                                api.closeToWin({
+                                    name: 'root'
+                                });
+                            },300)
                         } else {
                             console.log(JSON.stringify(err))
                         }

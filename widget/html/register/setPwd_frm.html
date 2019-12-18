@@ -36,7 +36,7 @@
         .info .login-info{
             width: 84%;
             height: 0.8rem;
-            margin: 0 auto;
+            margin: .2rem auto 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -175,16 +175,45 @@
                 },
                 //完成跳转到首页
                 goNext:function(){
-                  var params={
-                    code:info.code,
-                    username:info.username,
-                    password:this.password,
-                    type:info.type,
-                    company:info.company==''?'':info.company,
-                    companyNumber:info.companyNumber==''?'':info.companyNumber,
-                    companyPerson:info.companyPerson==''?'':info.companyPerson,
+                  if(info.flag){
+                    //表示从绑定手机号来的   这里剩下一个openId没有获取
+                    var params={
+                      code:info.code,
+                      username:info.username,
+                      password:this.password,
+                      type:info.type,
+                      company:info.company,
+                      companyNumber:info.companyNumber,
+                      companyPerson:info.companyPerson,
+                      openId:info
+                    }
+                    console.log(JSON.stringify(params))
+                    fnBodyPost(interfaces.bindPhone,params,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          $api.setStorage('accessToken',ret.data)
+                          api.openWin({
+                              name: 'footer_win',
+                              url: '../footer/footer_win.html',
+                              reload:true,
+                              pageParam: {
+                                  name: 'test'
+                              }
+                          });
+                        }
+                    })
                   }
-                  console.log(JSON.stringify(params))
+                  else{
+                    //表示是注册设置密码
+                    var params={
+                      code:info.code,
+                      username:info.username,
+                      password:this.password,
+                      type:info.type,
+                      company:info.company==''?'':info.company,
+                      companyNumber:info.companyNumber==''?'':info.companyNumber,
+                      companyPerson:info.companyPerson==''?'':info.companyPerson,
+                    }
+                    console.log(JSON.stringify(params))
                     if(this.nextFlag && this.inputFlag){
                       fnBodyPost(interfaces.register,params,function(ret,err){
                         console.log(JSON.stringify(ret))
@@ -205,9 +234,10 @@
                                       type:1
                                   }
                               });
+
                           }
                           else{
-                            $api.setStorage('accessToken',ret.data)
+                            $api.setStorage('accessToken',ret.data.accessToken)
                             console.log("个人注册")
                             api.openWin({
                                 name: 'footer',
@@ -227,9 +257,9 @@
                               duration: 2000,
                               location: 'bottom'
                           });
-
                         }
                       })
+                    }
                     }
                 }
             }

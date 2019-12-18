@@ -134,8 +134,10 @@
                           else{
                               vm.goods=vm.goods.concat(ret.data.list)
                           }
+                          var list=[]
                           for(var i=0;i<vm.goods.length;i++){
-                            vm.img.push(vm.goods[i].images.split(',')[0])
+                            list.push(vm.goods[i].images.split(',')[0])
+                            vm.img=list
                           }
                           vm.isLastPage=ret.data.lastPage
                         }

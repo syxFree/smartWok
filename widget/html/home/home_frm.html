@@ -266,7 +266,7 @@
           console.log(item)
           let vm=this
           fnGet(interfaces.shopshareCode, {shareCode:item}, false, function(ret, err) {
-              if(ret){
+              if(ret.code=+RESPONSE_OK){
                 console.log(JSON.stringify(ret))
                 vm.name=ret.data.cookbookName
                 vm.image=ret.data.image
