@@ -254,6 +254,7 @@
                     }
                     fnBodyPost(interfaces.login,params,function(ret,err){
                       if(ret.code==RESPONSE_OK){
+                        console.log(JSON.stringify(ret))
                         $api.setStorage('accessToken',ret.data)
                         api.openWin({
                             name: 'footer',
@@ -262,10 +263,32 @@
                             bounces: false,
                             slidBackEnabled: true,
                             pageParam: {
-
                             }
                         });
-                      }else{
+                      }
+                      else if(ret.code===40073){
+                        //账号审核中
+                        api.openWin({
+                            name: 'successfully',
+                            url: '../register/successfully_win.html',
+                            reload:true,
+                            pageParam: {
+                                type:2
+                            }
+                        });
+                      }
+                      else if(ret.code===40074){
+                        //账号审核失败
+                        api.openWin({
+                            name: 'successfully',
+                            url: '../register/successfully_win.html',
+                            reload:true,
+                            pageParam: {
+                                type:3
+                            }
+                        });
+                      }
+                      else{
                         api.toast({
                             msg: ret.msg,
                             duration: 2000,
@@ -345,36 +368,56 @@
                     }
                 },
                 wxLogin:function(){
+                    console.log("触发了微信登录")
                     var vm=this
-                    var wx = api.require('wx');
-                    wx.isInstalled(function(ret, err) {
-                        if (ret.installed) {
-                            console.log("安装了")
-                            wx.auth({
-                                apiKey: 'wxb989b47d3af39aca'
-                            }, function(ret, err){
-                                if(ret.status){
-                                    alert(JSON.stringify(ret));
-                                }else{
-                                    alert(err.code);
-                                }
-                            });
+                    // var wx = api.require('wxPlus');
+                    var wxPlus = api.require('wxPlus');
+                    wxPlus.auth({
+                        apiKey: ''
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            console.log(JSON.stringify(ret.status))
+                            alert(JSON.stringify(ret));
                         } else {
-                            alert('当前设备未安装微信客户端');
+                            alert(err.code);
                         }
                     });
+                    // wx.isInstalled(function(ret, err) {
+                    //     if (ret.installed) {
+                    //         console.log("安装了")
+                    //         wx.auth({
+                    //             apiKey: ''
+                    //         }, function(ret, err){
+                    //             if(ret.status){
+                    //                 console.log("======");
+                    //                 var params={
+                    //                   code:ret.code
+                    //                 }
+                    //                 fnBodyPost(interfaces.wxlogin,params,function(){
+                    //                     if(ret.code==RESPONSE_OK){
+                    //                       api.openWin({
+                    //                           name: 'binPhone',
+                    //                           url: '../register/register_win.html',
+                    //                           reload:true,
+                    //                           pageParam: {
+                    //                               openId:ret.data
+                    //                           }
+                    //                       });
+                    //
+                    //                     }
+                    //                 })
+                    //                 console.log(ret.code)
+                    //                 alert(JSON.stringify(ret));
+                    //             }else{
+                    //                 console.log("-------")
+                    //                 alert(err.code);
+                    //             }
+                    //         });
+                    //     } else {
+                    //         alert('当前设备未安装微信客户端');
+                    //     }
+                    // });
                  },
-                 bindWx:function(index){
-                     var vm=this
-                     var params={
-                       code:index
-                     }
-                     fnBodyPost(interfaces.wxlogin,params,function(ret,err){
-                         if(ret.code==RESPONSE_OK){
-                             console.log(JSON.stringify(ret.data))
-                         }
-                     })
-                 }
               },
           })
           //键盘弹出和收回时对微信登录的设置

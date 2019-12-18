@@ -107,8 +107,8 @@
     <script src="../../script/fastclick.js"></script>
     <script>
         apiready = function(){
-          var username=api.pageParam.username
-          var code=api.pageParam.code
+            var info=api.pageParam
+            console.log(JSON.stringify(info))
             //考虑手机嵌入式兼容性问题
             // var header = $api.dom('header');
             // var headerH = $api.fixStatusBar(header);
@@ -176,31 +176,51 @@
                 //完成跳转到首页
                 goNext:function(){
                   var params={
-                    code:code,
-                    username:username,
+                    code:info.code,
+                    username:info.username,
                     password:this.password,
+                    type:info.type,
+                    company:info.company==''?'':info.company,
+                    companyNumber:info.companyNumber==''?'':info.companyNumber,
+                    companyPerson:info.companyPerson==''?'':info.companyPerson,
                   }
                   console.log(JSON.stringify(params))
                     if(this.nextFlag && this.inputFlag){
                       fnBodyPost(interfaces.register,params,function(ret,err){
                         console.log(JSON.stringify(ret))
                         if(ret.code==RESPONSE_OK){
-                          $api.setStorage('accessToken',ret.data)
+                          console.log(JSON.stringify(ret.data))
                           api.toast({
                               msg: '注册成功',
                               duration: 2000,
                               location: 'middle'
                           });
-                          api.openWin({
-                              name: 'footer',
-                              url: '../footer/footer_win.html',
-                              reload:true,
-                              bounces:false,
-                              slidBackEnabled:true,
-                              pageParam: {
+                          if(params.type!=''){
+                              console.log("非个人注册")
+                              api.openWin({
+                                  name: 'success',
+                                  url: 'successfully_win.html',
+                                  reload:true,
+                                  pageParam: {
+                                      type:1
+                                  }
+                              });
+                          }
+                          else{
+                            $api.setStorage('accessToken',ret.data)
+                            console.log("个人注册")
+                            api.openWin({
+                                name: 'footer',
+                                url: '../footer/footer_win.html',
+                                reload:true,
+                                bounces:false,
+                                slidBackEnabled:true,
+                                pageParam: {
 
-                              }
-                          });
+                                }
+                            });
+                          }
+
                         }else{
                           api.toast({
                               msg: ret.msg,

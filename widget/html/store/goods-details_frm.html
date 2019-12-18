@@ -510,8 +510,8 @@
                 },
                 //分享到微信
                 shareWx:function(){
-                  var wx = api.require('wx');
-                  wx.shareWebpage({
+                  var wxPlus = api.require('wxPlus');
+                  wxPlus.shareWebpage({
                       apiKey: '',
                       scene: 'timeline',
                       title: '测试标题',

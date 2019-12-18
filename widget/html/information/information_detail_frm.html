@@ -117,8 +117,8 @@
         methods:{
           //微信分享
           shareWx:function(){
-            var wx = api.require('wx');
-            wx.shareWebpage({
+            var wxPlus = api.require('wxPlus');
+            wxPlus.shareWebpage({
                 apiKey: '',
                 scene: 'timeline',
                 title: '测试标题',

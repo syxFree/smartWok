@@ -12,14 +12,14 @@ var TOKEN_BEOVERDUE = 40001; // token过期
 
 
 // var host = 'http://192.168.1.28:9102';
-var host = 'http://106.15.102.116:9902'    //线
-// var host = 'http://192.168.1.106:9102'   //崔
+// var host = 'http://106.15.102.116:9902'    //线
+var host = 'http://192.168.1.106:9102'   //崔
 
 //外网测试地址
 // var host = "http://whale123.free.idcfengye.com";
 var interfaces = {
     login: '/sw/auth/login',// 登录
-    register:'/sw/auth/register', //注册
+    register:'/sw/auth/register/v2', //注册
     bindPhone:'/sw/auth/bind_phone', //绑定手机号
     setPwd:'/sw/auth/reset_pwd',    //修改密码
     loginId: '/jgj/worker/worker_type', // 判断用户登录身份

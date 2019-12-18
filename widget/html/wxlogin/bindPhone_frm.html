@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/mobileSelect.css">
     <style>
-        .top-font{
+        .top-font {
             color: #333;
             font-size: 0.44rem;
             line-height: 0.62rem;
             font-family: 'PingFang-SC-Bold';
         }
-        .top-font .font-one{
+
+        .top-font .font-one {
             width: 1.32rem;
             height: 0.62rem;
             margin-left: 0.6rem;
             margin-top: 0.9rem;
             /* font-weight: bolder; */
         }
-        .top-font .font-two{
-            width: 3.9rem;
+
+        .top-font .font-two {
+            /*width: 1.76rem;*/
             height: 0.52rem;
             margin-left: 0.6rem;
+            /* font-weight: bolder; */
+            /*border-bottom: 0.1rem solid rgb(247, 132, 61);*/
         }
-        .info{
+
+        .info {
             width: 100%;
             height: 3rem;
             margin-top: 0.8rem;
             font-size: 0.32rem;
         }
-        .info .login-info{
+
+        .info .login-info {
             width: 84%;
             height: 0.8rem;
             margin: 0 auto;
@@ -40,16 +48,19 @@
             align-items: center;
             border-bottom: 1px solid #D8D8D8;
         }
-        .info .login-info img{
+
+        .info .login-info img {
             width: 0.3rem;
             height: 0.3rem;
         }
-        .info .login-info input{
+
+        .info .login-info input {
             outline: none;
             padding-left: 3px;
             color: #333;
         }
-        .info .forget{
+
+        .info .forget {
             width: 84%;
             margin: 0 auto;
             text-align: right;
@@ -57,11 +68,14 @@
             color: #666;
             margin-top: 0.2rem;
         }
-        .login-btn{
+
+        .login-btn {
             width: 100%;
             height: 1rem;
+            margin-top: 1rem;
         }
-        .login-btn .input-btn{
+
+        .login-btn .input-btn {
             width: 6.3rem;
             height: 0.88rem;
             margin: 0 auto;
@@ -73,7 +87,8 @@
             justify-content: center;
             align-items: center;
         }
-        .input-btn-active{
+
+        .input-btn-active {
             background-color: #FF8C46;
             width: 6.3rem;
             height: 0.88rem;
@@ -85,7 +100,8 @@
             justify-content: center;
             align-items: center;
         }
-        .code{
+
+        .code {
             width: 1.8rem;
             height: 0.56rem;
             border-radius: 0.56rem;
@@ -96,7 +112,8 @@
             align-items: center;
             font-size: .24rem;
         }
-        .codeDisabled{
+
+        .codeDisabled {
             width: 1.8rem;
             height: 0.56rem;
             border-radius: 0.56rem;
@@ -107,8 +124,35 @@
             align-items: center;
             font-size: .24rem;
         }
+
+        .TCp {
+            font-family: PingFang-SC-Medium;
+            font-size: .24rem;
+            color: #666666;
+            display: flex;
+            align-items: center;
+            margin-left: .6rem;
+            margin-top: .2rem;
+        }
+
+        .TCp span {
+            color: #FF8C46;
+        }
+
+        .TCp img {
+            width: .34rem;
+            height: .34rem;
+            vertical-align: middle;
+        }
+
+        .unfold {
+            width: .15rem;
+            height: .25rem;
+            text-align: right;
+        }
     </style>
 </head>
+
 <body>
     <div class="app">
         <section>
@@ -118,116 +162,270 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="text" @blur="phoneJudge" placeholder="请输入手机号" v-model='phone'>
+                    <input type="text" placeholder="请选择注册类型" v-model="type">
+                    <img src="../../image/my/unfold.png" alt="" class="unfold" id="type">
+                </div>
+                <div class="login-info">
+                    <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
                 </div>
                 <div class="login-info">
                     <input type="password" @input="codeInput" placeholder="请输入验证码" v-model="code">
                     <div class="code" v-if="sendCodeFlag" @click="changeCodeFlag">获取验证码</div>
                     <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
                 </div>
+                <div class="TCp">
+                    <div style="margin-right: .08rem;">
+                        <img src="../../image/register/defaucheck.png" alt="" v-if="checkTCP" @click="checkTCP=false">
+                        <img src="../../image/register/check.png" alt="" v-if="!checkTCP" @click="checkTCP=true">
+                    </div>
+
+                    <div>
+                        我已阅读并同意
+                        <span @click="goTcp(0,'网络服务协议')">《网络服务协议》</span> 和
+                        <span @click="goTcp(1,'隐私政策')">《隐私政策》</span>
+                    </div>
+
+                </div>
             </div>
+
             <div class="login-btn">
-                <div :class="[btnFlag?'input-btn-active':'input-btn']" @click="goNext">确定</div>
+                <div :class="[btnFlag?'input-btn-active':'input-btn']" @click="handleto">下一步</div>
             </div>
         </section>
     </div>
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/mobileSelect.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script src="../../script/fastclick.js"></script>
     <script>
-        apiready = function(){
+        apiready = function() {
             //考虑手机嵌入式兼容性问题
             // var header = $api.dom('header');
             // var headerH = $api.fixStatusBar(header);
-            var vm=new Vue({
-            el:'.app',
-            data:{
-                phone:'',  //手机号
-                phoneFlag:false, //判断手机号是否合法
-                code:'',  //验证码
-                btnFlag:false,   //按钮是否可点击
-                sendCode:59,    //验证码倒计时
-                sendCodeFlag:true,   //刚开始验证码的状态
-                sendStatus:false,   //发送验证码按钮状态
-            },
-            watch: {
-                //监听输入手机号，动态显示删除按钮
-                phone:function(){
-                    if(this.phone!=''){
-                        this.imgFlag=true
-                    }
-                    else if(this.phone==''){
-                        this.imgFlag=false
-                    }
-                }
-            },
-            methods: {
-                //手机号输入框失去焦点
-                phoneJudge:function(){
-                    var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
-                    if(!phoneReg.test(this.phone)){
-                        alert("请输入正确的手机号")
-                        this.phoneFlag=false
-                    }else{
-                        this.phoneFlag=true
+            var vm = new Vue({
+                el: '.app',
+                data: {
+                    phone: '', //手机号
+                    phoneFlag: false, //判断手机号是否合法
+                    code: '', //验证码
+                    btnFlag: false, //按钮是否可点击
+                    sendCode: 59, //验证码倒计时
+                    sendCodeFlag: true, //刚开始验证码的状态
+                    sendStatus: false, //发送验证码按钮状态
+                    checkTCP: false,
+                    type: '',
+                    typeid: 0,
+                },
+                watch: {
+                    //监听输入手机号，动态显示删除按钮
+                    phone: function() {
+                        if (this.phone != '') {
+                            this.imgFlag = true
+                        } else if (this.phone == '') {
+                            this.imgFlag = false
+                        }
                     }
                 },
-                //验证码输入事件
-                codeInput:function(){
-                    if(this.code.length>=1){
-                        this.btnFlag=true
-                    }
-                    else{
-                        this.btnFlag=false
-                    }
+                mounted() {
+                    let vm = this;
+                    var mobileSelect1 = new MobileSelect({
+                        trigger: '#type',
+                        wheels: [{
+                            data: [{
+                                'id': 0,
+                                'value': '个人'
+                            }, {
+                                'id': 1,
+                                'value': '企业'
+                            }, {
+                                'id': 2,
+                                'value': '经销商'
+                            }]
+                        }],
+                        position: [0],
+                        callback: function(indexArr, data) {
+                            console.log(data[0].value)
+                            vm.type = data[0].value
+                            vm.typeid = data[0].id
+                        }
+                    });
                 },
-                //点击获取验证码，改变内容
-                changeCodeFlag:function(){
-                    if(this.phone==''){
-                        alert("请先输入手机号")
-                        return
-                    }
-                    if(this.phoneFlag==false){
-                        alert("请输入合法的手机号")
-                        return
-                    }
-                    this.sendCodeFlag=false
-                    // 发送验证码倒计时
-                    var vm = this;
-                        var s = 5;
-                        var countInterval = setInterval(function () {
-                            if (vm.sendCode > 0) {
-                                s--;
-                                vm.sendCode = s;
-                            } else {
-                                vm.sendCodeFlag=true
-                                clearInterval(countInterval);
-                                vm.sendCode = 59;
-                                // vm.sendStatus = 'before';
+                methods: {
+                    //前往协议页面
+                    goTcp:function(value1,value2){
+                        api.openWin({
+                            name: 'tcp',
+                            url: 'tcp_win.html',
+                            pageParam: {
+                                type:value1,
+                                title:value2
                             }
-                        }, 1000);
-                        vm.countInterval = countInterval;
-                }
-                },
-                // 点击下一步进入输入面页
-                goNext:function(){
-                    //这里做手机号验证，如果手机号填写正确，向后台发送的验证码也正确的话，则进行下一步操作
-                    if(this.phoneFlag){
-                      api.openWin({
-                          name: 'home',
-                          url: '../home/home_win.html',
-                          reload:true,
-                          slidBackEnabled:false,
-                          bounces:false,
-                          pageParam: {
-                              name: 'test'
-                          }
-                      });
+                        });
+
+                    },
+                    handleto() {
+                        let vm = this
+                        var params={
+                          code:this.code,
+                          phone:this.phone,
+                          type:0
+                        }
+                        if(vm.phone==''){
+                          api.toast({
+                              msg: '请先输入手机号',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          return
+                        }
+                        else if(vm.code==''){
+                          api.toast({
+                              msg: '请先输入验证码',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          return
+                        }
+                        else if(!vm.checkTCP){
+                          api.toast({
+                              msg: '请先勾选协议',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          return
+                        }
+                        else if (this.typeid === 0 && this.phone && this.code && this.checkTCP) {
+                          fnBodyPost(interfaces.checkCode,params,function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                              api.openWin({
+                                  name: 'setPwd_win',
+                                  url: 'setPwd_win.html',
+                                  reload: true,
+                                  bounces: false,
+                                  slidBackEnabled: true,
+                                  pageParam: {
+                                      username: vm.phone,
+                                      code: vm.code,
+                                      type:vm.typeid
+                                  }
+                              });
+                            }
+                            else{
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                          })
+                        }
+                        else if(this.typeid === 1 || this.typeid === 2 && this.phone && this.code && this.checkTCP){
+                          fnBodyPost(interfaces.checkCode,params,function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                              api.openWin({
+                                  name: 'register_firm_win',
+                                  url: 'register_firm_win.html',
+                                  reload: true,
+                                  bounces: false,
+                                  slidBackEnabled: true,
+                                  pageParam: {
+                                      username: vm.phone,
+                                      code: vm.code,
+                                      type:vm.typeid
+                                  }
+                              });
+                            }
+                            else{
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                          })
+                        }
+                    },
+                    //手机号输入框失去焦点
+                    phoneJudge: function() {
+                        var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+                        if (!phoneReg.test(this.phone)) {
+                            api.toast({
+                                msg: '请输入正确的手机号',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            this.phoneFlag = false
+                        } else {
+                            this.phoneFlag = true
+                        }
+                    },
+                    //验证码输入事件
+                    codeInput: function() {
+                        if (this.code.length >= 1) {
+                            this.btnFlag = true
+                        } else {
+                            this.btnFlag = false
+                        }
+                    },
+                    //点击获取验证码，改变内容
+                    changeCodeFlag: function() {
+                        if (this.phone == '') {
+                            alert("请先输入手机号")
+                            return
+                        }
+                        if (this.phoneFlag == false) {
+                            alert("请输入合法的手机号")
+                            return
+                        }
+                        let param = {
+                            phone: this.phone,
+                            type: 0
+                        }
+                        var vm = this;
+
+                        fnBodyPost(interfaces.sendCode, param, function(ret, err) {
+                            if (ret.code == RESPONSE_OK) {
+                                vm.sendCodeFlag = false
+                                console.log(JSON.stringify(ret));
+                                // 发送验证码倒计时
+                                var s = vm.sendCode;
+                                var countInterval = setInterval(function() {
+                                    if (vm.sendCode > 0) {
+                                        s--;
+                                        vm.sendCode = s;
+                                    } else {
+                                        vm.sendCodeFlag = true
+                                        clearInterval(countInterval);
+                                        vm.sendCode = 59;
+                                        // vm.sendStatus = 'before';
+                                    }
+                                }, 1000);
+                                vm.countInterval = countInterval;
+
+                            } else {
+                                api.toast({
+                                    msg: ret.msg,
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+
+                            }
+                        })
+
                     }
-                }
-        })
+                },
+                //点击下一步进入输入面页
+                // goNext:function(){
+                //     //这里做手机号验证，如果手机号填写正确，向后台发送的验证码也正确的话，则进行下一步操作
+                //     if(this.phoneFlag){
+                //         alert("即将跳转到输入密码页")
+                //     }
+                // }
+            })
         }
     </script>
 </body>
+
 </html>
