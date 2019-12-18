@@ -1,0 +1,1225 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+  .cover {
+    width: 6.9rem;
+    height: 3rem;
+    background: #FAFAFA;
+    border: 1px dashed #999999;
+    border-radius: 8px;
+    border-radius: 8px;
+    margin: .3rem;
+    text-align: center;
+  }
+
+  .cover .title {
+    margin-top: 1rem;
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #333333;
+  }
+
+  .cover .title img {
+    width: .33rem;
+    height: .33rem;
+  }
+
+  .cover .subtitle {
+    margin-top: .3rem;
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #FF8C46;
+  }
+
+  .menu-name {
+    margin: 0 .3rem;
+  }
+
+
+  .menu-name1 .title {
+    height: .48rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .34rem;
+    color: #333333;
+    margin: 0 .3rem;
+    border-bottom: .1rem solid #FA844A;
+  }
+
+
+
+  .menu-name .title {
+    height: .48rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .34rem;
+    color: #333333;
+    border-bottom: .1rem solid #FA844A;
+  }
+
+
+  .menu-name .name {
+    border-bottom: 1px solid #e0e0e0;
+    font-size: .28rem;
+    margin: .3rem 0;
+  }
+
+  .menu-name .name input:focus {
+    border: none;
+    outline: none;
+  }
+
+  .menu-name .name input {
+    padding-bottom: .2rem;
+    width: 100%;
+  }
+
+  .hrs {
+    width: 100%;
+    height: .2rem;
+    background-color: #F7F7F7;
+  }
+
+  .menu-magazine .name {
+    display: flex;
+  }
+
+  .menu-magazine .name span {
+    display: block;
+    width: 15%;
+    padding-bottom: .2rem;
+  }
+
+  .menu-magazine .name input {
+    width: 84%;
+  }
+
+  .cover-box {
+    width: 6.9rem;
+    height: 1rem;
+    border: 1px dashed #999999;
+    border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+    margin: .3rem 0;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+  }
+  .cover-left{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 80%;
+  }
+  .cover-box .num {
+    /*width: .42rem;
+    height: .42rem;*/
+    padding: .2rem ;
+    background: #FF8C46;
+    border-radius: 6px;
+    border-radius: 6px;
+    color: #ffffff;
+    text-align: center;
+    margin: 0 .1rem 0 .2rem;
+  }
+
+  .cover-box .ncontent {
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #999999;
+    width: ;
+    text-align: left;
+
+  }
+
+  .menu-name .add-box {
+    height: .4rem;
+    width: 100%;
+    text-align: center;
+    font-family: PingFang-SC-Bold;
+    font-size: .28rem;
+    color: #FF8C46;
+    margin: .3rem 0 .4rem 0;
+  }
+
+  .add-box img {
+    height: .3rem;
+    width: .3rem;
+    vertical-align: middle;
+    margin-bottom: .05rem;
+  }
+
+  .transfer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 .66rem;
+    height: .98rem;
+    align-items: center;
+  }
+
+  .transfer .del {
+    font-family: PingFang-SC-Bold;
+    font-size: .32rem;
+    color: #999999;
+  }
+
+  .transfer .save {
+    font-family: PingFang-SC-Bold;
+    font-size: .32rem;
+    color: #333333;
+  }
+
+  .transfer .fer {
+    width: 3.6rem;
+    height: .78rem;
+    background: #FF8C46;
+    border-radius: .44rem;
+    border-radius: .44rem;
+    text-align: center;
+    line-height: .78rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .32rem;
+    color: #ffffff;
+  }
+
+  .move {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 12;
+  }
+
+  .move-box {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70vh;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    overflow: auto;
+  }
+
+  .close-box {
+    padding: .3rem;
+    font-family: PingFang-SC-Bold;
+    font-size: .34rem;
+    color: #333333;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .close-box img {
+    width: .3rem;
+    height: .3rem;
+  }
+
+  .move .move-content {
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #333333;
+    margin-top: .4rem;
+    margin-left: .75rem;
+  }
+
+  .cross-box {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .cross {
+    display: flex;
+    overflow: auto;
+    padding-bottom: .4rem;
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #333333;
+    margin-top: .3rem;
+
+  }
+
+  ::-webkit-scrollbar {
+    /*隐藏滚轮*/
+    display: none;
+  }
+
+  .cross-child {
+    font-family: PingFang-SC-Medium;
+    font-size: .30rem;
+    color: #999999;
+    margin: 0 0.5rem;
+  }
+
+  .temperature,
+  .timeouth {
+    margin-top: 0.5rem;
+  }
+
+  .chekcolor {
+    color: #FF8C46;
+  }
+
+  .openblue {
+    width: 4rem;
+    height: .8rem;
+    margin: 0 auto;
+    text-align: center;
+    line-height: .8rem;
+    color: #ffffff;
+    font-size: 16px;
+    background: #FF8C46;
+    border-radius: 44px;
+    border-radius: 44px;
+    margin-top: .5rem;
+    margin-bottom: .3rem;
+  }
+
+  .cross-box p {
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #333333;
+    margin-left: .3rem;
+  }
+
+  /* 返回保存 */
+  .move1 {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .6);
+    z-index: 12;
+  }
+
+  .move-box1 {
+    position: fixed;
+    top: 3rem;
+    left: 1.25rem;
+    width: 5rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    border-radius: 12px;
+  }
+
+  .close-box1 {
+    text-align: right;
+  }
+
+  .move-box1 .close {
+    width: .3rem;
+    height: .3rem;
+    text-align: right;
+    padding: .2rem .2rem 0 0;
+  }
+
+  .move-box1 .bluetooth {
+    width: 2rem;
+    height: 2.2rem;
+    margin: .25rem 0;
+  }
+
+  .bluetooth-box {
+    text-align: center;
+  }
+
+  .move-title {
+    text-align: center;
+  }
+
+  .move-title b {
+    display: block;
+    font-size: 22px;
+    margin: .2rem 0;
+  }
+
+  .move-title p {
+    font-size: .24rem;
+    color: #666666;
+  }
+
+  .move1 .choose-btn {
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #999999;
+    text-align: center;
+    display: flex;
+    margin-top: .55rem;
+    border-top: 1px solid #d8d8d8;
+  }
+
+  .move1 .choose-btn p {
+    width: 51%;
+    border-right: 1px solid #d8d8d8;
+    padding: .25rem 0;
+  }
+
+  .close-boxtype img {
+    width: .4rem;
+    height: .4rem;
+    vertical-align: middle;
+    animation: mymove 3s linear infinite;
+  }
+
+  @keyframes mymove {
+    0% {
+      transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(0deg);
+      /* Firefox */
+      -webkit-transform: rotate(0deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(0deg);
+      /* Opera */
+      transform-origin: center;
+    }
+
+    25% {
+      transform: rotate(90deg);
+      -ms-transform: rotate(90deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(90deg);
+      /* Firefox */
+      -webkit-transform: rotate(90deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(90deg);
+      /* Opera */
+    }
+
+    50% {
+      transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(180deg);
+      /* Firefox */
+      -webkit-transform: rotate(180deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(180deg);
+      /* Opera */
+    }
+
+    75% {
+      transform: rotate(270deg);
+      -ms-transform: rotate(270deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(270deg);
+      /* Firefox */
+      -webkit-transform: rotate(270deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(270deg);
+      /* Opera */
+    }
+
+    100% {
+      transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      /* Internet Explorer */
+      -moz-transform: rotate(360deg);
+      /* Firefox */
+      -webkit-transform: rotate(360deg);
+      /* Safari 和 Chrome */
+      -o-transform: rotate(360deg);
+      /* Opera */
+    }
+  }
+
+  .bluesearch {
+    border: 2px solid #FF8C46;
+    border-radius: 44px;
+    border-radius: 44px;
+    color: '#FF8C46';
+    width: 3rem;
+    height: .66rem;
+    line-height: .66rem;
+    text-align: center;
+    margin: 0 auto;
+    font-family: PingFang-SC-Medium;
+    font-size: .3rem;
+    color: #FF8C46;
+    text-align: center;
+    margin-top: .8rem;
+    margin-bottom: .6rem;
+  }
+
+  .move-bluetooth {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    overflow: auto;
+  }
+  .list-box {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0ee;
+    padding: 0 .3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .list-box p {
+    font-family: PingFang-SC-Medium;
+    font-size: .34rem;
+    color: #333333;
+    margin-bottom: .1rem;
+    margin-top: .2rem;
+  }
+
+  .list-box span {
+    font-family: PingFang-SC-Medium;
+    font-size: .28rem;
+    color: #999999;
+    margin-bottom: .2rem;
+  }
+
+  .list-box .wait {
+    width: .4rem;
+    height: .4rem;
+    vertical-align: middle;
+    animation: mymove 3s linear infinite;
+  }
+
+  .list-box .success {
+    width: .4rem;
+    height: .4rem;
+  }
+  .covershow{
+    width: 6.9rem;
+    height: 3rem;
+    background: #FAFAFA;
+    border-radius: 8px;
+    border-radius: 8px;
+    margin: .3rem;
+    text-align: center;
+    position: relative;
+
+  }
+  .covershow img{
+    width: 100%;
+    height: 100%;
+  }
+  .del-pic {
+    position: absolute;
+    right: -.1rem;
+    top: -.1rem;
+    width: .3rem !important;
+    height: .3rem !important;
+  }
+  .cover-right{
+    width: .38rem;
+    height: .38rem;
+    margin-right: .3rem;
+  }
+  .mb1{
+    margin-bottom:1rem;
+  }
+  .transfer-box{
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    width:7.5rem;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- 上传封面 -->
+    <div class="cover" v-if="imgcover === '' " @click="upload_image">
+      <div class="title">
+        <img src="../../image/menu/upload.png" alt="">
+        上传封面
+      </div>
+      <p class="subtitle">这道菜谱离完美只差一张封面</p>
+    </div>
+    <div v-if="imgcover != ''" class="covershow" >
+      <img :src="imgcover" alt="" @click="getPutPhoto">
+      <img src="../../image/my/del-pic.png" alt="" class="del-pic" @click="handledelpic">
+    </div>
+    <div class="menu-name">
+        <span class="title">菜谱名称</span>
+      <div class="name"><input type="text" placeholder="请输入菜谱名字" v-model="name" maxlength="8"></div>
+    </div>
+    <div class="hrs"></div>
+    <!-- 料盒 -->
+    <div class="menu-name menu-magazine">
+        <span class="title">料盒</span>
+      <div class="name">
+        <span>料盒1</span>
+        <input type="text" placeholder="针对料盒内物品命名，如：盐" v-model="seasoningBox1" maxlength="8">
+      </div>
+      <div class="name">
+        <span>料盒2</span>
+        <input type="text" v-model="seasoningBox2" maxlength="8">
+      </div>
+      <div class="name">
+        <span>料盒2</span>
+        <input type="text" v-model="seasoningBox3" maxlength="8">
+      </div>
+      <div class="name">
+        <span>料盒4</span>
+        <input type="text" v-model="seasoningBox4" maxlength="8">
+      </div>
+    </div>
+    <div class="hrs"></div>
+    <!--程序  -->
+    <div class="menu-name">
+        <span class="title">程序</span>
+      <div class="cover-box" v-for="(item,index) in stepslist" :key="item.num" >
+        <div class="cover-left" @click.prevent="getmove(index+1)">
+          <div class="num">{{index+1}}</div>
+          <div class="ncontent">{{item}}</div>
+        </div>
+        <img src="../../image/menu/shanchu.png" alt="" class="cover-right" v-if="item !== '请选择一个程序'" @click="deleteprocedure(index)">
+      </div>
+      <div class="add-box" @click="addbox">
+        <img src="../../image/menu/create-orange.png" alt="添加">
+        <span>添加程序</span>
+      </div>
+    </div>
+    <div class="hrs mb1"></div>
+    <!-- 提交 -->
+    <div class="transfer-box">
+      <div class="transfer">
+        <div class="del" @click="empty">删除</div>
+        <div class="fer" @click="handleisbluetooth">传输</div>
+        <div class="save" @click="savemenu">保存</div>
+      </div>
+    </div>
+    <!-- 返回保存 -->
+    <div class="move1" v-if="openbluetooth">
+      <div class="move-box1">
+        <div class="close-box1"><img src="../../image/home/close.png" alt="" class="close"
+            @click.prevent="getopenbluetooth1"></div>
+        <div class="bluetooth-box"><img src="../../image/menu/save.png" alt="" class="bluetooth"></div>
+        <div class="move-title">
+          <b>提示</b>
+          <p>当前菜谱还未保存，是否需要保存？</p>
+        </div>
+        <div class="choose-btn">
+          <p>暂不</p>
+          <p style="border: none; color:#FF8C46">保存</p>
+        </div>
+      </div>
+    </div>
+    <!-- 点击弹出功能选择 -->
+    <div class="move" v-if="moveshow && movenum !=0">
+      <div class="move-box" v-if="movebox">
+        <div class="close-box">
+          <span>功能选择</span>
+          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
+        </div>
+        <div class="move-content" v-for="(item, index) in contentlist" :key="index" @click.prevent="getcontent(item,index)">
+          {{item.name}}</div>
+      </div>
+      <!-- 选择需要功能后在编辑详情 -->
+      <div class="move-box" v-if="!movebox">
+        <div class="close-box">
+          <div @click="handlemovebox">
+            <img src="../../image/register/black.png" alt="返回">
+            <span>{{content}}</span>
+          </div>
+          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
+        </div>
+        <div>
+          <!-- 参数 -->
+          <div class="menu-name1">
+              <span class="title">参数</span>
+            <div class="cross-box">
+              <div class="cross">
+                <div class="cross-child" :class="parameterBox === index ?'chekcolor':''" @click="handleparameter(index)"
+                  v-for="(item, index) in parameter" :key="index">{{item.optionName}}</div>
+              </div>
+            </div>
+
+          </div>
+          <!-- 温度 -->
+          <div class="menu-name1 temperature">
+              <span  class="title">温度(℃)</span>
+            <div class="cross-box">
+              <div class="cross">
+                <div class="cross-child" :class="temperatureBox === index ?'chekcolor':''"
+                  @click="handletemperature(index)" v-for="(item, index) in temperature" :key="index">{{item}}</div>
+              </div>
+            </div>
+          </div>
+          <!-- 事件 -->
+          <div class="menu-name1 timeouth">
+              <span  class="title">时间</span>
+            <div class="cross-box">
+              <p>时</p>
+              <div class="cross">
+                <div class="cross-child" :class="timeouthBox === index ?'chekcolor':''" @click="handletimeouth(index)"
+                  v-for="(item, index) in timeouth" :key="index">
+                  {{item}}</div>
+              </div>
+            </div>
+            <div class="cross-box">
+              <p>分</p>
+              <div class="cross">
+                <div class="cross-child" :class="timeoutmBox === index ?'chekcolor':''" @click="handletimeoutm(index)"
+                  v-for="(item, index) in timeoutm" :key="index">
+                  {{item}}</div>
+              </div>
+            </div>
+            <div class="cross-box">
+              <p>秒</p>
+              <div class="cross">
+                <div class="cross-child" :class="timeoutsBox === index ?'chekcolor':''" @click="handletimeouts(index)"
+                  v-for="(item, index) in timeouts" :key="index">
+                  {{item}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="openblue" @click="handlestepslist()">
+            确定
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 点击传输判断是否已经连接蓝牙 -->
+    <div class="move" v-if="isbluetooth">
+      <div class="move-bluetooth">
+        <div class="close-box">
+          <div class="close-boxtype">
+            <span>设备状态</span>
+            <img src="../../image/home/frame-0.png" alt="等待">
+          </div>
+          <!-- <span style="margin-right: 1.5rem;color:#DD3333;">未连接</span> -->
+          <span style="margin-right: 1.5rem;color: #13C368;">已连接</span>
+          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="handleisbluetooth">
+        </div>
+        <ul>
+          <li class="list-box">
+            <div>
+              <p>智能灶V1.0</p>
+              <span>LY:4564:da</span>
+            </div>
+            <img src="../../image/home/frame-0.png" class="wait" alt="等待">
+            <!-- <img src="../../image/home/success.png" class="success" alt="成功"> -->
+          </li>
+        </ul>
+        <div class="bluesearch">停止扫描</div>
+        <div class="openblue" @click="handletransfer()">
+            确定
+          </div>
+      </div>
+    </div>
+    <script src="../../script/api.js" charset="utf-8"></script>
+    <script src="../../script/flexible.js" charset="utf-8"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
+    <script src="../../script/fastclick.js"></script>
+    <script>
+      apiready = function () {
+      var vue = new Vue({
+        el: '.app',
+        data() {
+          return {
+            id:api.pageParam.id,
+            imgcover:'',  //图片
+            name:'',//菜谱名字
+            seasoningBox1:'',//料盒1
+            seasoningBox2:'',//料盒2
+            seasoningBox3:'',//料盒3
+            seasoningBox4:'',//料盒4
+            type:[],//选择的第几个步骤给成数组回来好取值
+            isbluetooth: false,
+            openbluetooth: false,
+            stepslist: ['请选择一个程序'],
+            contentlist:'',
+            moveshow: false,
+            movenum: 0,
+            movebox: true, //控制显示第几个盒子
+            content: "",
+            temperature: ['60', '70', '80', '90', '100','110', '120', '130', '140','150', '160', '170', '180','190', '200', '210', '220','230'], //温度
+            parameter: '', //参数
+            timeouth: ['0', '1', '2'], //时
+            timeoutm: ['0', '1', '2', '3', '4', '5','6', '7', '8', '9', '10','11', '12', '13', '14', '15','16', '17', '18', '19','20'],
+            timeouts: ['0', '5', '10', '15', '20', '25','30','35','40','45','50','55'], //秒
+            temperatureBox: 0,
+            parameterBox: 0,
+            timeouthBox: 0,
+            timeoutmBox: 0,
+            timeoutsBox: 0,
+            temperaturecon: '',
+            parametercon: '',
+            parameterconValue:[],//value值
+            timeoutcon:0,
+            timeHnum:0,
+            timeMnum:0,
+            timeSnum:0,
+            // 对于回显的步骤数组
+            itemname:[],
+            paramelist:[],
+            parameterconValue:[],
+            temperlist:[],
+            timelist:[]
+          }
+        },
+        mounted() {
+          this.temperaturecon = this.temperature[0]
+          this.parametercon = this.parameter[0]
+          this.timeHnum= this.timeouth[0]
+          this.timeMnum= this.timeoutm[0]
+          this.timeSnum= this.timeouts[0]
+          this.getFeature();
+          this.getcookdetail()
+        },
+        methods: {
+          getFeature(){
+            let vm=this
+            fnGet(interfaces.cookbookfun,{},true,function(ret, err) {
+              if(ret){
+                vm.contentlist=ret.data.functions
+              }else{
+                console.log(JSON.stringify(err))
+              }
+            })
+          },
+          // 获取详情
+            getcookdetail(){
+            let vm=this
+            fnGet(interfaces.cookdetail,{id:this.id},true,function(ret, err) {
+              if(ret){
+              vm.datadisplay(ret.data)
+              }else{
+                console.log(JSON.stringify(err))
+              }
+            })
+            },
+            //
+            datadisplay(data){
+            console.log(JSON.stringify(data))
+            let vm=this
+            vm.imgcover=data.image
+            vm.name=data.name
+            vm.seasoningBox1=data.seasoningBox1
+            vm.seasoningBox2=data.seasoningBox2
+            vm.seasoningBox3=data.seasoningBox3
+            vm.seasoningBox4=data.seasoningBox4
+            let functions=data.functions
+            for(var i=0;i<functions.length;i++){
+              vm.type.push(functions[i].type)
+                 console.log(JSON.stringify(vm.type))
+              let options=functions[i].options
+              console.log(JSON.stringify(options))
+              for(var j=0;j<options.length;j++){
+                  if(j==0){ //for循环找到对应的状态参数
+                      vm.contentlist.forEach(item=>{
+
+                        if(item.type==functions[i].type){
+                          vm.itemname.push(item.name)
+                          item.functions.forEach(item2=>{
+
+                            if(item2.group==0){
+                            item2.funcOptions.forEach(item3=>{
+                              console.log(options[j].optionValue)
+                              if(item3.optionOrdinal==options[j].optionValue){
+                                vm.paramelist.push(item3)
+                                vm.parameterconValue.push(item3.optionOrdinal)
+                              }
+                            })
+                            }
+                          })
+                        }
+                      })
+                  }else if(j==1){
+                    vm.temperlist.push(options[j].optionValue)
+                  }else{
+                    console.log(options[j].optionValue)
+                    vm.timelist.push(options[j].optionValue)
+                  }
+              }
+            }
+            vm.stepslistall()
+            },
+            // 实现到元素身上
+            stepslistall(){
+            let vm=this
+            let type=this.type
+            for(var i=0;i<type.length;i++){
+               if(type[i] == 4){
+                 this.stepslist[i]='停顿'
+                 continue
+               }else{
+                 if(this.stepslist[i-1]=='停顿'){
+                  //  console.log(JSON.stringify(this.timelist))
+                  this.stepslist[i]=this.itemname[i-1] + '：' + this.paramelist[i-1].optionName+'，温度：'+this.temperlist[i-1]+'℃，时间：'+this.timelist[i-1]
+                }else {
+                  console.log(JSON.stringify(this.timelist))
+                 this.stepslist[i]=this.itemname[i] + '：' + this.paramelist[i].optionName+'，温度：'+this.temperlist[i]+'℃，时间：'+this.timelist[i]
+                }
+
+               }
+            }
+            },
+
+          empty(){
+            let vm=this
+            api.confirm({
+                title: '提示',
+                msg: '是否要删除该菜谱',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                if(index === 1){
+                  let url=interfaces.cookbookpost+'?id='+vm.id
+                  fnDelete(url,true, function(ret,err){
+                  console.log(JSON.stringify(ret))
+                    if(ret.code==RESPONSE_OK){
+                        api.toast({
+                            msg: '删除成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                        api.sendEvent({
+                            name: 'changemenu',
+                        });
+                        api.closeWin()
+
+                    }else{
+                      console.log(JSON.stringify(err))
+                    }
+                })
+                }
+            });
+          },
+          deleteprocedure(index){
+            console.log(index)
+            this.stepslist.splice(index,1)
+          },
+          // 删除上传封面
+          handledelpic(){
+            this.imgcover=""
+          },
+          handletransfer(){
+            // 调用ajax
+          },
+          handleisbluetooth(){
+            this.isbluetooth = !this.isbluetooth
+          },
+          getopenbluetooth1() {
+            this.openbluetooth = !this.openbluetooth
+          },
+          addbox() {
+            console.log(this.stepslist.length)
+            this.stepslist.push("请选择一个程序")
+          },
+          getopenbluetooth() {
+            this.movenum = 0
+            this.moveshow = false
+          },
+          handlemovebox() {
+            this.movebox = true
+          },
+          getmove(num) {
+            this.movenum = num
+            this.movebox = true
+            this.moveshow = true
+          },
+          getcontent(item,index) {
+            this.movebox = false
+            this.content = item.name
+            console.log(this.type.length)
+            console.log(this.stepslist.length)
+            if(this.type.length=this.stepslist.length){
+              this.type[this.movenum-1]=item.type
+            }else{
+              this.type.push(item.type)
+            }
+            console.log(JSON.stringify(this.type))
+              //修改对应
+            let contentlist=this.contentlist
+            for(var i=0;i<contentlist.length;i++){
+              if(contentlist[i].name===item.name){
+                // console.log(JSON.stringify(contentlist[i].functions))
+                this.parameter=''
+                if(contentlist[i].functions === null){
+                  this.handlestepslist()
+                  return
+                }
+                if(contentlist[i].functions.length>1){
+                  let contentlistFunctions=contentlist[i].functions
+                    for(var j=0;j<contentlistFunctions.length;j++){
+                        if(contentlistFunctions[j].name==='参数'){
+                          this.parameter=contentlistFunctions[j].funcOptions
+                          this.parametercon=this.parameter[0]
+                        }
+                    }
+                }
+              }
+            }
+          },
+          handleparameter(index) {
+            this.parameterBox = index
+            console.log(index)
+            for (let i = 0; i < this.parameter.length; i++) {
+              if (index === i) {
+                this.parametercon = this.parameter[i]
+              }
+            }
+          },
+          handletemperature(index) {
+            this.temperatureBox = index
+            for (let i = 0; i < this.temperature.length; i++) {
+              if (index === i) {
+                this.temperaturecon = this.temperature[i]
+              }
+            }
+          },
+          handletimeouth(index) {
+            this.timeouthBox = index
+            console.log(index)
+            for (let i = 0; i < this.timeouth.length; i++) {
+              if (index === i) {
+                  this.timeHnum= this.timeouth[i]
+
+              }
+            }
+          },
+          handletimeoutm(index) {
+            this.timeoutmBox = index
+            console.log(index)
+            for (let i = 0; i < this.timeoutm.length; i++) {
+              if (index === i) {
+              this.timeMnum= this.timeoutm[i]
+              }
+            }
+          },
+          handletimeouts(index) {
+            this.timeoutsBox = index
+            console.log(index)
+            for (let i = 0; i < this.timeouts.length; i++) {
+              if (index === i) {
+              this.timeSnum= this.timeouts[i]
+              }
+            }
+          },
+          handlestepslist() {
+            if(this.timeHnum!=0 && this.timeMnum!=0 && this.timeSnum!=0){
+                this.timeoutcon=this.timeHnum+'时'+this.timeMnum+'分'+this.timeSnum+'秒'
+            }else if(this.timeSnum!=0 && this.timeMnum!=0 &&this.timeHnum==0) {
+                this.timeoutcon=this.timeMnum+'分'+this.timeSnum+'秒'
+            }else if(this.timeSnum==0 && this.timeMnum!=0 &&this.timeHnum!=0){
+                this.timeoutcon=this.timeHnum+'时'+this.timeMnum+'分'
+            }else if(this.timeSnum!=0 && this.timeMnum==0 &&this.timeHnum!=0){
+                this.timeoutcon=this.timeHnum+'时'+this.timeSnum+'秒'
+            }else if(this.timeSnum==0 && this.timeMnum==0 &&this.timeHnum!=0){
+                this.timeoutcon=this.timeHnum+'时'
+            }else if(this.timeSnum==0 && this.timeMnum!=0 &&this.timeHnum==0){
+                this.timeoutcon=this.timeMnum+'分'
+            }else{
+                this.timeoutcon=this.timeSnum+'秒'
+            }
+            for (let i = 0; i < this.stepslist.length; i++) {
+              if (this.movenum === Number([i+1])) {
+                if(this.content==='停顿'){
+                    this.parameterconValue.push('')
+                    this.stepslist[i]= this.content
+                }else{
+                  this.parameterconValue.push(this.parametercon.optionOrdinal)
+                  this.stepslist[i] = this.content + '：' + this.parametercon.optionName+'，温度：'+this.temperaturecon+'℃，时间：'+this.timeoutcon
+                }
+              }
+            }
+            console.log(this.stepslist)
+            this.getopenbluetooth()
+          },
+          // 上传图片
+          upload_image(){
+             var vm = this;
+             api.actionSheet({
+                     title: '',
+                     cancelTitle: '取消',
+                     buttons: ['拍摄','相册']
+                 }, function(ret, err) {
+                     var index = ret.buttonIndex;
+                     var sourType = '';
+                     if (index == 1 || index == 2 ) {
+                      sourType= index==1?'camera':'photos'
+                        //  sourType = 'camera';
+                        console.log(sourType)
+                         var resultList = api.hasPermission({
+                             list: [sourType]
+                         });
+                         if (!resultList[0].granted) {
+                             api.requestPermission({
+                                 list: [sourType],
+                                 code: 1
+                             }, function(ret, err) {
+                                 if (ret && ret.list && ret.list.length > 0 && ret.list[0].granted) {
+                                     vm.getPicture(sourType)
+                                 }
+                             });
+                         } else {
+                             vm.getPicture(sourType)
+                         }
+                     } else  {
+                         return;
+                     }
+
+                 });
+             },
+          getPicture(sourType){
+            if(sourType==='photos'){
+              sourType='library'
+            }
+            let vm=this
+            api.getPicture({
+                sourceType: sourType,
+                encodingType: 'jpg',
+                mediaValue: 'pic',
+                destinationType: 'base64',
+                allowEdit: false,
+                quality: 80,
+                targetWidth: 500,
+                targetHeight: 500,
+                saveToPhotoAlbum: false
+            }, function(ret, err) {
+              if (ret) {
+                var formdata = {
+                      base64Image: ret.base64Data.substring(ret.base64Data.indexOf('base64,') + 'base64,'.length)
+                };
+                if(ret.data !== ""){
+                  fnBodyPost(interfaces.upload, formdata, function(ret, err) {
+                      if (ret.code == RESPONSE_OK) {
+                          vm.imgcover=ret.data
+                      } else {
+                          if (ret.subMsg || ret.msg) {
+                              api.toast({
+                                  msg: ret.subMsg ? ret.subMsg : ret.msg,
+                                  duration: 2000,
+                                  location: 'middle'
+                              });
+                          }
+                      }
+                  });
+                }
+              } else {
+                console.log(JSON.stringify(err));
+              }
+            })
+          },
+          // 预览图片
+          getPutPhoto: function() {
+            var vm = this;
+            // console.log(item);
+            var photoBrowser = api.require('photoBrowser');
+            photoBrowser.open({
+                images: [vm.imgcover],
+                bgColor: '#000'
+            }, function(ret, err) {
+                if (ret.eventType == "click") {
+                    photoBrowser.close();
+                }
+            });
+          },
+          //获取菜谱数据封装成函数 可保存可传输
+          menuData(){
+            let vm=this;
+            let stepslist=this.stepslist
+            const CookbookParam={}
+            const functions=[]  //获取步骤数据
+            for(var i =0;i<stepslist.length;i++){
+              const  type=vm.type[i]
+              console.log(type)
+              const alldata={}
+              if(stepslist[i]==='请选择一个程序'){
+                api.toast({
+                    msg: '请不要放入空程序',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                return
+              }
+              if(stepslist[i]==='停顿'){
+                alldata.type=4
+                functions.push(alldata)
+                continue
+              }
+              let options=[]
+              let arr =stepslist[i].split('：')
+              let arr1=arr[1].split('，')
+              let arr2=arr[2].split('，')
+              arr2=arr2[0].split('℃')
+              for(let j=0;j<3;j++){
+                const obj={}
+                if(j==0){
+                  obj.group=0
+                  obj.optionValue=vm.parameterconValue[i]
+                }else if(j==1){
+                  obj.group=1
+                  obj.optionValue=Number(arr2[0])
+                }else{
+                  obj.group=2
+                  obj.optionValue=arr[3]
+                }
+                options.push(obj)
+              }
+                alldata.type=Number(type)
+                alldata.options=options
+                functions.push(alldata)
+            }
+            if(vm.name== ''){
+              api.toast({
+                  msg: '菜谱名字不能为空',
+                  duration: 2000,
+                  location: 'bottom'
+              });
+              return;
+            }
+            CookbookParam.name=vm.name
+            CookbookParam.image=vm.imgcover
+            CookbookParam.seasoningBox1=vm.seasoningBox1
+            CookbookParam.seasoningBox2=vm.seasoningBox2
+            CookbookParam.seasoningBox3=vm.seasoningBox3
+            CookbookParam.seasoningBox4=vm.seasoningBox4
+            CookbookParam.id=vm.id
+            CookbookParam.functions=functions
+            // console.log(JSON.stringify(CookbookParam))
+            return CookbookParam
+          },
+          // 保存菜谱
+            savemenu(){
+              let CookbookParam=this.menuData()
+              console.log(JSON.stringify(CookbookParam))
+              fnBodyPost(interfaces.cookbookpost, CookbookParam, function(ret,err){
+                if(ret.code == RESPONSE_OK){
+                    api.toast({
+                        msg: '保存成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                    api.sendEvent({
+                        name: 'changemenu',
+                    });
+                  console.log(JSON.stringify(ret))
+                  setTimeout(function(){api.closeWin()}, 1000);
+                }else{
+                  console.log(JSON.stringify(err))
+                }
+              })
+            }
+
+        },
+      })
+    }
+    </script>
+</body>
+
+</html>

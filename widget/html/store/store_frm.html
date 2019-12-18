@@ -7,63 +7,30 @@
     <title>资讯详情</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
-        .app{
-            overflow: hidden;
+        html,body,.app{
             width: 100%;
-            min-height: 100vh;
+            height: 100%;
         }
-        .search{
-            width: 100%;
-            height: .96rem;
-            border-bottom: 1px solid #E0E0E0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        section{
+          height: 100%;
         }
-        .search-content{
-            width: 6.9rem;
-            height: .6rem;
-            background-color: rgba(0, 0, 0, 0.05);
-            color: #999;
-            border-radius: .6rem;
-            display: flex;
-            align-items: center;
-            padding-left: .2rem;
-            font-size: .28rem;
-            box-sizing: border-box;
-        }
-        .search-content img{
-            width: .28rem;
-            height: .28rem;
-        }
-        .search-content span{
-            margin-left: 0.05rem;
-        }
-        .nav{
-            width: 100%;
-            height: .9rem;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            font-size: .3rem;
-            color: rgba(0, 0, 0, 0.58);
-        }
-        .nav .nav-item-active{
-            font-weight: 600;
-            color: #333;
-            border-bottom: 3px solid #FF8C46;
-        }
+
         .goods{
             width: 90%;
+            /*height: calc(100% - 1.86rem);*/
+            padding-top: .3rem;
+            overflow: auto;
             display: flex;
             flex-wrap: wrap;
             margin: 0 auto;
             justify-content: space-between;
+            -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */
         }
         .goods-item{
             width: 3.2rem;
             height: 4.9rem;
             background-color: white;
+            position: relative;
         }
         .goods-item img{
             width: 100%;
@@ -83,31 +50,19 @@
         .goods-item .price{
             font-size: .36rem;
             color: #FF8C46;
+            position: absolute;
+            bottom: .3rem;
         }
     </style>
 </head>
 <body>
     <div class="app">
        <section>
-           <div class="search">
-               <div class="search-content" @click="goSearch">
-                   <img src="../../image/store/search.png" alt="搜索框">
-                   <span>搜索</span>
-               </div>
-           </div>
-           <div class="nav">
-                <div
-                :class="[navIndex==index?'nav-item-active':'nav-item']"
-                v-for="(item, index) in nav"
-                :key="index"
-                @click="navChange(index)">
-                    {{item}}
-                </div>
-           </div>
+
            <div class="goods">
-               <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails">
-                    <img :src="item.img" alt="图片">
-                    <div class="describe">{{item.describe}}</div>
+               <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails(item.id)">
+                    <img :src="img[index]" alt="图片">
+                    <div class="describe">{{item.goodsName}}</div>
                     <div class="price">￥{{item.price}}</div>
                </div>
            </div>
@@ -116,12 +71,18 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
         var vm=new Vue({
             el:'.app',
             data:{
-                navIndex:0,  //导航列表索引
-                nav:['全部','炒锅系列','电火锅','电饭煲','火锅'],
+                pageNum:1,
+                pageSize:4,
+                id:'',
+                img:[],
+                isLastPage:false,
                 goods:[
                     {
                         img:'../../image/store/one.jpg',
@@ -145,41 +106,107 @@
                     }
                 ]
             },
+            created(){
+                this.getGoodsList()
+            },
             methods:{
-                //跳转到搜索页面
-                goSearch:function(){
-                    api.openWin({
-                        name: 'search',
-                        url: '../search/search_win.html',
-                        reload:true,
-                        bounces:false,
-                        slidBackEnabled:false,
-                        pageParam: {
+                getGoodsList:function(value){
+                  // console.log(JSON.stringify(this.nav))
+                  console.log("商城页获取数据")
+                    if(value=='15'){   //这里做全部的一个操作
+                      value=''
+                    }
+                    var vm=this
+                    var params={
+                      pageSize:vm.pageSize,
+                      pageNum:vm.pageNum,
+                      categoryId:value
+                    }
+                    console.log(JSON.stringify(params))
+                    fnGet(interfaces.goodsList,params,true,function(ret,err){
+                        // if (value = 'refresh') {
+                            api.refreshHeaderLoadDone()
+                        // }
+                        if(ret.code==RESPONSE_OK){
+                          if(vm.pageNum==1){
+                              vm.goods=ret.data.list
+                          }
+                          else{
+                              vm.goods=vm.goods.concat(ret.data.list)
+                          }
+                          for(var i=0;i<vm.goods.length;i++){
+                            vm.img.push(vm.goods[i].images.split(',')[0])
+                          }
+                          vm.isLastPage=ret.data.lastPage
+                        }
+                        else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
 
                         }
-                    });
-
-                },
-                //切换导航栏状态
-                navChange:function(index){
-                    this.navIndex=index
+                    })
                 },
                 //跳转到商品详情页
-                goGoodsDetails:function(){
+                goGoodsDetails:function(id){
                     api.openWin({
                         name: 'details',
                         url: 'goods-details_win.html',
                         reload:true,
                         bounces:false,
-                        slidBackEnabled:false,
+                        slidBackEnabled:true,
                         pageParam: {
-                            name: 'test'
+                            id:id
                         }
                     });
-
                 }
             }
         })
+        //导航点击获取数据
+        api.addEventListener({
+            name: 'getGoodsList'
+        }, function(ret, err){
+            if( ret ){
+                vm.pageSize=4
+                vm.pageNum=1
+                vm.id=ret.value.id
+                vm.getGoodsList(ret.value.id)
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+        // 上拉加载
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: -10
+            }
+        }, function (ret, err) {
+            if (vm.isLastPage != 'true' && vm.isLastPage != true) {
+              console.log("上拉加载更多")
+                vm.pageNum++;
+                vm.getGoodsList();
+            } else {
+                api.toast({
+                    msg: '没有更多了~',
+                    location: 'middle',
+                    duration: 800,
+                });
+            }
+        });
+        // 下拉刷新
+        api.setRefreshHeaderInfo({
+            bgColor: '#fff'
+        }, function (ret, err) {
+            vm.pageNum = 1;
+            vm.pageSize=4;
+            vm.isLastPage = false;
+            vm.goods = null;
+            vm.getGoodsList(vm.id)
+        });
+      }
     </script>
 </body>
 </html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/mobileSelect.css">
+    <style>
+        .app {
+            overflow: hidden;
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            height: 0.88rem;
+            line-height: 1.2rem;
+            padding-left: .2rem;
+        }
+
+        header img {
+            width: .4rem;
+            height: .4rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <header>
+            <img src="../../image/register/black.png" alt="返回" @click="back">
+        </header>
+    </div>
+    <script src="../../script/api.js"></script>
+    <script src="../../script/flexible.js"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script src="../../script/fastclick.js"></script>
+    <script>
+        apiready = function () {
+          var header = $api.dom('header'); // 获取 header 标签元素
+          var footer = $api.dom('footer'); // 获取 footer 标签元素
+
+          // 1.修复开启沉浸式效果带来的顶部Header与手机状态栏重合的问题，最新api.js方法已支持适配iPhoneX；
+          // 2.默认已开启了沉浸式效果 config.xml中 <preference name="statusBarAppearance" value="true"/>
+          // 3.沉浸式效果适配支持iOS7+，Android4.4+以上版本
+          var headerH = $api.fixStatusBar(header);
+          // 最新api.js为了适配iPhoneX增加的方法，修复底部Footer部分与iPhoneX的底部虚拟横条键重叠的问题；
+          var footerH = $api.fixTabBar(footer);
+          api.openFrame({
+              name: 'register_firm_frm',
+              url: 'register_firm_frm.html',
+              rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
+                  marginTop: headerH, // main页面距离win顶部的高度
+                  marginBottom: footerH, // main页面距离win底部的高度
+                  w: 'auto' // main页面的宽度 自适应屏幕宽度
+              },
+              pageParam: api.pageParam
+          });
+            //考虑手机嵌入式兼容性问题
+            // var header = $api.dom('header');
+            // var headerH = $api.fixStatusBar(header);
+            var vm = new Vue({
+                el: '.app',
+                data: {
+                },
+                mounted() {
+                },
+                methods: {
+                  back: function () {
+                      api.closeWin()
+                  },
+                //点击下一步进入输入面页
+                // goNext:function(){
+                //     //这里做手机号验证，如果手机号填写正确，向后台发送的验证码也正确的话，则进行下一步操作
+                //     if(this.phoneFlag){
+                //         alert("即将跳转到输入密码页")
+                //     }
+                // }
+            }
+        })
+      }
+    </script>
+</body>
+
+</html>

@@ -51,6 +51,7 @@
     .head-img .head {
       width: .9rem;
       height: .9rem;
+      border-radius: 50%;
     }
 
     .content-name .name {
@@ -62,6 +63,10 @@
     .mobileSelect .content {
       left: -.3rem;
     }
+    #address,#sex{
+      width: 70%;
+      text-align: right;
+    }
   </style>
 </head>
 
@@ -70,30 +75,32 @@
     <div class="content">
       <div class="head-img">
         <span>头像</span>
-        <div class="imgs">
-          <img src="../../image/my/default-head.png" alt="" class="head">
+        <div class="imgs" @click="upload_img">
+          <img :src="pers.avater" alt="" class="head" v-if="pers.avater">
+          <img src="../../image/my/default-head.png" alt="" class="head" v-else>
           <img src="../../image/my/unfold.png" alt="" class="unfold">
         </div>
       </div>
-      <div class="content-name" >
+      <div class="content-name" @click="tonickname()">
         <span>昵称</span>
         <div>
-          <span class="name">用户小白</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" @click="tonickname()">
+          <span class="name" v-if="pers.nickname !=null">{{pers.nickname}}</span>
+          <span class="name" v-if="pers.nickname ==null">{{pers.username}}</span>
+          <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
-      <div class="content-name">
+      <div class="content-name" >
         <span>性别</span>
-        <div>
-          <span class="name">男</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" id="sex">
+        <div id="sex">
+          <span class="name">{{sex}}</span>
+          <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
-      <div class="content-name">
+      <div class="content-name" >
         <span>所在地</span>
-        <div>
+        <div id="address">
           <span class="name">{{address}}</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" id="trigger">
+          <img src="../../image/my/unfold.png" alt="" class="unfold" >
         </div>
       </div>
     </div>
@@ -115,48 +122,154 @@
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
   <script src="../../script/mobileSelect.js"></script>
+  <script src="../../script/restful.js" charset="utf-8"></script>
+  <script src="../../script/fastclick.js"></script>
   <script>
+  apiready = function() {
+    api.addEventListener({
+      name: 'changeperson'
+    }, function(ret, err) {
+      console.log(JSON.stringify(ret))
+      vue.person()
+    });
+    // 下拉刷新
+    //
+    // api.setRefreshHeaderInfo({
+    //     bgColor: '#fff'
+    // }, function (ret, err) {
+    //     vue.person()
+    //     api.refreshHeaderLoadDone();
+    // });
+
+
     var vue = new Vue({
       el: '.app',
       data() {
         return {
           openbluetooth: false,
+          addresslist:'',
+          data: [{ 'id': 0, 'value': '男' },{ 'id': 1, 'value': '女' }],
+          sex:'',
+          sexId:'0',
           address:'',
+          addressId:'',
+          pers:'',
+          addindex:[],
         }
       },
       mounted() {
-        let vm=this
-        var mobileSelect1 = new MobileSelect({
+        // 获取个人信息、
+        this.person()
+      },
+      methods: {
+        // 地址
+        getaddress(person){
+          let vm=this;
+          let treePath = person.treePath
+          let arrtreePath = treePath.split(',')
+          arrtreePath.splice(0, 1)
+          let arrtreePathlength = arrtreePath.length
+          fnGet(interfaces.area, {}, true, function(ret, err) {
+              if (ret.code == RESPONSE_OK) {
+                  let array = ret.data
+                  for (var i = 0; i < array.length; i++) {
+                      if (array[i].id == arrtreePath[0]) {
+                          // console.log(JSON.stringify(array[i]))
+                          let city = array[i].childs
+                          if(arrtreePathlength ==1){
+                              vm.addindex.push(i)
+                              vm.addressId = array[i].id
+                                vm.address=array[i].value
+                          }
+                          for (var j = 0; j < city.length; j++) {
+                              if (city[j].id == arrtreePath[1]) {
+                                  let area = city[j].childs
+                                  if (arrtreePathlength > 2) {
+                                      for (var k = 0; k < area.length; k++) {
+                                          if (area[k].id == arrtreePath[2]) {
+                                              vm.addindex.push(i)
+                                              vm.addindex.push(j)
+                                              vm.addindex.push(k)
+                                              vm.addressId = area[k].id
+                                              vm.address=array[i].value+' '+city[j].value+" "+area[k].value
+                                          }
+                                      }
+                                  } else {
+                                      vm.addindex.push(i)
+                                      vm.addindex.push(j)
+                                      vm.address=array[i].value+' '+city[j].value
+                                      vm.addressId = city[j].id
+                                  }
+                              }
+                          }
+                      }
+                  }
+                  vm.getmobileSelect1(ret.data) //创建选择(ret.data)
+                  vm.getmobileSelect2()
+              } else {
+                  console.log(JSON.stringify(err))
+              }
+          })
+        },
+        getmobileSelect1(array){
+          let vm=this
+          var mobileSelect1 = new MobileSelect({
+          trigger: '#address',
+          title: '所在地区',
+          wheels: [
+            {
+              data: array
+            }
+          ],
+          position: vm.addindex,
+          callback: function (indexArr, data) {
+            for (var i = 0; i < data.length; i++) {
+                vm.address += data[i].value
+                vm.address += " "
+                vm.addressId = data[i].id
+            }
+            vm.saveperson()
+          }
+        });
+      },
+        getmobileSelect2(){
+          let vm=this
+          var mobileSelect2 = new MobileSelect({
           trigger: '#sex',
           title: '性别',
           wheels: [
             {
-              data: [
-                { 'id': 1, 'value': '男' },
-                { 'id': 0, 'value': '女' }
-              ]
+              data:vm.data
             }
           ],
-          position: [0],
+          position: [vm.sexId],
           callback: function (indexArr, data) {
-            console.log(data)
+            vm.sex=data[0].value
+            vm.sexId=data[0].id
+            vm.saveperson()
           }
         });
-        var mobileSelect2 = new MobileSelect({
-          trigger: "#trigger",
-          title: "所在地",
-          wheels: [
-            { data: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"] }
-          ],
-          position: [0],
-          callback: function (indexArr, data) {
-            console.log(data);
-            vm.address=data
-          }
-        });
-
       },
-      methods: {
+        // 个人信息
+        person(){
+          let vm=this
+          fnGet(interfaces.info, {}, true, function(ret,err){
+              if(ret.code==RESPONSE_OK){
+                console.log(JSON.stringify(ret.data))
+                vm.pers=ret.data
+                vm.address=ret.data.areaName
+                vm.sexId=ret.data.sex
+                if(ret.data.sex ==0){
+                  vm.sex='男'
+                }else{
+                  vm.sex='女'
+                }
+                vm.getaddress(ret.data)
+              }else{
+                console.log(JSON.stringify(err))
+              }
+          })
+        },
         getopenbluetooth() {
           this.openbluetooth = !this.openbluetooth;
         },
@@ -168,9 +281,110 @@
               bounces: false,
               slidBackEnabled: true,
           });
-        }
+        },
+
+      // 上传
+      upload_img(){
+        var vm = this;
+        api.actionSheet({
+                title: '',
+                cancelTitle: '取消',
+                buttons: ['拍摄','相册']
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                var sourType = '';
+                if (index == 1 || index == 2 ) {
+                 sourType=index==1?'camera':'photos'
+                    var resultList = api.hasPermission({
+                        list: [sourType]
+                    });
+                    if (!resultList[0].granted) {
+                        api.requestPermission({
+                            list: [sourType],
+                            code: 1
+                        }, function(ret, err) {
+                            if (ret && ret.list && ret.list.length > 0 && ret.list[0].granted) {
+                                vm.getPicture(sourType)
+                            }
+                        });
+                    } else {
+                        vm.getPicture(sourType)
+                    }
+                } else  {
+                    return;
+                }
+
+            });
       },
+      getPicture(sourType){
+        if(sourType==='photos'){
+          sourType='library'
+        }
+        let vm=this
+        api.getPicture({
+            sourceType: sourType,
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'base64',
+            allowEdit: false,
+            quality: 80,
+            targetWidth: 500,
+            targetHeight: 500,
+            saveToPhotoAlbum: false
+        }, function(ret, err) {
+          if (ret) {
+            var formdata = {
+                  base64Image: ret.base64Data.substring(ret.base64Data.indexOf('base64,') + 'base64,'.length)
+            };
+            if(ret.data !== ""){
+              fnBodyPost(interfaces.upload, formdata, function(ret, err) {
+                  if (ret.code == RESPONSE_OK) {
+                    vm.pers.avater=ret.data
+                    vm.saveperson()
+                  } else {
+                      if (ret.subMsg || ret.msg) {
+                          api.toast({
+                              msg: ret.subMsg ? ret.subMsg : ret.msg,
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                      }
+                  }
+              });
+            }
+          } else {
+            console.log(JSON.stringify(err));
+          }
+        })
+      },
+        // 更改了就立马保存
+        saveperson(){
+         let vm=this
+          let param={
+            "areaId": vm.addressId,
+            "avater": vm.pers.avater,
+            "sex": vm.sexId
+          }
+          fnBodyPost(interfaces.info, param, function(ret,err){
+              console.log(JSON.stringify(ret))
+            if(ret.code==RESPONSE_OK){
+                console.log(JSON.stringify(ret))
+                api.toast({
+                    msg: '修改成功',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                api.sendEvent({
+                    name: 'changeperson',
+                });
+            }else{
+              console.log(JSON.stringify(err))
+            }
+          })
+        },
+    }
     })
+  }
   </script>
 
 </body>

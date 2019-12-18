@@ -46,17 +46,17 @@
 <body>
     <div class="app">
         <footer>
-            <div class="footer-item" @click="toHomeType(0)" tapmode>
-                <img :src="currentIdx==0?home[1]:home[0]" alt="">
-                <span class="title" :class="{'on':currentIdx==0}">首页</span>
-            </div>
-            <div class="footer-item" @click="toHomeType(1)" tapmode>
-                <img :src="currentIdx==1?consult[1]:consult[0]" alt="">
-                <span class="title" :class="{'on':currentIdx==1}">资讯</span>
-            </div>
+          <div class="footer-item" @click="toHomeType(0)" tapmode>
+              <img :src="currentIdx==0?consult[1]:consult[0]" alt="">
+              <span class="title" :class="{'on':currentIdx==0}">资讯</span>
+          </div>
+          <div class="footer-item" @click="toHomeType(1)" tapmode>
+              <img :src="currentIdx==1?shop[1]:shop[0]" alt="">
+              <span class="title" :class="{'on':currentIdx==1}">商城</span>
+          </div>
             <div class="footer-item" @click="toHomeType(2)" tapmode>
-                <img :src="currentIdx==2?shop[1]:shop[0]" alt="">
-                <span class="title" :class="{'on':currentIdx==2}">商城</span>
+                <img :src="currentIdx==2?home[1]:home[0]" alt="">
+                <span class="title" :class="{'on':currentIdx==2}">设备</span>
             </div>
             <div class="footer-item" @click="toHomeType(3)" tapmode>
                 <img :src="currentIdx==3?mineImg[1]:mineImg[0]" alt="">
@@ -70,38 +70,47 @@
     <script src="../../script/fastclick.js"></script>
     <script>
         apiready = function() {
+          var index=api.pageParam.index
           api.addEventListener({
               name: 'keyback'
           }, function (ret, err) {
               api.closeWidget({});
           });
 
-          setTimeout(function () {
-              api.closeWin({
-                  name: 'login_win'
-              });
-          }, 1000);
-
+            setTimeout(function () {
+                api.closeWin({
+                    name: 'login_win'
+                });
+                api.closeWin({
+                    name: 'register_win'
+                });
+                api.closeWin({
+                    name: 'find_password_win'
+                });
+                api.closeWin({
+                    name: 'find_password_next_win'
+                });
+            }, 300);
             var vue = new Vue({
                 el: '.app',
                 data() {
                     return {
                         currentIdx: 0,
-                        home: ['../../image/footer/home.png', '../../image/footer/home_true.png'],
+                        home: ['../../image/footer/equipment.png', '../../image/footer/equipment_true.png'],
                         consult: ['../../image/footer/consult.png', '../../image/footer/consult_true.png'],
                         shop: ['../../image/footer/shop.png', '../../image/footer/shop_true.png'],
                         mineImg: ['../../image/footer/my.png', '../../image/footer/my_true.png'],
                         framesArr: [
-                            {
+                          {
+                              name: 'information_list_win',
+                              url: '../information/information_list_win.html'
+                          }, {
+                              name: 'store_win',
+                              url: '../store/store_win.html'
+                          },{
                                 name: 'home_win',
                                 url: '../home/home_win.html'
-                            }, {
-                                name: 'information_list_win',
-                                url: '../information/information_list_win.html'
-                            }, {
-                                name: 'store_win',
-                                url: '../store/store_win.html'
-                            }, {
+                            },{
                                 name: '/my_win',
                                 url: '../my/my_win.html'
                             }]
@@ -109,9 +118,13 @@
                 },
                 created: function () {
                     this.openHomeGroup();
+                    console.log(index)
+                    if(index){
+                      this.currentIdx=index
+                    }
                 },
                 mounted: function () {
-                    this.toHomeType(0)
+                    // this.toHomeType(0)
                 },
                 methods: {
                   toHomeType: function (index) {
@@ -132,7 +145,7 @@
                       var that = this;
                       var headerH = '';
                       var footerH = '';
-                      setTimeout(function () {
+                      // setTimeout(function () {
                           var header = $api.dom('header'); // 获取 header 标签元素
                           var footer = $api.dom('footer'); // 获取 footer 标签元素
                           headerH = $api.fixStatusBar(header);
@@ -159,14 +172,17 @@
                           }, function (ret, err) {
                               var index = ret.index;
                               that.currentIdx = index;
-                              api.sendEvent({
-                                  name: 'footerIndexMarket',
-                                  extra: {
-                                      index: index
-                                  }
-                              })
+                              setTimeout(function(){
+                                api.sendEvent({
+                                    name: 'footerIndexMarket',
+                                    extra: {
+                                        index: index
+                                    }
+                                })
+                              }, 300);
+
                           });
-                      }, 300);
+                      // }, 300);
                   },
 
                 },

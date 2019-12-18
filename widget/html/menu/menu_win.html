@@ -42,6 +42,7 @@
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
     apiready = function () {
         var header = $api.dom('header'); // 获取 header 标签元素
@@ -53,6 +54,8 @@
         var headerH = $api.fixStatusBar(header);
         // 最新api.js为了适配iPhoneX增加的方法，修复底部Footer部分与iPhoneX的底部虚拟横条键重叠的问题；
         var footerH = $api.fixTabBar(footer);
+        // let access= $api.getStorage("accessToken");
+        // console.log(access);
         var goodsvue = new Vue({
             el: '.app',
             data: {},

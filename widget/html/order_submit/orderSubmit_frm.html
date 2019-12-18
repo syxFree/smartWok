@@ -54,6 +54,10 @@
             overflow: hidden;
             white-space: nowrap;
         }
+        .user-info-else{
+            font-size: .24rem;
+            color: #666;
+        }
         .user-box .moreAdress{
             width: .24rem;
             height: .36rem;
@@ -111,7 +115,7 @@
         }
         .good-box .right p{
             width: 4.6rem;
-            height: .88rem;
+            /*height: .88rem;*/
             font-size: .28rem;
             overflow:hidden;
             text-overflow:ellipsis;
@@ -262,11 +266,12 @@
             <div class="userInfo" @click="goUserInfo">
                 <div class="user-box">
                     <img src="../../image/submitOrder/adress-orderSubmit.png" alt="订单图片">
-                    <div class="user-info">
-                        <span class="userName">{{userInfo.userName}}</span>
-                        <span class="userPhone">{{userInfo.userPhone}}</span>
-                        <p>{{userInfo.adress}}</p>
+                    <div v-if="userInfoFlag" class="user-info">
+                        <span class="userName">{{userInfo.receiptorName}}</span>
+                        <span class="userPhone">{{userInfo.receiptorPhone}}</span>
+                        <p>{{userInfo.address}}</p>
                     </div>
+                    <div v-else class="user-info-else">您还没有添加过地址，点击添加</div>
                     <div class="moreAdress">
                         <img src="../../image/submitOrder/right.png" alt="右箭头">
                     </div>
@@ -278,12 +283,12 @@
             <div class="goods-info">
                 <p class="goods-title">商品信息</p>
                 <div class="good-box">
-                    <img :src="goods.swiper" alt="商品图片">
+                    <img :src="goods.img" alt="商品图片">
                     <div class="right">
-                        <p>{{goods.details}}</p>
+                        <p>{{goods.name}}</p>
                         <div class="right-flex">
                             <span>￥{{goods.price}}</span>
-                            <span>x{{orderCount}}</span>
+                            <span>x{{goods.count}}</span>
                         </div>
                     </div>
                 </div>
@@ -302,7 +307,7 @@
                     </div>
                     <div class="item">
                         <span>订单备注</span>
-                        <input type="text" placeholder="选填(30字以内)">
+                        <input v-model="memo" type="text" maxlength="30" placeholder="选填(30字以内)" ref="memo">
                     </div>
                 </div>
             </div>
@@ -340,8 +345,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bottom">
-                <span>共{{orderCount}}件</span>
+            <div class="bottom" id="bottom">
+                <span>共{{goods.count}}件</span>
                 <div class="count">合计：<span>￥{{totalCount}}</span></div>
                 <div class="submit" @click="submit">提交订单</div>
             </div>
@@ -350,14 +355,26 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
+        //点击输入框的时候让屏幕向上滑动
+        window.addEventListener('resize',function(){
+          if(document.activeElement.tagName==='INPUT' || document.activeElement.tagName==='TEXTAREA'){
+            window.setTimeout(function(){
+                document.activeElement.scrollIntoView(true)
+            },100)
+          }
+        })
+        $api.fixTabBar($api.byId('bottom'))
         var vm=new Vue({
             el:'.app',
             data:{
                 userInfo:{
                     userName:'大脸布丁',
                     userPhone:15516354832,
-                    adress:'上海市松江区沪松公路1399弄68号1003-1004室'
+                    address:'上海市松江区沪松公路1399弄68号1003-1004室'
                 },
                 goods:{
                     swiper:'../../image/store/five.jpg',
@@ -370,23 +387,172 @@
                 orderCount:12,   //购买商品数量
                 chooseFlag:false,  //支付按钮的选择状态
                 ticketFlag:false,  //订单按钮选择状态
+                userInfoFlag:true,  //地址的有无判断
+                address:'',
+                memo:'',   //留言
+                aliPayMsg:'',
             },
             computed: {
                 totalCount:function(){
-                    return parseFloat(this.orderCount*this.goods.price).toFixed(2)
+                    return parseFloat(this.goods.count*this.goods.price).toFixed(2)
+                }
+            },
+            created(){
+                this.goods=api.pageParam.goodsInfo
+                this.getAddress()
+                console.log(JSON.stringify(this.goods))
+            },
+            watch:{
+                memo:function(){
+                    if(this.memo.length>=30){
+                      api.toast({
+                          msg: '最多只能填入30字',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      return
+                    }
                 }
             },
             methods: {
                 //提交订单
                 submit:function(){
+                    var vm=this
+                    var type=0
+                    if(vm.chooseFlag){
+                      type=0   //0代表支付宝
+                      // vm.aliPay()
+                    }else{
+                      type=1   //1代表微信
+                      // vm.wxPay()
+                    }
+                    var params={
+                      memo:vm.memo,   //留言
+                      payType:type,   //那种方法付款
+                      productId:vm.goods.productId,  // 商品的id
+                      quantity:vm.goods.count,   //商品数量
+                      receiptAddressId:vm.userInfo.id  //收货地址id
+                    }
+                    console.log(JSON.stringify(params))
+                    fnBodyPost(interfaces.createOrder,params,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          vm.aliPayMsg=ret.data
+                          if(type==0){
+                            vm.aliPay(vm.aliPayMsg.paySign,vm.aliPayMsg.orderId)
+                          }
+                          else if(type==1){
+                            console.log("微信支付")
+                            vm.wxPay(ret.data)
+                          }
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                        }
+                    })
+                },
+                wxPay:function(params){
+                  console.log(JSON.stringify(params))
+                  var wxPayPlus = api.require('wxPayPlus');
+                  wxPayPlus.payOrder({
+                      apiKey: params.appId,
+                      orderId: params.orderId,
+                      mchId: params.partnerId,
+                      nonceStr: params.nonceStr,
+                      timeStamp: params.timeStamp,
+                      package: params.packageStr,
+                      sign: params.paySign
+                  }, function(ret, err) {
+                      if (ret.status) {
+                          vm.payNow(params.orderId,1)
+                      } else {
+                          alert(err.code);
+                      }
+                  });
+                },
+                aliPay:function(value,id){
+                  var vm=this
+                  var aliPayPlus = api.require('aliPayPlus');
+                  aliPayPlus.payOrder({
+                    orderInfo: value   //这里是后台返回的一个字段
+                  }, function(ret, err) {
+                    if(ret.code==9000){
+                      vm.payNow(id,0)
+                    }
+                  });
+                },
+                payNow:function(id,type){
+                  var vm=this
+                  var params={
+                    payType:type,
+                    orderId:id
+                  }
+                  fnBodyPost(interfaces.payNow,params,function(ret,err){
+                    if(ret.code==RESPONSE_OK){
+                      vm.paySuccess()
+                    }else{
+                      api.toast({
+                          msg: ret.msg,
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                    }
+                  })
+                },
+                //付款成功后的状态
+                paySuccess:function(){
+                  api.openWin({
+                      name: 'orderSuccess',
+                      url: 'orderSuccess_win.html',
+                      reload:true,
+                      slidBackEnabled:true,
+                      bounces:false,
+                      pageParam: {
+                          name: 'test'
+                      }
+                  });
+                },
+                //获取用户默认地址
+                getAddress:function(){
+                    var vm=this
+                    fnGet(interfaces.getAdress,{},true,function(ret,err){
+                        if(ret.code==40071){
+                            vm.userInfoFlag=false
+                            api.toast({
+                                msg: '您还没有设置默认地址',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
 
+                        }else{
+                            vm.userInfo=ret.data
+                            console.log(JSON.stringify(vm.address))
+                        }
+                    })
+                },
+                //获取用户信息
+                getUserInfo:function(){
+                    var vm=this
+                    fnGet(interfaces.info,{},true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          vm.userInfo=ret.data
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                        }
+                    })
                 },
                 goUserInfo:function(){
                   api.openWin({
                       name: 'userAdress',
                       url: '../address/address_win.html',
                       reload:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
                           name: 'test'
@@ -396,6 +562,7 @@
                 }
             },
         })
+    }
     </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="../../css/api.css">
+    <link rel="stylesheet" href="../../css/mobileSelect.css">
     <style>
         .app {
             overflow: hidden;
@@ -158,7 +159,13 @@
         .TCp img {
             width: .34rem;
             height: .34rem;
-           vertical-align: middle;
+            vertical-align: middle;
+        }
+
+        .unfold {
+            width: .15rem;
+            height: .25rem;
+            text-align: right;
         }
     </style>
 </head>
@@ -175,6 +182,10 @@
             </div>
             <div class="info">
                 <div class="login-info">
+                    <input type="text"  placeholder="请选择注册类型" v-model="type">
+                    <img src="../../image/my/unfold.png" alt="" class="unfold" id="type">
+                </div>
+                <div class="login-info">
                     <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
                 </div>
                 <div class="login-info">
@@ -183,9 +194,10 @@
                     <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
                 </div>
                 <div class="TCp">
-                    <div style="margin-right: .08rem;"> 
+                    <div style="margin-right: .08rem;">
                         <img src="../../image/register/defaucheck.png" alt="" v-if="ckeckTCP" @click="ckeckTCP=false">
-                        <img src="../../image/register/check.png" alt="" v-if="ckeckTCP === false" @click="ckeckTCP=true">
+                        <img src="../../image/register/check.png" alt="" v-if="ckeckTCP === false"
+                            @click="ckeckTCP=true">
                     </div>
 
                     <div>
@@ -206,6 +218,7 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/mobileSelect.js"></script>
     <script>
         var apiready
         apiready = function () {
@@ -223,6 +236,7 @@
                     sendCodeFlag: true,   //刚开始验证码的状态
                     sendStatus: false,   //发送验证码按钮状态
                     ckeckTCP: true,
+                    type:''
                 },
                 watch: {
                     //监听输入手机号，动态显示删除按钮
@@ -235,54 +249,74 @@
                         }
                     }
                 },
+                mounted(){
+                    let vm=this;
+                    var mobileSelect1 = new MobileSelect({
+                    trigger: '#type',
+                    wheels: [
+                        {
+                            data: [
+                                { 'id': 0, 'value': '个人' },
+                                { 'id': 1, 'value': '企业' },
+                                { 'id': 2, 'value': '经销商' }
+                            ]
+                        }
+                    ],
+                    position: [0],
+                    callback: function (indexArr, data) {
+                        console.log(data[0].value)
+                        vm.type=data[0].value
+                    }
+                });
+                },
                 methods: {
-                    //手机号输入框失去焦点
-                    phoneJudge: function () {
-                        var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
-                        if (!phoneReg.test(this.phone)) {
-                            alert("请输入正确的手机号")
-                            this.phoneFlag = false
-                        } else {
-                            this.phoneFlag = true
-                        }
-                    },
-                    //验证码输入事件
-                    codeInput: function () {
-                        if (this.code.length >= 1) {
-                            this.btnFlag = true
-                        }
-                        else {
-                            this.btnFlag = false
-                        }
-                    },
-                    //点击获取验证码，改变内容
-                    changeCodeFlag: function () {
-                        if (this.phone == '') {
-                            alert("请先输入手机号")
-                            return
-                        }
-                        if (this.phoneFlag == false) {
-                            alert("请输入合法的手机号")
-                            return
-                        }
-                        this.sendCodeFlag = false
-                        // 发送验证码倒计时
-                        var vm = this;
-                        var s = 5;
-                        var countInterval = setInterval(function () {
-                            if (vm.sendCode > 0) {
-                                s--;
-                                vm.sendCode = s;
-                            } else {
-                                vm.sendCodeFlag = true
-                                clearInterval(countInterval);
-                                vm.sendCode = 59;
-                                // vm.sendStatus = 'before';
-                            }
-                        }, 1000);
-                        vm.countInterval = countInterval;
+                //手机号输入框失去焦点
+                phoneJudge: function () {
+                    var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+                    if (!phoneReg.test(this.phone)) {
+                        alert("请输入正确的手机号")
+                        this.phoneFlag = false
+                    } else {
+                        this.phoneFlag = true
                     }
                 },
+                //验证码输入事件
+                codeInput: function () {
+                    if (this.code.length >= 1) {
+                        this.btnFlag = true
+                    }
+                    else {
+                        this.btnFlag = false
+                    }
+                },
+                //点击获取验证码，改变内容
+                changeCodeFlag: function () {
+                    if (this.phone == '') {
+                        alert("请先输入手机号")
+                        return
+                    }
+                    if (this.phoneFlag == false) {
+                        alert("请输入合法的手机号")
+                        return
+                    }
+                    this.sendCodeFlag = false
+                    // 发送验证码倒计时
+                    var vm = this;
+                    var s = 5;
+                    var countInterval = setInterval(function () {
+                        if (vm.sendCode > 0) {
+                            s--;
+                            vm.sendCode = s;
+                        } else {
+                            vm.sendCodeFlag = true
+                            clearInterval(countInterval);
+                            vm.sendCode = 59;
+                            // vm.sendStatus = 'before';
+                        }
+                    }, 1000);
+                    vm.countInterval = countInterval;
+                }
+            },
                 //点击下一步进入输入面页
                 // goNext:function(){
                 //     //这里做手机号验证，如果手机号填写正确，向后台发送的验证码也正确的话，则进行下一步操作

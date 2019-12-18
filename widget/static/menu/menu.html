@@ -203,7 +203,11 @@
       vertical-align: middle;
       margin-bottom: .05rem;
     }
-
+    .transfer-box{
+      position: fixed;
+      bottom: 0;
+      background: #fff;
+      width: 7.5rem;    }
     .transfer {
       display: flex;
       justify-content: space-between;
@@ -561,13 +565,16 @@
     .covershow img{
       width: 100%;
       height: 100%;
-    } 
+    }
     .del-pic {
       position: absolute;
       right: -.1rem;
       top: -.1rem;
       width: .3rem !important;
       height: .3rem !important;
+    }
+    .mb1{
+      margin-bottom:1rem;
     }
   </style>
 </head>
@@ -635,13 +642,16 @@
         <span>添加程序</span>
       </div>
     </div>
-    <div class="hrs"></div>
+    <div class="hrs mb1"></div>
     <!-- 提交 -->
-    <div class="transfer">
-      <div class="del">删除</div>
-      <div class="fer" @click="handleisbluetooth">传输</div>
-      <div class="save">保存</div>
+    <div class="transfer-box">
+      <div class="transfer">
+        <div class="del">删除</div>
+        <div class="fer" @click="handleisbluetooth">传输</div>
+        <div class="save">保存</div>
+      </div>
     </div>
+
     <!-- 返回保存 -->
     <div class="move1" v-if="openbluetooth">
       <div class="move-box1">
@@ -802,10 +812,10 @@
           }
         },
         mounted() {
-          this.temperaturecon = this.temperature[0]  
-          this.parametercon = this.parameter[0] 
-          this.timeoutcon += this.timeouth[0] * 60 * 60 
-          this.timeoutcon += this.timeoutm[0] * 60  
+          this.temperaturecon = this.temperature[0]
+          this.parametercon = this.parameter[0]
+          this.timeoutcon += this.timeouth[0] * 60 * 60
+          this.timeoutcon += this.timeoutm[0] * 60
           this.timeoutcon += this.timeouts[0]
         },
         methods: {

@@ -20,16 +20,15 @@
             position: relative;
             display: flex;
             /*box-sizing: border-box;*/
-            padding-left: .2rem;
+            /*padding-left: .2rem;*/
             align-items: center;
 
         }
         header img{
             width: .4rem;
             height: .45rem;
-            /*position: absolute;
+            position: relative;;
             left: .2rem;
-            top: .21rem;*/
         }
         header span{
             font-size: .36rem;
@@ -51,6 +50,7 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
     apiready=function(){
       var header = $api.dom('header'); // 获取 header 标签元素

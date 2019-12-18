@@ -1,0 +1,145 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        .content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: .6rem;
+            margin: 0 .3rem;
+            padding: .1rem 0;
+            font-family: PingFang-SC-Medium;
+            font-size: .28rem;
+            color: #333333;
+        }
+
+        .type-right {
+            display: flex;
+            text-align: right;
+        }
+
+        .type-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .person {
+            margin-right: .3rem;
+        }
+
+        .type-right img {
+            height: .42rem;
+            width: .42rem;
+            vertical-align: middle;
+        }
+
+        .content input {
+            width: 3rem;
+            text-align: right;
+        }
+
+        .borderBT {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .btn {
+            width: 6.9rem;
+            height: .78rem;
+            background: #FF8C46;
+            border-radius: 39px;
+            border-radius: 39px;
+            font-family: PingFang-SC-Medium;
+            font-size: .3rem;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <div>
+            <div class="content">
+                <div class="type-left">
+                    <p>发票类型</p>
+                </div>
+                <div class="type-right">
+                    <div class="person" @click="handlechoose(1)">
+                        <img src="../../image/submitOrder/choose-active.png" alt="" v-if="!choose &&chooseindex==1">
+                        <img src="../../image/submitOrder/choose.png" alt="" v-if="choose &&chooseindex==2">
+                        <span>个人或事业单位</span>
+                    </div>
+                    <div @click="handlechoose(2)">
+                        <img src="../../image/submitOrder/choose-active.png" alt="" v-if="choose &&chooseindex==2">
+                        <img src="../../image/submitOrder/choose.png" alt="" v-if="!choose &&chooseindex==1">
+                        <span>企业</span>
+                    </div>
+                </div>
+            </div>
+            <!--  -->
+            <div class="content borderBT">
+                <p>发票抬头</p>
+                <input type="text" placeholder="抬头名称">
+            </div>
+            <!-- 企业 -->
+            <div v-if="choose">
+                <div class="content borderBT ">
+                    <p>税号</p>
+                    <input type="text" placeholder="纳税人识别号">
+                </div>
+                <div class="content borderBT">
+                    <p>开户银行</p>
+                    <input type="text" placeholder="选填">
+                </div>
+                <div class="content borderBT">
+                    <p>银行账号</p>
+                    <input type="text" placeholder="选填">
+                </div>
+                <div class="content borderBT">
+                    <p>企业地址</p>
+                    <input type="text" placeholder="选填">
+                </div>
+                <div class="content borderBT">
+                    <p>企业电话</p>
+                    <input type="text" placeholder="选填">
+                </div>
+            </div>
+            <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
+                <button class="btn" >确定</button>
+            </div>
+        </div>
+    </div>
+    <script src="../../script/api.js" charset="utf-8"></script>
+    <script src="../../script/flexible.js" charset="utf-8"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
+    <script>
+        var vue = new Vue({
+            el: '.app',
+            data() {
+                return {
+                    choose: false,
+                    chooseindex: 1
+                }
+            },
+            methods: {
+                handlechoose(index) {
+                    // this.choose = !this.choose
+                    if (this.chooseindex == index) {
+                        return
+                    } else {
+                        this.choose = !this.choose
+                        this.chooseindex = index
+                    }
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

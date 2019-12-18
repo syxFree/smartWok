@@ -48,14 +48,33 @@
     <div class="app">
         <header>
             <img src="../../image/information/back.png" alt="返回" @click="back">
-            <input type="text" v-model="searchTxt" >
+            <input type="text" v-model="searchTxt" @keypress="keypress">
         </header>
     </div>
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
     apiready = function () {
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err){
+            if( ret ){
+                console.log("按下了返回键")
+                api.sendEvent({
+                    name: 'search',
+                    extra: {
+                    }
+                });
+                api.closeWin()
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+
+        var text=api.pageParam.text
+        console.log(text)
         var header = $api.dom('header'); // 获取 header 标签元素
         var footer = $api.dom('footer'); // 获取 footer 标签元素
 
@@ -68,13 +87,57 @@
         var goodsvue = new Vue({
             el: '.app',
             data: {
-              searchTxt:'一只皮卡丘'
+              searchTxt:text
             },
             created: function () {
             },
             methods: {
               back: function () {
+                  api.sendEvent({
+                      name: 'search',
+                      extra: {
+                      }
+                  });
                   api.closeWin()
+              },
+              keypress:function(e){
+                  var vm=this
+                  var keyCode=e.keyCode;
+                  if(vm.searchTxt==''){
+                    api.toast({
+                        msg: '请先输入搜索字',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                    return
+                  }
+                  if($api.getStorage('search')){
+                      console.log('111')
+                      var search=$api.getStorage('search')
+                  }
+                  else{
+                    console.log('222')
+                      var search=[]
+                  }
+                  search.unshift(vm.searchTxt)
+                  //搜索过的商品去重，并且经最后搜索的商品排列在最前边
+                  for(var i=0;i<search.length;i++){
+                    for(var j=0;j<i;j++){
+                      if(search[i]==search[j]){
+                        search.splice(i,1)
+                        j--
+                      }
+                    }
+                  }
+                  $api.setStorage('search',search)
+                  if(keyCode=='13'){
+                    api.sendEvent({
+                        name: 'search',
+                        extra: {
+                            value:vm.searchTxt
+                        }
+                    });
+                  }
               },
             }
         });

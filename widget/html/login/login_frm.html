@@ -7,10 +7,16 @@
     <title>Document</title>
     <link rel="stylesheet" href="../../css/api.css">
     <style>
+    html,body{
+      height: 100%;
+    }
         .app{
             overflow: hidden;
             background-color: white;
-            min-height: 100vh;
+            /*height: 100%;*/
+        }
+        section{
+          /*height: 100%;*/
         }
         .top-font{
             color: #333;
@@ -71,7 +77,7 @@
         .login-btn .input-btn{
             width: 6.3rem;
             height: 0.88rem;
-            margin: 0 auto;
+            margin: .5rem auto;
             border-radius: 0.88rem;
             background-color: #FFB98F;
             color: white;
@@ -84,7 +90,7 @@
             background-color: #FF8C46;
             width: 6.3rem;
             height: 0.88rem;
-            margin: 0 auto;
+            margin: .5rem auto;
             border-radius: 0.88rem;
             color: white;
             font-size: 0.34rem;
@@ -95,7 +101,7 @@
         .register{
             width: 3rem;
             height: 1rem;
-            margin: 0 auto;
+            margin: .15rem auto;
             font-size: 0.28rem;
             color: #FF8C46;
             text-align: center;
@@ -103,8 +109,9 @@
         .wx-login{
             width: 100%;
             height: 3rem;
+            /*margin-top: 3.5rem;*/
             position: fixed;
-            bottom: 0.3rem;
+            bottom:.5rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -138,11 +145,11 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
+                    <input type="number" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone' size="11" @focus="phoneFocus">
                     <img src="../../image/login/delete.png" alt="删除" v-if="imgFlag" @click='deletePhone'>
                 </div>
                 <div class="login-info">
-                    <input type="password" @input="passwordInput" placeholder="请输入密码" v-model="password">
+                    <input type="password" @input="passwordInput" placeholder="请输入密码" v-model="password" @blur="pwdBlur">
                 </div>
                 <div class="forget" @click="goFindPwd">忘记密码？</div>
             </div>
@@ -156,7 +163,7 @@
                     <span>第三方登录</span>
                     <span class="line"></span>
                 </div>
-                <div class="wx-img">
+                <div class="wx-img" @click="wxLogin">
                     <img src="../../image/login/wx.png" alt="微信图片">
                 </div>
             </div>
@@ -165,7 +172,17 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
+        // window.addEventListener('resize',function(){
+        //   if(document.activeElement.tagName==='INPUT' || document.activeElement.tagName==='TEXTAREA'){
+        //     console.log("aaaaa")
+        //     window.setTimeout(function(){
+        //         document.activeElement.scrollIntoViewIfNeeded()
+        //     },20)
+        //   }
+        // })
         apiready = function(){
             //考虑手机嵌入式兼容性问题
             var header = $api.dom('header');
@@ -189,7 +206,25 @@
                     else if(this.phone==''){
                         this.imgFlag=false
                     }
+                    var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+                    if(this.phone.length>11){
+                        api.toast({
+                            msg: '请输入正确的手机号',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                        this.phoneFlag=false
+                    }else{
+                        this.phoneFlag=true
+                    }
                 }
+            },
+            created(){
+
+            },
+            mounted(){
+              // this.$refs.input.focus()
+
             },
             methods: {
                 //清空手机号
@@ -197,30 +232,81 @@
                     this.phone=''
                 },
                 login:function(){
-                    api.openWin({
-                        name: 'home',
-                        url: '../home/home_win.html',
-                        reload: true,
-                        bounces: false,
-                        slidBackEnabled: false,
-                        pageParam: {
+                    if(this.phone==''){
+                      api.toast({
+                          msg: '请先输入手机号',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      return
+                    }
+                    if(this.password==''){
+                      api.toast({
+                          msg: '请先输入密码',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      return
+                    }
+                    var params={
+                      password:this.password,
+                      username:this.phone
+                    }
+                    fnBodyPost(interfaces.login,params,function(ret,err){
+                      if(ret.code==RESPONSE_OK){
+                        $api.setStorage('accessToken',ret.data)
+                        api.openWin({
+                            name: 'footer',
+                            url: '../footer/footer_win.html',
+                            reload: true,
+                            bounces: false,
+                            slidBackEnabled: true,
+                            pageParam: {
 
-                        }
-                    });
-
+                            }
+                        });
+                      }else{
+                        api.toast({
+                            msg: ret.msg,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                      }
+                    })
                 },
                 goRegister:function(){
+                  console.log(1231)
                   api.openWin({
                       name: 'register',
                       url: '../register/register_win.html',
                       reload:true,
                       bounces:false,
-                      slidBackEnabled;false,
+                      slidBackEnabled:true,
                       pageParam: {
 
                       }
                   });
-
+                },
+                phoneFocus:function(){
+                  // this.changeStyle()
+                  document.body.addEventListener('touchmove', this.scroll
+                  , {passive:false});
+                },
+                changeStyle:function(){
+                    document.getElementsByClassName('wx-login')[0].style.position='absolute'
+                    document.getElementsByClassName('wx-login')[0].style.bottom='-3rem'
+                },
+                resizeStyle:function(){
+                  document.getElementsByClassName('wx-login')[0].style.position='fixed'
+                  document.getElementsByClassName('wx-login')[0].style.bottom='.5rem'
+                },
+                pwdBlur:function(){
+                  // this.resizeStyle()
+                  document.body.removeEventListener('touchmove', this.scroll
+                  ,{passive:false});
+                },
+                scroll:function(e){
+                    e.preventDefault();
                 },
                 goFindPwd:function(){
                   api.openWin({
@@ -228,7 +314,7 @@
                       url: '../find_password/find_password_win.html',
                       reload:true,
                       bounces:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       pageParam: {
                           name: 'test'
                       }
@@ -239,7 +325,11 @@
                 phoneJudge:function(){
                     var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
                     if(!phoneReg.test(this.phone)){
-                        alert("请输入正确的手机号")
+                        api.toast({
+                            msg: '请输入正确的手机号',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
                         this.phoneFlag=false
                     }else{
                         this.phoneFlag=true
@@ -254,8 +344,50 @@
                         this.btnFlag=false
                     }
                 },
-            },
-        })
+                wxLogin:function(){
+                    var vm=this
+                    var wx = api.require('wx');
+                    wx.isInstalled(function(ret, err) {
+                        if (ret.installed) {
+                            console.log("安装了")
+                            wx.auth({
+                                apiKey: 'wxb989b47d3af39aca'
+                            }, function(ret, err){
+                                if(ret.status){
+                                    alert(JSON.stringify(ret));
+                                }else{
+                                    alert(err.code);
+                                }
+                            });
+                        } else {
+                            alert('当前设备未安装微信客户端');
+                        }
+                    });
+                 },
+                 bindWx:function(index){
+                     var vm=this
+                     var params={
+                       code:index
+                     }
+                     fnBodyPost(interfaces.wxlogin,params,function(ret,err){
+                         if(ret.code==RESPONSE_OK){
+                             console.log(JSON.stringify(ret.data))
+                         }
+                     })
+                 }
+              },
+          })
+          //键盘弹出和收回时对微信登录的设置
+          var height=document.body.clientHeight
+          window.onresize=function(){
+            var heightNow= document.body.clientHeight
+            if(height-heightNow>140){
+              vm.changeStyle()
+            }
+            else{
+              vm.resizeStyle()
+            }
+          }
         }
     </script>
 </body>

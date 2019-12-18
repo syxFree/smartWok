@@ -9,7 +9,7 @@
     <style>
         html,body,.app{
             width: 100%;
-            height: 100%;
+            /*height: 100%;*/
             background-color: #f7f7f7;
         }
         section{
@@ -97,15 +97,15 @@
             font-weight: 600;
         }
         .list-btn{
-            width: 3.8rem;
+            width:7rem;
             height: 1rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: flex-end;
             font-size: .28rem;
-            position: relative;
-            left: 3.1rem;
-            flex-direction: row-reverse;
+        }
+        .list-btn div{
+          margin-left:.3rem;
         }
         .disActive{
             width: 1.8rem;
@@ -126,36 +126,58 @@
             color: white;
             background-color: #FF8C46;
         }
+        .empty{
+          width: 100%;
+          height: 100%;
+          background-color: rgb(247, 247, 247);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          color: #999;
+          font-size: .28rem;
+        }
+        .empty img{
+          width: 4.6rem;
+          height: 3.5rem;
+          margin-top: 2rem;
+          margin-bottom: .3rem;
+        }
     </style>
 </head>
 <body>
     <div class="app">
         <section>
-            <div class="list" v-for="(item, index) in orderList" :key="index">
+            <div class="empty" v-if="emptyFlag">
+              <img src="../../image/orderDetails/empty.png" alt="">
+              <span>当前还没有订单</span>
+            </div>
+            <div v-else class="list" v-for="(item, index) in orderList" :key="index">
                 <div class="order-time">
-                    <span>{{item.createTime}}</span>
-                    <span v-if="item.status=='待付款'" class="activeRed">{{item.status}}</span>
-                    <span v-if="item.status=='待发货' || item.status=='待收货'" class="activeGreen">{{item.status}}</span>
-                    <span v-if="item.status=='已取消' || item.status=='已完成'" class="activeBlack">{{item.status}}</span>
+                    <span>{{orderTime[index]}}</span>
+                    <span v-if="item.orderStatus==0" class="activeRed">{{orderStatus[index]}}</span>
+                    <span v-if="item.orderStatus==1 || item.orderStatus==2" class="activeGreen">{{orderStatus[index]}}</span>
+                    <span v-if="item.orderStatus==5 || item.orderStatus==3" class="activeBlack">{{orderStatus[index]}}</span>
                 </div>
-                <div class="good-box" @click="goOrderDetails(index)">
-                    <img :src="item.swiper" alt="商品图片">
+                <div class="good-box" @click="goOrderDetails(item.id)" v-if="item.orderItems">
+                    <img :src="item.orderItems[0].image" alt="商品图片">
                     <div class="right">
-                        <p>{{item.details}}</p>
+                        <p>{{item.orderItems[0].productName}}</p>
                         <div class="right-flex">
-                            <span>￥{{item.price}}</span>
-                            <span>x{{item.orderCount}}</span>
+                            <span>￥{{item.orderItems[0].unitPrice }}</span>
+                            <span>x{{item.orderItems[0].quantity }}</span>
                         </div>
                     </div>
                 </div>
-                <div class="countPrice">共{{item.orderCount}}件，合计<span>￥{{item.price*item.orderCount}}</span></div>
+                <div v-if="item.orderItems" class="countPrice">共{{item.orderItems[0].quantity}}件，合计：<span>￥{{item.orderItems[0].unitPrice*item.orderItems[0].quantity}}</span></div>
                 <div class="list-btn">
-                    <div v-if="item.status=='待付款'" class="active" @click="pay(index)">立即付款</div>
-                    <div v-if="item.status=='待发货'" class="active" @click="reminder">提醒发货</div>
-                    <div v-if="item.status=='待收货'" class="active" @click="confirmGoods">确认收货</div>
-                    <div v-if="item.status=='已取消' || item.status=='已完成'" class="disActive" @click="del">删除订单</div>
-                    <div v-if="item.status=='待收货' || item.status=='已完成'" class="disActive" @click="look">查看物流</div>
-                    <div v-if="item.status=='待付款'" class="disActive" @click="cancel">取消订单</div>
+                    <div v-if="item.status=='待付款'" class="active" @click="invoice(item.id)">申请发票</div>
+                    <div v-if="item.orderStatus==0" class="active" @click="pay(item.id)">立即付款</div>
+                    <div v-if="item.orderStatus==1" class="active" @click="reminder(item.id)">提醒发货</div>
+                    <div v-if="item.orderStatus==2" class="active" @click="confirmGoods(item.id)">确认收货</div>
+                    <div v-if="item.orderStatus==5 || item.orderStatus==3" class="disActive" @click="del(item.id)">删除订单</div>
+                    <div v-if="item.orderStatus==2 || item.orderStatus==3" class="disActive" @click="look(item.id)">查看物流</div>
+                    <div v-if="item.orderStatus==0" class="disActive" @click="cancel(item.id)">取消订单</div>
                 </div>
             </div>
         </section>
@@ -163,7 +185,10 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
         var vm=new Vue({
             el:'.app',
             data:{
@@ -226,19 +251,132 @@
                 ],
                 chooseFlag:false,  //支付按钮的选择状态
                 ticketFlag:false,  //订单按钮选择状态
+                pageSize:10,
+                pageNum:1,
+                isLastPage:false,
+                orderTime:[],
+                orderStatus:[],
+                emptyFlag:true
+            },
+            created(){
+              this.getData()
+              // console.log(this.timeToDate(1575354633000))
+            },
+            watch:{
+              emptyFlag:function(){
+                if(vm.orderList.length>0){
+                  vm.emptyFlag=false
+                }
+                else{
+                  vm.emptyFlag=true
+                }
+              }
             },
             methods: {
+                //获取数据
+                getData(value){
+                  var vm=this
+                  vm.orderTime=[],
+                  vm.orderStatus=[]
+                  var params={
+                    pageSize:vm.pageSize,
+                    pageNum:vm.pageNum
+                  }
+                  console.log(JSON.stringify(params))
+                  fnGet(interfaces.getOrderList,params,true,function(ret,err){
+                      if (value = 'refresh') {
+                          api.refreshHeaderLoadDone()
+                      }
+                      if(ret.code==RESPONSE_OK){
+                        if(vm.pageNum==1){
+                            vm.orderList=ret.data.list
+                        }
+                        else{
+                          vm.orderList=vm.orderList.concat(ret.data.list)
+                        }
+                        if(vm.orderList.length>0){
+                          vm.emptyFlag=false
+                        }
+                        else{
+                          vm.emptyFlag=true
+                        }
+                        vm.isLastPage=ret.data.lastPage
+                        console.log(JSON.stringify(vm.orderList))
+                        for(var i=0;i<vm.orderList.length;i++){
+                          vm.orderTime.push(vm.timeToDate(vm.orderList[i].createDate))
+                          vm.orderStatus.push(vm.numsToStatus(vm.orderList[i].orderStatus))
+                        }
+                        // console.log(JSON.stringify(vm.orderList))
+                      }else{
+                        api.toast({
+                            msg: ret.msg,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                      }
+                  })
+                },
+                //状态转换
+                numsToStatus:function(value){
+                    if(value==0){
+                      return '待付款'
+                    }
+                    else if(value==1){
+                      return '待发货'
+                    }
+                    else if(value==2){
+                      return '待收货'
+                    }
+                    else if(value==3){
+                      return '已完成'
+                    }
+                    else if(value==4){
+                      return '已关闭'
+                    }
+                    else if(value==5){
+                      return '已取消'
+                    }
+                },
+                //时间转换
+                timeToDate:function(timestamp){
+                  if (!timestamp) {
+                      return ''
+                  }
+                  var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                  Y = date.getFullYear() + '-';
+                  M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                  D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+                  h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':';
+                  m = (date.getMinutes() < 10 ? '0' + (date.getMinutes()) : date.getMinutes()) + ':';
+                  s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds())
+                  // s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds());
+                  return Y + M + D + h + m + s;
+                },
+                  invoice(index){
+                    api.openWin({
+                        name: 'invoice_win',
+                        url: 'invoice_win.html',
+                        reload:true,
+                        slidBackEnabled:false,
+                        bounces:false,
+                        pageParam: {
+                          id:index,
+                        }
+                  })
+                },
                 //立即付款
                 pay:function(index){
+                  console.log(index)
                   api.openWin({
                       name: 'orderDetails',
                       url: 'orderDetails_win.html',
                       reload:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
                         shadeFlag:true,
-                        type:this.orderList[index].status
+                        id:index
+                        // type:this.orderList[index].status
                       }
                   });
                 },
@@ -248,71 +386,168 @@
                         name: 'orderDetails',
                         url: 'orderDetails_win.html',
                         reload:true,
-                        slidBackEnabled:false,
+                        slidBackEnabled:true,
                         bounces:false,
                         pageParam: {
-                          type:this.orderList[index].status
+                          id:index
                         }
                     });
 
                 },
                 //提醒发货
-                reminder:function(){
+                reminder:function(value){
+                    var vm=this
+                    fnBodyPut(interfaces.remindOrder+'/'+value,{},function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                            api.toast({
+                                msg: '提醒成功',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            vm.remindOrder=false
+                        }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
 
+                        }
+                    })
                 },
-                //确认发货
-                confirmGoods:function(){
-
+                //确认收货
+                confirmGoods:function(index){
+                    var vm=this
+                    api.confirm({
+                        msg: '您确认收货吗？',
+                        buttons: ['确定', '取消']
+                    }, function(ret, err){
+                        if( ret.buttonIndex==1 ){
+                          fnBodyPut(interfaces.receiptOrder+'/'+index,{},function(ret,err){
+                              if(ret.code==RESPONSE_OK){
+                                api.toast({
+                                    msg: '确认收货成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                vm.getData()
+                              }
+                              else{
+                                api.toast({
+                                    msg: ret.msg,
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                              }
+                          })
+                        }else{
+                             return
+                        }
+                    });
                 },
                 //删除订单
-                del:function(){
+                del:function(index){
+                  var vm=this
                   api.confirm({
-                      title: '您确认要取消订单吗？',
-                      // msg: 'testmsg',
+                      msg: '您确认要删除此订单吗？',
                       buttons: ['确定', '取消']
                   }, function(ret, err){
-                      if( ret ){
-                          //  alert( JSON.stringify( ret ) );
+                      if( ret.buttonIndex==1 ){
+                        fnBodyPut(interfaces.deleteOrder+'/'+index,{},function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                                api.toast({
+                                    msg: '删除成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                vm.getData()
+                            }else{
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                        })
                       }else{
-                          //  alert( JSON.stringify( err ) );
+                          return
                       }
                   });
                 },
                 //查看物流
-                look:function(){
+                look:function(index){
                   api.openWin({
                       name: 'logistics_information',
                       url: '../logistics_information/logistics_info_win.html',
                       reload:true,
-                      slidBackEnabled:false,
+                      slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
-                          name: 'test'
+                          id:index
                       }
                   });
                 },
                 //取消订单
-                cancel:function(){
+                cancel:function(index){
+                  var vm=this
                   api.confirm({
-                      title: '您确认要取消订单吗？',
-                      // msg: 'testmsg',
+                      msg: '您确认取消订单吗？',
                       buttons: ['确定', '取消']
                   }, function(ret, err){
                       if( ret ){
-                          //  alert( JSON.stringify( ret ) );
+                        fnBodyPut(interfaces.cancelOrder+'/'+index,{},function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                                vm.getData()
+                                api.toast({
+                                    msg: '取消成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }else{
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                        })
                       }else{
-                          //  alert( JSON.stringify( err ) );
+                           return
                       }
                   });
-
-                    // if(confirm("您确认要删除订单吗？")){
-                    //     console.log("取消")
-                    // }else{
-                    //     return
-                    // }
                 }
             },
         })
+        // 上拉加载
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: -10
+            }
+        }, function (ret, err) {
+            if (vm.isLastPage != 'true' && vm.isLastPage != true) {
+              console.log("上拉加载更多")
+                vm.pageNum++;
+                vm.getData();
+            } else {
+                api.toast({
+                    msg: '没有更多了~',
+                    location: 'middle',
+                    duration: 800,
+                });
+            }
+        });
+        // 下拉刷新
+        api.setRefreshHeaderInfo({
+            bgColor: '#fff'
+        }, function (ret, err) {
+            vm.pageNum = 1;
+            vm.pageSize=3;
+            vm.isLastPage = false;
+            vm.orderList = null;
+            vm.getData('refresh')
+        });
+      }
     </script>
 </body>
 </html>

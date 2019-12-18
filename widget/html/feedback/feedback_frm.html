@@ -82,6 +82,7 @@
       font-size: .28rem;
       color: #999999;
       padding: .24rem .3rem;
+      line-height: .36rem;
     }
 
     .t_h {
@@ -169,7 +170,7 @@
       <div class="opinionbox">
         <textarea name="" id="opinion" cols="30" rows="10" maxlength="300" placeholder="请输入"
           v-model="textareavalue"></textarea>
-        <div class="t_h"><i>{{textareavalue.length}}</i>/300</div>
+        <div class="t_h">{{textareavalue.length}}/300</div>
       </div>
     </div>
     <div class="content content-pic">
@@ -177,13 +178,13 @@
         <span>图片</span>
       </div>
       <p class="warn">图片选填，最多不超过3张</p>
-      <img src="../../image/my/upload.png" alt="" v-if="imgs.length===0">
+      <img src="../../image/my/upload.png" alt="" v-if="imgs.length===0" @click="uploadpicture">
       <ul v-if="imgs.length>0">
-        <li v-for="(item, index) in imgs" :key="index" class="imgsfor">
-          <img :src="item" alt="">
+        <li v-for="(item, index) in imgs" :key="index" class="imgsfor" >
+          <img :src="item" alt="" @click="getPutPhoto(item)">
           <img src="../../image/my/del-pic.png" alt="" class="del" @click='hanldepicdel(index)'>
         </li>
-        <li v-if="imgs.length<3"><img src="../../image/my/addpic.png" alt="" ></li>
+        <li v-if="imgs.length<3" @click="uploadpicture" ><img src="../../image/my/addpic.png" alt="" ></li>
       </ul>
 
     </div>
@@ -191,16 +192,19 @@
       <div class="title" style="width:1rem">
         <span>手机号</span>
       </div>
-      <input type="phone" placeholder="我们将及时帮您解决问题" v-model="phonenum">
+      <input type="phone" placeholder="我们将及时帮您解决问题" v-model="phonenum" @blur="judgephone">
     </div>
-    <div class="btn-box">
-      <button class="btn">提交</button>
+    <div class="btn-box" >
+      <button class="btn" @click="getfeedback">提交</button>
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/restful.js"></script>
+  <script src="../../script/fastclick.js"></script>
   <script>
+    apiready = function () {
     var vue = new Vue({
       el: '.app',
       data() {
@@ -209,10 +213,169 @@
           titleindex: 0,
           textareavalue: '',
           phonenum: '',
-          imgs: ['../../image/my/jidan.png', '../../image/my/jidan.png', '../../image/my/jidan.png'],
+          imgs: [],
         }
       },
       methods: {
+        //
+        judgephone(){
+          var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+          if (!phoneReg.test(this.phonenum)) {
+              api.toast({
+                msg: '手机号不正确',
+                duration: 2000,
+                location: 'bottom'
+            });
+            return;
+          }
+        },
+
+        // 提交意见反馈
+        getfeedback(){
+         if(!this.textareavalue){
+          api.toast({
+              msg: '意见反馈不能为空',
+              duration: 2000,
+              location: 'bottom'
+          });
+          return;
+         }
+         if(!this.phonenum){
+          api.toast({
+              msg: '手机号不能为空',
+              duration: 2000,
+              location: 'bottom'
+          });
+          return;
+         }
+         var phoneReg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+         if (!phoneReg.test(this.phonenum)) {
+             api.toast({
+               msg: '手机号不正确',
+               duration: 2000,
+               location: 'bottom'
+           });
+           return;
+         }
+         let param={
+          content: this.textareavalue,
+          images: this.imgs,
+          phone: this.phonenum,
+          type: this.titleindex
+         }
+         fnBodyPost(interfaces.feedback,param,function(ret,err){
+         if(ret.code === 20000){
+          api.toast({
+              msg: '意见反馈成功',
+              duration: 2000,
+              location: 'bottom'
+          });
+          this.textareavalue= ""
+          this.phonenum= ""
+          this.imgs=""
+          setTimeout(function(){api.closeWin()}, 1000);
+
+        }else{
+          console.log(JSON.stringify(err))
+        }
+      })
+        },
+        // 上传图片
+        uploadpicture(){
+          if (this.imgs.length >=3) {
+               api.toast({
+                   msg: '最多上传3张照片',
+                   duration: 2000,
+                   location: 'middle'
+               });
+               return
+           }
+           var vm = this;
+           api.actionSheet({
+                   title: '',
+                   cancelTitle: '取消',
+                   buttons: ['拍摄','相册']
+               }, function(ret, err) {
+                   var index = ret.buttonIndex;
+                   var sourType = '';
+                   if (index == 1 || index == 2 ) {
+                    sourType= index==1?'camera':'photos'
+                       var resultList = api.hasPermission({
+                           list: [sourType]
+                       });
+                       if (!resultList[0].granted) {
+                           api.requestPermission({
+                               list: [sourType],
+                               code: 1
+                           }, function(ret, err) {
+                               if (ret && ret.list && ret.list.length > 0 && ret.list[0].granted) {
+                                   vm.getPicture(sourType)
+                               }
+                           });
+                       } else {
+                           vm.getPicture(sourType)
+                       }
+                   } else  {
+                       return;
+                   }
+
+               });
+           },
+        getPicture(sourType){
+          if(sourType==='photos'){
+            sourType='library'
+          }
+          let vm=this
+          api.getPicture({
+              sourceType: sourType,
+              encodingType: 'jpg',
+              mediaValue: 'pic',
+              destinationType: 'base64',
+              allowEdit: false,
+              quality: 80,
+              targetWidth: 500,
+              targetHeight: 500,
+              saveToPhotoAlbum: false
+          }, function(ret, err) {
+            if (ret) {
+              var formdata = {
+                    base64Image: ret.base64Data.substring(ret.base64Data.indexOf('base64,') + 'base64,'.length)
+              };
+              if(ret.data !== ""){
+                fnBodyPost(interfaces.upload, formdata, function(ret, err) {
+                    if (ret.code == RESPONSE_OK) {
+                      console.log(JSON.stringify(ret.data))
+                        // vm.imgs.push(ret.data);
+                    } else {
+                        if (ret.subMsg || ret.msg) {
+                            api.toast({
+                                msg: ret.subMsg ? ret.subMsg : ret.msg,
+                                duration: 2000,
+                                location: 'middle'
+                            });
+                        }
+                    }
+                });
+              }
+            } else {
+              console.log(JSON.stringify(err));
+            }
+          })
+        },
+        // 预览图片
+        getPutPhoto: function(item) {
+          var vm = this;
+          // console.log(item);
+          var photoBrowser = api.require('photoBrowser');
+          photoBrowser.open({
+              images: [item],
+              bgColor: '#000'
+          }, function(ret, err) {
+              if (ret.eventType == "click") {
+                  photoBrowser.close();
+              }
+          });
+        },
         handleclicksubtitle(index) {
           this.titleindex = index
         },
@@ -221,6 +384,7 @@
         }
       },
     })
+  }
   </script>
 </body>
 

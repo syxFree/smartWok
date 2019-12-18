@@ -52,6 +52,7 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
     apiready=function(){
       var header = $api.dom('header'); // 获取 header 标签元素
@@ -78,15 +79,13 @@
       api.openFrame({
           name: 'orderDetails',
           url: 'orderDetails_frm.html',
+          reload:true,
           rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
               marginTop: headerH, // main页面距离win顶部的高度
               marginBottom: footerH, // main页面距离win底部的高度
               w: 'auto' // main页面的宽度 自适应屏幕宽度
           },
-          pageParam: {
-            shadeFlag:api.pageParam.shadeFlag,
-            type:api.pageParam.type
-          }
+          pageParam: api.pageParam
       });
     }
 

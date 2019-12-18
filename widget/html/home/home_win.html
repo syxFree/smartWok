@@ -34,12 +34,13 @@
 
 <body>
   <div class="app">
-    <header>首页</header>
+    <header>设备</header>
     <!-- <h2>首页</h2> -->
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/fastclick.js"></script>
   <script>
   apiready = function () {
     var header = $api.dom('header'); // 获取 header 标签元素
@@ -52,7 +53,7 @@
       api.addEventListener({
           name: 'footerIndexMarket'
       }, function (ret, err) {
-          if (ret.value.index != 0) {
+          if (ret.value.index != 2) {
               api.setFrameAttr({
                   name: 'home_frm',
                   hidden: true
@@ -81,16 +82,6 @@
           },
           methods: {
           }
-      });
-      api.openFrame({
-          name: 'home_frm',
-          url: 'home_frm.html',
-          rect: { // 推荐使用Margin布局，用于适配屏幕的动态变化
-              marginTop: headerH, // main页面距离win顶部的高度
-              marginBottom: api.pageParam.footerH, // main页面距离win底部的高度
-              w: 'auto' // main页面的宽度 自适应屏幕宽度
-          },
-          pageParam: api.pageParam
       });
   }
   </script>

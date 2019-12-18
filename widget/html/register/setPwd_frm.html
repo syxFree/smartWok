@@ -79,9 +79,6 @@
 </head>
 <body>
     <div class="app">
-        <header>
-            <img src="../../image/register/black.png" alt="返回">
-        </header>
         <section>
             <div class="top-font">
                 <div class="font-one">您好,</div>
@@ -89,7 +86,7 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="password" placeholder="请输入密码" v-model='password'>
+                    <input type="password" placeholder="请输入密码" v-model='password' @blur="Judge">
                 </div>
                 <div class="login-info">
                     <input type="password"
@@ -106,8 +103,12 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
         apiready = function(){
+          var username=api.pageParam.username
+          var code=api.pageParam.code
             //考虑手机嵌入式兼容性问题
             // var header = $api.dom('header');
             // var headerH = $api.fixStatusBar(header);
@@ -117,12 +118,37 @@
                 password:'', //第一遍输入密码
                 passwordAgain:'',  //第二遍输入密码
                 btnFlag:false,   //按钮的状态
-                nextFlag:false   //是否能跳转到下一页
+                nextFlag:false,   //是否能跳转到下一页
+                inputFlag:false,  //第一个输入框的状态 输入正确才能为true
             },
             watch: {
-
+                password:function(){
+                  if(this.password.length>16){
+                    api.toast({
+                        msg: '请输入6-16位的数字加字母',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                    return
+                  }
+                }
             },
             methods: {
+                //密码格式校验
+                Judge:function(){
+                    var reg=/^[0-9a-zA-a-Z]{6,16}$/
+                    if(!reg.test(this.password)){
+                      api.toast({
+                          msg: '请输入6-16位的数字加字母',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      this.inputFlag=false
+                    }
+                    else{
+                      this.inputFlag=true
+                    }
+                },
                 //确认密码
                 confirmPwd:function(){
                     if(this.password==''){
@@ -149,17 +175,42 @@
                 },
                 //完成跳转到首页
                 goNext:function(){
-                    api.openWin({
-                        name: 'home',
-                        url: '../home/home_win.html',
-                        reload:true,
-                        bounces:false,
-                        slidBackEnabled:false,
-                        pageParam: {
+                  var params={
+                    code:code,
+                    username:username,
+                    password:this.password,
+                  }
+                  console.log(JSON.stringify(params))
+                    if(this.nextFlag && this.inputFlag){
+                      fnBodyPost(interfaces.register,params,function(ret,err){
+                        console.log(JSON.stringify(ret))
+                        if(ret.code==RESPONSE_OK){
+                          $api.setStorage('accessToken',ret.data)
+                          api.toast({
+                              msg: '注册成功',
+                              duration: 2000,
+                              location: 'middle'
+                          });
+                          api.openWin({
+                              name: 'footer',
+                              url: '../footer/footer_win.html',
+                              reload:true,
+                              bounces:false,
+                              slidBackEnabled:true,
+                              pageParam: {
+
+                              }
+                          });
+                        }else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
 
                         }
-                    });
-
+                      })
+                    }
                 }
             }
         })

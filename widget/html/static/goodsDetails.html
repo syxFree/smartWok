@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>产品分享</title>
+  <style>
+      *{
+        padding: 0;
+        margin:0;
+      }
+      .header{
+        width: 100%;
+        height: 44px;
+        display: flex;
+        align-items: center;
+      }
+      .header img{
+        width: 15px;
+        height: 15px;
+        position: relative;
+        left: 10px;
+      }
+      .header span{
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .content{
+        width: 100%;
+      }
+      .content img{
+        width: 100%;
+      }
+      .goodsInfo{
+        width: 100%;
+        height: 90px;
+        /*border: 1px solid;*/
+        /*padding: 10px;*/
+        position: relative;
+      }
+      .goodsInfo p{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 10px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        display:-webkit-box;
+        -webkit-box-orient:vertical;
+        -webkit-line-clamp:2;
+      }
+      .goodsPrice{
+          width: 100%;
+          box-sizing: border-box;
+          padding: 0 10px;
+          height: 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: absolute;
+          bottom: 10px;
+      }
+      .goodsPrice span:nth-of-type(1){
+        color: #FF8C46;
+        font-size: 18px;
+      }
+      .goodsPrice span:nth-of-type(2){
+        color: #999;
+        font-size: 14px;
+      }
+      .bg{
+        width: 100%;
+        height: 10px;
+        background-color: #F7F7F7
+      }
+      .goodsDetails{
+        width: 100%;
+      }
+      .goodsDetailsHeader{
+        width: 100%;
+        height: 50px;
+        /*line-height: 50px;*/
+        box-sizing: border-box;
+        padding: 10px;
+      }
+      .goodsDetailsHeader span{
+        border-bottom: 4px solid #FF8C46;
+      }
+      .goods-box{
+        box-sizing: border-box;
+        padding: 10px;
+      }
+  </style>
+</head>
+<body>
+    <div class="header">
+          <img src="./image/close.png" alt="">
+          <span>产品详情</span>
+    </div>
+    <div class="content">
+        <img src="./image/five.jpg" alt="">
+        <div class="goodsInfo">
+            <p>这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字这是商品名字</p>
+            <div class="goodsPrice">
+                <span>￥368.00</span>
+                <span>库存：666</span>
+            </div>
+        </div>
+    </div>
+    <div class="bg"></div>
+    <div class="goodsDetails">
+        <div class="goodsDetailsHeader">
+            <span>商品详情</span>
+        </div>
+        <div class="goods-box">
+            <h2>我是富文本内容</h2>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    document.getElementsByClassName('header')[0].getElementsByTagName('img')[0].onclick=function(){
+      window.close()
+    }
+</script>
+</html>

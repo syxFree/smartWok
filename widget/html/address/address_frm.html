@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name = "format-detection" content = "telephone=no">
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
   <style>
@@ -23,13 +24,14 @@
       font-family: PingFang-SC-Medium;
       font-size: .24rem;
       color: #FF8C46;
-      text-align: center;
+      text-align: right;
     }
 
     .address-handle {
       display: flex;
       justify-content: space-between;
       padding-right: .3rem;
+      text-align: right;
     }
 
     .address-person {
@@ -57,7 +59,7 @@
       border-bottom: .01rem solid #e0e0e0;
     }
 
-    .address-bottom img {
+    .address-bottom img,.address-handle img{
       width: .34rem;
       height: .34rem;
       margin-right: .15rem;
@@ -92,6 +94,7 @@
 
     .empty {
       text-align: center;
+      height: 100vh;
       /* margin: 0 auto; */
     }
     .empty img {
@@ -106,66 +109,130 @@
       color: #999999;
       margin-bottom: 1.5rem;
     }
+    .hrs {
+          width: 100%;
+          height: .2rem;
+          background-color: #F7F7F7;
+        }
   </style>
 </head>
 
 <body>
   <div class="app">
     <!-- 当有收获地址的时候 -->
-    <div v-if="hasaddress">
-      <div class="address">
+    <div v-if="hasaddress" v-for="(item,index) in addresslist">
+      <div class="address" >
         <div class="address-person">
-          <span class="name">大脸布丁</span>
-          <span class="phone">15538383833</span>
+          <span class="name">{{item.receiptorName}}</span>
+          <span class="phone">{{item.receiptorPhone}}</span>
         </div>
-        <p class="address-res">上海 上海市 松江区 沪松公路1234号1003室</p>
-        <div class="address-bottom">
-          <div>
+        <p class="address-res">{{item.areaName}}&nbsp;{{item.address}}</p>
+        <div class="address-bottom" >
+          <div v-show="item.def===true">
             <img src="../../image/my/de-address.png" alt="">
             <span>默认地址</span>
           </div>
+          <div v-show="item.def===false"></div>
           <div class="address-handle">
-            <div @click="editor">
+            <div @click="editor(item.id)">
               <img src="../../image/my/editor.png" alt="">
               编辑
             </div>
-            <div>
-              <img src="../../image/my/address-del.png" alt="">
+            <div @click="deleaddress(item,index)">
+              <img src="../../image/my/address-del.png" alt="" >
               删除
             </div>
           </div>
         </div>
       </div>
-      <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
-        <button class="btn" @click="addnew">新增收货地址</button>
+      <div class="hrs">
+
       </div>
     </div>
     <!-- 当没有收获地址的时候 -->
     <div v-if="hasaddress ===false" class="empty">
       <img src="../../image/my/empty-add.png" alt="">
       <p>当前还没有收货地址</p>
-      <button class="btn" style="width: 3.8rem;height:.8rem" @click="addnew">新增收货地址</button>
+      <!-- <button class="btn" style="width: 3.8rem;height:.8rem" @click="addnew">新增收货地址</button> -->
+    </div>
+    <div style="text-align: center;margin-top:2rem;margin-bottom:1rem">
+      <button class="btn" @click="addnew">新增收货地址</button>
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/restful.js"></script>
+  <script src="../../script/fastclick.js"></script>
   <script>
+  apiready = function() {
+    api.addEventListener({
+    name: 'changeaddress'
+    }, function(ret, err) {
+    vue.getaddress()
+    });
+
     var vue = new Vue({
       el: '.app',
       data() {
         return {
-          hasaddress: true,
+          hasaddress: false,
+          addresslist:''
         }
       },
+      mounted(){
+        this.getaddress()
+      },
       methods: {
-        editor(){
+        // 获取地址
+        // 获取地址
+        // gethome(home){
+        //   let vm=this;
+        //   fnGet(interfaces.area,{parentId:home.treePath},true,function(ret, err) {
+        //       if (ret.code == RESPONSE_OK) {
+        //         console.log(JSON.stringify(ret.data))
+        //         for(var i =0;i<home.length;i++){
+        //           for(var j=0;j<ret.data.length;j++){
+        //             if(home[i].areaId ==ret.data[j].id){
+        //               home[i].home=ret.data[j].name
+        //             }
+        //           }
+        //         }
+        //         console.log(JSON.stringify(home))
+        //         vm.addresslist=home
+        //       }else{
+        //         console.log(JSON.stringify(err))
+        //       }
+        //     })
+        // },
+        // 获取收获地址
+        getaddress(){
+          let vm=this
+          fnGet(interfaces.address, {}, true, function(ret,err){
+            if(ret.code==RESPONSE_OK){
+              console.log(JSON.stringify(ret.data))
+              // vm.addresslist=ret.data
+              if(ret.data.length == 0){
+              vm.hasaddress=false
+            }else{
+              vm.hasaddress=true
+            }
+               vm.addresslist=ret.data
+            }else{
+              console.log(JSON.stringify(err))
+            }
+          })
+        },
+        editor(id){
           api.openWin({
               name: 'changeaddress_win',
               url: 'changeaddress_win.html',
               reload: true,
               bounces: false,
               slidBackEnabled: true,
+              pageParam:{
+                id:id
+              }
           });
         },
         addnew(){
@@ -177,8 +244,24 @@
               slidBackEnabled: true,
           });
         },
-      },
+        //删除收获地址
+        deleaddress(item,index){
+          let vm=this
+             let url=interfaces.address+'?id='+item.id
+           fnDelete(url,true, function(ret,err){
+             console.log(JSON.stringify(ret))
+               if(ret.code==RESPONSE_OK){
+                 console.log(JSON.stringify(ret))
+                  vm.addresslist.splice(index,1)
+               }else{
+                 console.log(JSON.stringify(err))
+               }
+           })
+        },
+
+      }
     })
+  }
   </script>
 
 </body>

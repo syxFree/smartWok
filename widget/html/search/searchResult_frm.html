@@ -35,6 +35,7 @@
         }
         .goods{
             width: 100%;
+           -webkit-overflow-scrolling: touch;/* 解决ios滑动不流畅问题 */
             box-sizing: border-box;
             padding: .4rem .3rem 0 .3rem;
             background-color: white;
@@ -47,6 +48,8 @@
             width: 3.2rem;
             height: 4.9rem;
             background-color: white;
+            /*border:1px solid;*/
+            position: relative;
         }
         .goods-item img{
             width: 100%;
@@ -54,6 +57,7 @@
         }
         .goods-item .describe{
             width: 100%;
+            margin-top: .1rem;
             font-size: .3rem;
             color: #333;
             overflow:hidden;
@@ -65,6 +69,8 @@
         .goods-item .price{
             font-size: .36rem;
             color: #FF8C46;
+            position: absolute;
+            bottom: .2rem;
         }
         .item-bottom{
             width: 100%;
@@ -93,13 +99,13 @@
                 <p>抱歉，暂时没有搜索到相关产品</p>
             </div>
             <div class="goods" v-else>
-                <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails">
-                    <img :src="item.img" alt="图片">
-                    <div class="describe">{{item.describe}}</div>
+                <div class="goods-item" v-for="(item, index) in goods" :key="index" @click="goGoodsDetails(item.id)">
+                    <img :src="img[index]" alt="图片">
+                    <div class="describe" v-html="item.goodsName">{{item.describe}}</div>
                     <div class="price">￥{{item.price}}</div>
                 </div>
             </div>
-            <div class="item-bottom"  v-if='!flag'>
+            <div class="item-bottom"  v-if='bottomFlag'>
                 <span></span>
                 <p>一不小心到底了</p>
                 <span></span>
@@ -109,11 +115,17 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js"></script>
     <script>
+    apiready=function(){
+        var text=api.pageParam.text
         var vm=new Vue({
             el:'.app',
             data:{
                 flag:true,   //根据商品有无判断
+                bottomFlag:false,   //底部的字
+                img:[],
                 // searchTxt:'这是一只皮卡丘', //这里是跳转过来的输入框文本
                 goods:[
                     {
@@ -136,26 +148,127 @@
                         describe:'无油烟不粘锅不锈钢真空锅三层钢',
                         price:40
                     }
-                ]
+                ],
+                isLastPage:false,
+                pageSize:4,
+                pageNum:1,
             },
             created() {
-                if(this.goods.length==0){
-                    this.flag=true
-                }else{
-                    this.flag=false
+                var params={
+                  keyword:text,
+                  pageSize:this.pageSize,
+                  pageNum:this.pageNum
                 }
+                this.getData(params)
             },
             methods: {
+                getData:function(params,value){
+                    var vm=this
+                    fnGet(interfaces.goodsList,params,true,function(ret,err){
+                        if(value=='refresh'){
+                          api.refreshHeaderLoadDone()
+                        }
+                        if(ret.code==RESPONSE_OK){
+                            if(vm.pageNum==1){
+                                vm.goods=ret.data.list
+                            }
+                            else{
+                                vm.goods=vm.goods.concat(ret.data.list)
+                            }
+                            for(var i=0;i<vm.goods.length;i++){
+                              vm.img.push(vm.goods[i].images.split(',')[0])
+                            }
+                            vm.isLastPage=ret.data.lastPage
+                            vm.bottomFlag=ret.data.lastPage
+                            if(vm.goods.length==0){
+                              vm.flag=true
+                            }else{
+                              vm.flag=false
+                            }
+                        }
+                        else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
+                        }
+                    })
+                },
                 //返回搜索页面
                 goSearch:function(){
 
                 },
                 //进入商品详情页
-                goGoodsDetails:function(){
+                goGoodsDetails:function(value){
+                    api.openWin({
+                        name: 'goods_details',
+                        url: '../store/goods-details_win.html',
+                        reload:true,
+                        slidBackEnabled:true,
+                        bounces:false,
+                        pageParam: {
+                            id: value
+                        }
+                    });
 
                 }
             },
         })
+        api.addEventListener({
+            name: 'search'
+        }, function(ret, err){
+            if( ret ){
+              console.log(JSON.stringify(ret.value))
+                var params={
+                  keyword:ret.value.value
+                }
+                vm.getData(params)
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+        // 上拉加载
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: -10
+            }
+        }, function (ret, err) {
+            if (vm.isLastPage != 'true' && vm.isLastPage != true) {
+              console.log("上拉加载更多")
+                vm.pageNum++;
+                var params={
+                  keyword:text,
+                  pageSize:vm.pageSize,
+                  pageNum:vm.pageNum
+                }
+                vm.getData(params);
+            } else {
+                api.toast({
+                    msg: '没有更多了~',
+                    location: 'middle',
+                    duration: 800,
+                });
+            }
+        });
+        // 下拉刷新
+        api.setRefreshHeaderInfo({
+            bgColor: '#fff'
+        }, function (ret, err) {
+            vm.pageNum = 1;
+            vm.pageSize=4;
+            vm.isLastPage = false;
+            vm.goods = null;
+            var params={
+              pageSize:vm.pageSize,
+              pageNum:vm.pageNum,
+              keyword:text
+            }
+            vm.getData(params,'refresh')
+        });
+      }
     </script>
 </body>
 </html>

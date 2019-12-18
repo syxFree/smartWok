@@ -39,27 +39,47 @@
 
 <body>
   <div class="app">
-    <div class="content">
+    <div class="content" v-html="content">
 
     </div>
   </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/restful.js" charset="utf-8"></script>
+  <script src="../../script/fastclick.js"></script>
   <script>
+  apiready=function(){
+    var index=api.pageParam.type
     var vue = new Vue({
       el: '.app',
       data() {
         return {
-          phonenum: '',
-          code: '',
-          password: '',
-          password2: ''
+          content:'',
         }
       },
+      created(){
+          console.log(index)
+          this.getData(index)
+      },
       methods: {
+        getData:function(index){
+          var vm=this
+          fnGet(interfaces.getTcp+'/'+index,{},true,function(ret,err){
+              if(ret.code==RESPONSE_OK){
+                  vm.content=ret.data
+              }else{
+                api.toast({
+                    msg: ret.msg,
+                    duration: 2000,
+                    location: 'bottom'
+                });
+              }
+          })
+        }
       },
     })
+  }
   </script>
 </body>
 

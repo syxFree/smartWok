@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .app {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    header {
+      text-align: left;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding: 0 .2rem;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+      margin-top: .24rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+    </header>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script src="../../script/fastclick.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          audit:3
+        }
+      },
+      methods: {
+      },
+    })
+  </script>
+</body>
+
+</html>

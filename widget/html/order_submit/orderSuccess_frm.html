@@ -56,7 +56,9 @@
     <script src="../../script/api.js"></script>
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
         var vm=new Vue({
             el:'.app',
             data:{
@@ -66,10 +68,32 @@
                 //返回按钮 这里返回支付界面
                 //返回商城
                 backToStore:function(){
+                    api.openWin({
+                        name: 'footer_win',
+                        url: '../footer/footer_win.html',
+                        pageParam: {
+                            index:2
+                        }
+                    });
+                    api.sendEvent({
+                        name: 'orderSuccess',
+                        extra: {
 
+                        }
+                    });
+
+                    api.closeToWin({
+                        name: 'details'
+                    });
+
+                    // api.setFrameGroupIndex({
+                    //     name: 'home-group',
+                    //     index:2
+                    // });
                 }
             },
         })
+      }
     </script>
 </body>
 </html>

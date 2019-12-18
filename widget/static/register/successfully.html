@@ -1,0 +1,97 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../css/api.css">
+  <style>
+    .app {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    header {
+      text-align: left;
+      height: 0.88rem;
+      line-height: 0.88rem;
+      padding: 0 .2rem;
+    }
+
+    header img {
+      width: .4rem;
+      height: .4rem;
+      margin-top: .24rem;
+    }
+
+    .content {
+      height: .6rem;
+      margin-top: 3rem;
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #333333;
+      text-align: center;
+    }
+
+    .content img {
+      width: 4.15rem;
+      height: 2.95rem;
+    }
+
+    .title {
+      margin-top: .4rem;
+      font-size: .34rem;
+      color: #FF8C46;
+      text-align: center;
+      line-height: .5rem;
+    }
+    .subtitle{
+      font-family: PingFang-SC-Medium;
+      font-size: .28rem;
+      color: #3F3F3F;
+      text-align: center;
+      line-height: .5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <img src="../../image/register/black.png" alt="返回">
+    </header>
+    <div class="content" v-if="audit==1">
+      <img src="../../image/register/audit.png" alt="">
+      <p class="title">提交成功</p>
+      <p class="subtitle">请等待审核，我们将在3天内完成审核</p>
+    </div>
+    <div class="content"  v-if="audit==3">
+        <img src="../../image/register/unaudit.png" alt="" width="2.06rem" height="2.58rem" style="width:2.06rem;height:2.58trem">
+        <p class="title">审核失败</p>
+        <p class="subtitle">您的帐号未通过审核，无法登录</p>
+      </div>
+      <div class="content"  v-if="audit==2">
+          <img src="../../image/register/audit.png" alt="">
+          <p class="title">帐号审核中</p>
+          <p class="subtitle">请等待审核，我们将在提交日3天内完成审核</p>
+      </div>
+  </div>
+  <script src="../../script/api.js" charset="utf-8"></script>
+  <script src="../../script/flexible.js" charset="utf-8"></script>
+  <script src="../../script/vue.min.js"></script>
+  <script>
+    var vue = new Vue({
+      el: '.app',
+      data() {
+        return {
+          audit:3
+        }
+      },
+      methods: {
+      },
+    })
+  </script>
+</body>
+
+</html>

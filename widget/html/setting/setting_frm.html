@@ -1,82 +1,154 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <link rel="stylesheet" href="../../css/api.css">
-  <style>
-    .content {
-      padding-left: .3rem;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../css/api.css">
+    <style>
+        .content {
+            padding-left: .3rem;
+        }
 
-    .content .line {
-      height: 1.02rem;
-      padding-right: .3rem;
-      border-bottom: 1px solid #e6e6e6;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        .content .line {
+            height: 1.02rem;
+            padding-right: .3rem;
+            border-bottom: 1px solid #e6e6e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .line p {
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #333333;
-    }
-    .line span {
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #808080;
-    }
-    .line img{
-      width: .15rem;
-      height: .25rem;
-    }
-    .btn {
-      width: 6.9rem;
-      height: .78rem;
-      background: #FF8C46;
-      border-radius: 39px;
-      border-radius: 39px;
-      font-family: PingFang-SC-Medium;
-      font-size: .3rem;
-      color: #FFFFFF;
-    }
-  </style>
+        .line p {
+            font-family: PingFang-SC-Medium;
+            font-size: .3rem;
+            color: #333333;
+        }
+
+        .line span {
+            font-family: PingFang-SC-Medium;
+            font-size: .3rem;
+            color: #808080;
+        }
+
+        .line img {
+            width: .15rem;
+            height: .25rem;
+        }
+
+        .btn {
+            width: 6.9rem;
+            height: .78rem;
+            background: #FF8C46;
+            border-radius: 39px;
+            border-radius: 39px;
+            font-family: PingFang-SC-Medium;
+            font-size: .3rem;
+            color: #FFFFFF;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="app">
-    <div class="content">
-      <div class="line">
-        <p>清除缓存</p>
-        <span>55.5MB</span>
-      </div>
-      <div class="line">
-        <p>修改密码</p>
-        <img src="../../image/my/unfold.png" alt="">
-      </div>
+    <div class="app">
+        <div class="content">
+            <div class="line" @click="deleCacheSize">
+                <p>清除缓存</p>
+                <span>{{CacheSize}}</span>
+            </div>
+            <div class="line" @click="changepass">
+                <p>修改密码</p>
+                <img src="../../image/my/unfold.png" alt="">
+            </div>
+        </div>
+        <div style="text-align: center;margin-top: 2rem;">
+            <button class="btn" @click="rmlogin">退出登录</button>
+        </div>
     </div>
-    <div style="text-align: center;margin-top: 2rem;">
-      <button class="btn">退出登录</button>
-    </div>
-  </div>
-  <script src="../../script/api.js" charset="utf-8"></script>
-  <script src="../../script/flexible.js" charset="utf-8"></script>
-  <script src="../../script/vue.min.js"></script>
-  <script>
-    var vue = new Vue({
-      el: '.app',
-      data() {
-        return {
+    <script src="../../script/api.js" charset="utf-8"></script>
+    <script src="../../script/flexible.js" charset="utf-8"></script>
+    <script src="../../script/vue.min.js"></script>
+    <script src="../../script/restful.js"></script>
+    <script src="../../script/fastclick.js"></script>
+    <script>
+        apiready = function() {
+            // 获取缓存
+            var vue = new Vue({
+                el: '.app',
+                data() {
+                    return {
+                        CacheSize: ''
+                    }
+                },
+                mounted() {
+                    this.getCacheSize()
+                },
+                methods: {
+                    // 获取缓存
+                    getCacheSize() {
+                        let vm = this
+                        api.getCacheSize(function(ret, err) {
+                            //size:        //缓存大小，单位为Byte，数字类型。（-1：无存储设备、-2：正在准备USB存储设备、-3：无法访问存储设备）
+                            console.log(JSON.stringify(ret))
+                            if (ret.size == 0) vm.CacheSize = 0 + 'B'
+                            var size = (ret.size / 1024) / 1024;
+                            size = size.toFixed(2) + 'MB'
+                            vm.CacheSize = size
+                        });
+                    },
+                    // 清除缓存
+                    deleCacheSize() {
+                        let vm = this
+                        api.confirm({
+                            title: '警告',
+                            msg: '请确认是否清除缓存',
+                            buttons: ['确定', '取消']
+                        }, function(ret, err) {
+                            var index = ret.buttonIndex;
+                            if (index === 1) {
+                                api.clearCache(function() {
+                                    api.toast({
+                                        msg: '清除完成'
+                                    });
+                                    vm.getCacheSize()
+                                });
+                            }
+                        });
+
+                    },
+                    changepass() {
+                        api.openWin({
+                            name: 'amend_win',
+                            url: 'amend_win.html',
+                            reload: true,
+                            bounces: false,
+                            slidBackEnabled: true,
+                        });
+                    },
+                    rmlogin() {
+                        $api.rmStorage('accessToken')
+                        if (!$api.getStorage('accessToken')) {
+                            api.openWin({
+                                name: 'login_win',
+                                url: '../login/login_win.html',
+                                reload: true,
+                                bounces: false,
+                                slidBackEnabled: true,
+                            });
+                            setTimeout(function(){
+                                api.closeToWin({
+                                    name: 'root'
+                                });
+                                console.log("执行关闭页面")
+                            },300)
+                        }
+                    },
+
+                },
+            })
         }
-      },
-      methods: {
-      },
-    })
-  </script>
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="font.css">
+    <title>Document</title>
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        text-decoration: none;
+    }
+    #fade{
+        width: 500px;
+        height: 500px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .now-left{
+        position: absolute;
+        top: 45%
+    }
+    .now-right{
+        position: absolute;
+        top: 45%;
+        left:93%;
+    }
+    .ul_dian{
+        position: absolute;
+        top: 90%;
+        left: 38%;
+    }
+    .ul_dian li{
+        float: left;
+    }
+    </style>
+</head>
+<body>
+    <center><h2>轮播图</h2></center>
+    <div id="fade">
+        <img src="../../image/store/one.jpg" width="100%" height="100%" id="lunbo">
+        <i class='iconfont icon-jiantouzuo now-left' id="left"></i>
+        <i class='iconfont icon-jiantouyou now-right' id="right"></i>
+        <ul class="ul_dian">
+            <li class='iconfont icon-yuandianzhong '></li>
+            <li class='iconfont icon-yuandianzhong '></li>
+            <li class='iconfont icon-yuandianzhong '></li>
+            <li class='iconfont icon-yuandianzhong'></li>
+        </ul>
+    </div>
+    <script>
+        var lb = document.getElementById("lunbo")
+        var num=1;
+
+
+        // 自动换图
+        setInterval(function(){
+            num++;
+            if(num == 5){
+                num = 1;     
+            }
+            lb.src="img/"+num+".jpg" 
+            // console.log(num)
+        },3000)
+        var left = document.getElementById("left")
+        var right = document.getElementById("right")
+
+        // 点击左箭头换图
+        left.onclick=function(){
+            num--;
+            if(num == 0){
+                num = 1;     
+            }
+            lb.src="img/"+num+".jpg" 
+   
+        }
+
+        // 点击右键换箭头
+        right.onclick=function(){
+            num++;
+            if(num == 5){
+                num = 4;     
+            }
+            lb.src="img/"+num+".jpg" 
+        }
+
+
+        // 点击圆点换图
+        var allLi = document.getElementsByTagName('ul')[0].getElementsByTagName("li");
+        for(var i = 0 ; i < allLi.length ; i++){
+            // 给每个li元素赋值，每循环一次，i+1;
+            allLi[i].index = i;
+            allLi[i].onclick=function(){
+                // li的索引是从0开始的，所以要+1
+                var num = this.index+1;
+                lb.src="img/"+num+".jpg" 
+            }   
+        }
+    </script>
+</body>
+</html>

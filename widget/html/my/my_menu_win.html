@@ -48,21 +48,10 @@
         <p>添加</p>
       </div>
     </header>
-    <div id="shade" @click="cancel" >
-        <div class="content">
-            <div class="share-img" @click.stop="shareWx">
-                <img src="../../image/information/share_wx.png" alt="">
-                 <span>微信好友</span>
-            </div>
-            <div class="share-img" @click.stop="shareFriend">
-                 <img src="../../image/information/share_friend.png" alt="">
-                 <span>朋友圈</span>
-            </div>
-        </div>
-    </div>
   <script src="../../script/api.js" charset="utf-8"></script>
   <script src="../../script/flexible.js" charset="utf-8"></script>
   <script src="../../script/vue.min.js"></script>
+  <script src="../../script/fastclick.js"></script>
   <script>
   apiready = function () {
       var header = $api.dom('header'); // 获取 header 标签元素
@@ -80,6 +69,9 @@
           created: function () {
           },
           methods: {
+            cancel:function(){
+
+            },
             back: function () {
                 api.closeWin()
             },
