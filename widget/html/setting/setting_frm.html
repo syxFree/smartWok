@@ -61,6 +61,14 @@
                 <p>修改密码</p>
                 <img src="../../image/my/unfold.png" alt="">
             </div>
+            <div class="line" @click="goTcp(0,'网络服务协议')">
+                <p>网络服务协议</p>
+                <img src="../../image/my/unfold.png" alt="">
+            </div>
+            <div class="line" @click="goTcp(1,'隐私政策')">
+                <p>隐私政策</p>
+                <img src="../../image/my/unfold.png" alt="">
+            </div>
         </div>
         <div style="text-align: center;margin-top: 2rem;">
             <button class="btn" @click="rmlogin">退出登录</button>
@@ -85,6 +93,17 @@
                     this.getCacheSize()
                 },
                 methods: {
+                    //前往协议页面
+                    goTcp:function(value1,value2){
+                        api.openWin({
+                            name: 'tcp',
+                            url: '../register/tcp_win.html',
+                            pageParam: {
+                                type:value1,
+                                title:value2
+                            }
+                        });
+                    },
                     // 获取缓存
                     getCacheSize() {
                         let vm = this

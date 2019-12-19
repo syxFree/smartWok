@@ -362,9 +362,9 @@
         //点击输入框的时候让屏幕向上滑动
         window.addEventListener('resize',function(){
           if(document.activeElement.tagName==='INPUT' || document.activeElement.tagName==='TEXTAREA'){
-            window.setTimeout(function(){
+            // window.setTimeout(function(){
                 document.activeElement.scrollIntoView(true)
-            },100)
+            // },100)
           }
         })
         $api.fixTabBar($api.byId('bottom'))
@@ -437,7 +437,8 @@
                     var params={
                       memo:vm.memo,   //留言
                       payType:type,   //那种方法付款
-                      productId:vm.goods.productId,  // 商品的id
+                      productId:vm.goods.productId,  // 商品库存ID ,
+                      goodsId:vm.goods.goodsId,    //商品的id
                       quantity:vm.goods.count,   //商品数量
                       receiptAddressId:vm.userInfo.id  //收货地址id
                     }

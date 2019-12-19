@@ -12,8 +12,8 @@ var TOKEN_BEOVERDUE = 40001; // token过期
 
 
 // var host = 'http://192.168.1.28:9102';
-var host = 'http://106.15.102.116:9902'    //线
-// var host = 'http://192.168.1.106:9102'   //崔
+// var host = 'http://106.15.102.116:9902'    //线
+var host = 'http://192.168.1.106:9102'   //崔
 
 //外网测试地址
 // var host = "http://whale123.free.idcfengye.com";
@@ -47,6 +47,7 @@ var interfaces = {
     getLogistics:'/sw/info/logistics',  //获取物流信息
     deleteOrder:'/sw/order/delete',   //删除订单
     receiptOrder:'/sw/order/receipt',  // 确认收货
+    invoice:'/sw/invoice',        //申请发票
     cookbookfun:'/sw/cookbook/functions',    //菜谱功能
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈

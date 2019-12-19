@@ -46,6 +46,7 @@
             outline: none;
             padding-left: 3px;
             color: #333;
+            width: 100%;
         }
         .login-btn{
             width: 100%;
@@ -152,7 +153,12 @@
                 //确认密码
                 confirmPwd:function(){
                     if(this.password==''){
-                        alert("请先输入密码")
+                        api.toast({
+                            msg: '请先输入密码',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+
                         this.passwordAgain=''
                         return
                     }
@@ -166,7 +172,11 @@
                 //确认两次密码是否一致
                 pwdJudge:function(){
                     if(this.passwordAgain!=this.password){
-                        alert("两次密码填写不一致，请重新输入")
+                        api.toast({
+                            msg: '两次密码填写不一致，请重新输入',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
                         this.passwordAgain=''
                         this.nextFlag=false
                     }else if(this.passwordAgain==this.password){
@@ -176,10 +186,11 @@
                 //完成跳转到首页
                 goNext:function(){
                   if(info.flag){
-                    //表示从绑定手机号来的   这里剩下一个openId没有获取
+                    //表示从绑定手机号来的
+                    console.log("走了绑定")
                     var params={
                       code:info.code,
-                      username:info.username,
+                      phone:info.username,
                       password:this.password,
                       type:info.type,
                       company:info.company,
@@ -188,22 +199,56 @@
                       openId:info.openId
                     }
                     console.log(JSON.stringify(params))
-                    fnBodyPost(interfaces.bindPhone,params,function(ret,err){
-                        if(ret.code==RESPONSE_OK){
-                          $api.setStorage('accessToken',ret.data)
-                          api.openWin({
-                              name: 'footer_win',
-                              url: '../footer/footer_win.html',
-                              reload:true,
-                              pageParam: {
-                                  name: 'test'
-                              }
-                          });
-                        }
-                    })
+                    if(info.type==0){
+                      console.log("绑定走了个人")
+                      fnBodyPost(interfaces.bindPhone,params,function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                            $api.setStorage('accessToken',ret.data)
+                            api.openWin({
+                                name: 'footer_win',
+                                url: '../footer/footer_win.html',
+                                reload:true,
+                                pageParam: {
+                                    name: 'test'
+                                }
+                            });
+                          }
+                          else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                    }
+                    else{
+                      console.log("绑定走了企业")
+                      fnBodyPost(interfaces.bindPhone,params,function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                            $api.setStorage('openId', info.openId);
+                            api.openWin({
+                                name: 'success',
+                                url: 'successfully_win.html',
+                                reload:true,
+                                pageParam: {
+                                    type:1
+                                }
+                            });
+                          }
+                          else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                    }
                   }
                   else{
                     //表示是注册设置密码
+                    console.log("走了注册")
                     var params={
                       code:info.code,
                       username:info.username,
@@ -218,7 +263,7 @@
                       fnBodyPost(interfaces.register,params,function(ret,err){
                         console.log(JSON.stringify(ret))
                         if(ret.code==RESPONSE_OK){
-                          console.log(JSON.stringify(ret.data))
+                          $api.setStorage('openId', info.openId);
                           api.toast({
                               msg: '注册成功',
                               duration: 2000,
@@ -234,7 +279,6 @@
                                       type:1
                                   }
                               });
-
                           }
                           else{
                             $api.setStorage('accessToken',ret.data.accessToken)

@@ -7,9 +7,9 @@
     var isAndroid = (/android/gi).test(navigator.appVersion);
     var uzStorage = function(){
         var ls = window.localStorage;
-        if(isAndroid){
-           ls = os.localStorage();
-        }
+        // if(isAndroid){
+        //    ls = os.localStorage();
+        // }
         return ls;
     };
     function parseArguments(url, data, fnSuc, dataType) {
@@ -213,7 +213,7 @@
 
             return mark;
         }
-        
+
     };
     u.remove = function(el){
         if(el && el.parentNode){
@@ -331,7 +331,7 @@
                     break;
             }
         }
-        
+
     };
     u.prepend = function(el, html){
         if(!u.isElement(el)){
@@ -582,10 +582,8 @@
     };
 
 /*end*/
-    
+
 
     window.$api = u;
 
 })(window);
-
-

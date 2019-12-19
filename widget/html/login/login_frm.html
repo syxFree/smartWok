@@ -61,6 +61,7 @@
             outline: none;
             padding-left: 3px;
             color: #333;
+            width: 100%;
         }
         .info .forget{
             width: 84%;
@@ -225,6 +226,7 @@
             mounted(){
               // this.$refs.input.focus()
 
+
             },
             methods: {
                 //清空手机号
@@ -368,15 +370,6 @@
                     }
                 },
                 wxLogin:function(){
-                  // api.openWin({
-                  //     name: 'bindPhone',
-                  //     url: '../wxlogin/bindPhone_win.html',
-                  //     reload:true,
-                  //     pageParam: {
-                  //         // openId:ret.data
-                  //     }
-                  // });
-                    console.log("触发了微信登录")
                     var vm=this
                     var wx = api.require('wxPlus');
                     wx.isInstalled(function(ret, err) {
@@ -384,37 +377,77 @@
                             console.log("安装了")
                             wx.auth({
                                 // apiKey: ''
-                            }, function(ret, err){
-                                if(ret.status){
-                                    console.log("======");
-                                    console.log(ret.code)
-                                    // alert(JSON.stringify(ret));
+                            }, function(ret1, err1){
+                                //微信授权成功
+                                if(ret1.status){
                                     var params={
-                                      code:ret.code
+                                      code:ret1.code
                                     }
-                                    console.log()
-                                    fnBodyPost(interfaces.wxlogin,params,function(){
-                                        if(ret.code==RESPONSE_OK){
-                                          console.log("成功")
-                                          console.log(JSON.stringify(ret.data))
+                                    fnBodyPost(interfaces.wxlogin,params,function(ret2,err2){
+                                        console.log(JSON.stringify(ret2))
+                                        if(ret2.code==RESPONSE_OK){
+                                          //这里第一次微信登录先存起来openId 后边再用微信登录则直接进入
+                                          if($api.getStorage('openId')){
+                                              //如果拿到openId 证明绑定过 这时候存进storage的是token
+                                              $api.setStorage('accessToken', ret2.data);
+                                              api.openWin({
+                                                  name: 'footer_win',
+                                                  url: '../footer/footer_win.html',
+                                                  reload:true,
+                                                  pageParam: {
+                                                      name: 'test'
+                                                  }
+                                              });
+                                          }
+                                          else{
+                                            // 否则就走第一次绑定的逻辑
+                                            api.openWin({
+                                                name: 'bindPhone',
+                                                url: '../wxlogin/bindPhone_win.html',
+                                                reload:true,
+                                                pageParam: {
+                                                    openId:ret2.data
+                                                }
+                                            });
+                                          }
+                                        }
+                                        else if(ret2.code===40073){
+                                          //账号审核中
                                           api.openWin({
-                                              name: 'bindPhone',
-                                              url: '../wxlogin/bindPhone_win.html',
+                                              name: 'successfully',
+                                              url: '../register/successfully_win.html',
                                               reload:true,
                                               pageParam: {
-                                                  openId:ret.data
+                                                  type:2
                                               }
                                           });
-
+                                        }
+                                        else if(ret2.code===40074){
+                                          //账号审核失败
+                                          api.openWin({
+                                              name: 'successfully',
+                                              url: '../register/successfully_win.html',
+                                              reload:true,
+                                              pageParam: {
+                                                  type:3
+                                              }
+                                          });
+                                        }
+                                        else{
+                                          api.toast({
+                                              msg: ret2.msg,
+                                              duration: 2000,
+                                              location: 'bottom'
+                                          });
                                         }
                                     })
-
                                 }else{
                                     console.log("-------")
                                     alert(err.code);
                                 }
                             });
-                        } else {
+                        }
+                        else {
                             alert('当前设备未安装微信客户端');
                         }
                     });

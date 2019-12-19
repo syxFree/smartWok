@@ -84,33 +84,33 @@
             <!--  -->
             <div class="content borderBT">
                 <p>发票抬头</p>
-                <input type="text" placeholder="抬头名称">
+                <input type="text" placeholder="抬头名称" v-model="title">
             </div>
             <!-- 企业 -->
             <div v-if="choose">
                 <div class="content borderBT ">
                     <p>税号</p>
-                    <input type="text" placeholder="纳税人识别号">
+                    <input type="text" placeholder="纳税人识别号" v-model="taxNo">
                 </div>
                 <div class="content borderBT">
                     <p>开户银行</p>
-                    <input type="text" placeholder="选填">
+                    <input type="text" placeholder="选填" v-model="bank">
                 </div>
                 <div class="content borderBT">
                     <p>银行账号</p>
-                    <input type="text" placeholder="选填">
+                    <input type="text" placeholder="选填" v-model="bankNo">
                 </div>
                 <div class="content borderBT">
                     <p>企业地址</p>
-                    <input type="text" placeholder="选填">
+                    <input type="text" placeholder="选填" v-model="bankAddress">
                 </div>
                 <div class="content borderBT">
                     <p>企业电话</p>
-                    <input type="text" placeholder="选填">
+                    <input type="text" placeholder="选填" v-model="phone">
                 </div>
             </div>
             <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
-                <button class="btn" >确定</button>
+                <button class="btn" @click="invoice">确定</button>
             </div>
         </div>
     </div>
@@ -118,13 +118,23 @@
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/fastclick.js" charset="utf-8"></script>
+    <script src="../../script/restful.js" charset="utf-8"></script>
     <script>
+    apiready=function(){
         var vue = new Vue({
             el: '.app',
             data() {
                 return {
                     choose: false,
-                    chooseindex: 1
+                    chooseindex: 1,
+                    title:'',
+                    taxNo:'',
+                    bank:'',
+                    bankNo:'',
+                    bankAddress:'',
+                    phone:'',
+                    orderId:api.pageParam.id
+
                 }
             },
             methods: {
@@ -136,9 +146,80 @@
                         this.choose = !this.choose
                         this.chooseindex = index
                     }
-                }
+                },
+                invoice:function(){
+                    var vm=this
+                    if(vm.choose){
+                      //企业发票
+                      if(this.title==''){
+                        api.toast({
+                            msg: '请先输入抬头名称',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                        return
+                      }
+                      if(this.taxNo==''){
+                        api.toast({
+                            msg: '请先输入纳税人识别号',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                        return
+                      }
+                      var params={
+                        type:1,
+                        title:vm.title,
+                        orderId:vm.orderId,
+                        bank:vm.bank,
+                        bankAccount:vm.bankNo,
+                        companyAddress:vm.bankAddress,
+                        companyPhone:vm.phone,
+                        taxNo:vm.taxNo
+                      }
+                      fnBodyPost(interfaces.invoice,params,function(ret,err){
+                          if(ret.code=+RESPONSE_OK){
+                            api.toast({
+                                msg: '申请成功',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                    }
+                    else{
+                      //个人发票
+                      var params={
+                        type:0,
+                        title:vm.title,
+                        orderId:vm.orderId
+                      }
+                      fnBodyPost(interfaces.invoice,params,function(ret,err){
+                          if(ret.code==RESPONSE_OK){
+                            api.toast({
+                                msg: '申请成功',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }else{
+                            api.toast({
+                                msg: ret.msg,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                          }
+                      })
+                    }
+                },
             },
         })
+      }
     </script>
 </body>
 

@@ -171,11 +171,11 @@
                 </div>
                 <div v-if="item.orderItems" class="countPrice">共{{item.orderItems[0].quantity}}件，合计：<span>￥{{item.orderItems[0].unitPrice*item.orderItems[0].quantity}}</span></div>
                 <div class="list-btn">
-                    <div v-if="item.orderStatus==1 || item.orderStatus==2 || item.orderStatus==3" class="disActive" @click="invoice(item.id)">申请发票</div>
+                    <!-- <div v-if="item.orderStatus==1 || item.orderStatus==2 || item.orderStatus==3" class="disActive" @click="invoice(item.id)">申请发票</div> -->
                     <div v-if="item.orderStatus==0" class="active" @click="pay(item.id)">立即付款</div>
                     <div v-if="item.orderStatus==1" class="active" @click="reminder(item.id)">提醒发货</div>
                     <div v-if="item.orderStatus==2" class="active" @click="confirmGoods(item.id)">确认收货</div>
-                    <div v-if="item.orderStatus==5 || item.orderStatus==3" class="disActive" @click="del(item.id)">删除订单</div>
+                    <div v-if="item.orderStatus==5 || item.orderStatus==3" class="disActive" @click="del(item.id,index)">删除订单</div>
                     <div v-if="item.orderStatus==2 || item.orderStatus==3" class="disActive" @click="look(item.id)">查看物流</div>
                     <div v-if="item.orderStatus==0" class="disActive" @click="cancel(item.id)">取消订单</div>
                 </div>
@@ -251,7 +251,7 @@
                 ],
                 chooseFlag:false,  //支付按钮的选择状态
                 ticketFlag:false,  //订单按钮选择状态
-                pageSize:10,
+                pageSize:4,
                 pageNum:1,
                 isLastPage:false,
                 orderTime:[],
@@ -301,26 +301,29 @@
                         else{
                           vm.emptyFlag=true
                         }
+                        console.log(JSON.stringify(vm.orderList))
                         var list=[],
                             time=[],
                             status=[]
-                        vm.isLastPage=ret.data.lastPage
-                        // console.log(JSON.stringify(vm.orderList))
                         for(var i=0;i<vm.orderList.length;i++){
-                          console.log(JSON.stringify(vm.orderList[i].orderItems)[0].image)
-                          vm.orderTime=time.push(vm.timeToDate(vm.orderList[i].createDate))
-                          vm.orderStatus=status.push(vm.numsToStatus(vm.orderList[i].orderStatus))
+                          time.push(vm.timeToDate(vm.orderList[i].createDate))
+                          status.push(vm.numsToStatus(vm.orderList[i].orderStatus))
+                          vm.orderTime=time
+                          vm.orderStatus=status
                           if(vm.orderList[i].orderItems[0].image){
                               console.log("有图片")
-                              vm.image=list.push(vm.orderList[i].orderItems[0].image.split(',')[0])
+                              list.push(vm.orderList[i].orderItems[0].image.split(',')[0])
+                              vm.image=list
                           }
                           else {
                               console.log("无图片")
-                              vm.image=list.push(vm.orderList[i].orderItems[0].image)
+                              list.push(vm.orderList[i].orderItems[0].image)
+                              vm.image=list
                           }
                         }
-                        // console.log(JSON.stringify(vm.orderList))
-                      }else{
+                        vm.isLastPage=ret.data.lastPage
+                      }
+                      else{
                         api.toast({
                             msg: ret.msg,
                             duration: 2000,
@@ -365,6 +368,7 @@
                   // s = (date.getSeconds() < 10 ? '0' + (date.getSeconds()) : date.getSeconds());
                   return Y + M + D + h + m + s;
                 },
+                //申请发票
                 invoice(index){
                     api.openWin({
                         name: 'invoice_win',
@@ -459,7 +463,7 @@
                     });
                 },
                 //删除订单
-                del:function(index){
+                del:function(index,value){
                   var vm=this
                   api.confirm({
                       msg: '您确认要删除此订单吗？',
@@ -468,6 +472,7 @@
                       if( ret.buttonIndex==1 ){
                         fnBodyPut(interfaces.deleteOrder+'/'+index,{},function(ret,err){
                             if(ret.code==RESPONSE_OK){
+                                vm.orderList.splice(value,1)
                                 vm.getData()
                                 api.toast({
                                     msg: '删除成功',

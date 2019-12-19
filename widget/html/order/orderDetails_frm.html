@@ -416,7 +416,7 @@
                     <div class="user-info">
                         <span class="userName">{{userInfo.userName}}</span>
                         <span class="userPhone">{{userInfo.userPhone}}</span>
-                        <p>{{userInfo.adress}}</p>
+                        <p>{{userInfo.address}}</p>
                     </div>
                 </div>
                 <div class="line">
@@ -598,9 +598,25 @@
                     fnGet(interfaces.getLogistics,params,true,function(ret,err){
                         if(ret.code==RESPONSE_OK){
                           // console.log(JSON.stringify(ret.data.logistics[ret.data.logistics.length-1]))
-                          var logistics=ret.data.logistics[ret.data.logistics.length-1]
-                          vm.logistics.address=logistics.AcceptStation
-                          vm.logistics.time=vm.timeToDate(logistics.AcceptTime)
+                          if(ret.data.logistics.length>0){
+                            console.log(JSON.stringify(ret))
+                            var logistics=ret.data.logistics[ret.data.logistics.length-1]
+                            console.log(JSON.stringify(logistics))
+                            vm.logistics.address=logistics.AcceptStation
+                            vm.logistics.time=vm.timeToDate(logistics.AcceptTime)
+                          }
+                          else{
+                            vm.logistics.address='暂无物流信息'
+                            vm.logistics.time=''
+                          }
+                        }
+                        else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
                         }
                     })
                 },
@@ -649,18 +665,20 @@
                       return '已取消'
                     }
                 },
+                //申请发票
+                //点击付款
                 pay:function(){
                     console.log("a")
                     this.shadeFlag=true
                 },
                 //申请发票
-                ApplicationInvoice:function(){
+                ApplicationInvoice:function(index){
                     api.openWin({
                         name: 'invoice',
                         url: 'invoice_win.html',
                         reload:true,
                         pageParam: {
-                            name: 'test'
+                            id:index
                         }
                     });
                 },
@@ -685,11 +703,12 @@
                     })
                 },
                 //确认收货
-                confirmGoods:function(){
+                confirmGoods:function(index){
                   var vm=this
                   if(confirm("您确认收货吗？")){
                     fnBodyPut(interfaces.receiptOrder+'/'+index,{},function(ret,err){
                         if(ret.code==RESPONSE_OK){
+                          vm.getData()
                           api.toast({
                               msg: '确认收货成功',
                               duration: 2000,
@@ -810,6 +829,7 @@
                 payOrder:function(id){
                     var vm=this
                     var type=0
+                    console.log(vm.payFlag)
                     if(vm.payOrder){
                       type=0   //代表支付宝支付
                       // vm.aliPay()
@@ -821,13 +841,16 @@
                         orderId:id,
                         payType:type
                     }
+                    console.log(JSON.stringify(params));
                     fnBodyPost(interfaces.payNow,params,function(ret,err){
                       if(ret.code==RESPONSE_OK){
-                          console.log(JSON.stringify(ret.data))
-                          if(type==0){
+                          // console.log(JSON.stringify(ret.data))
+                          if(vm.payFlag){
+                            console.log("支付宝支付")
                             vm.aliPay(ret.data.paySign)
                           }
-                          else if(type==1){
+                          else{
+                            console.log("微信支付")
                             vm.wxPay(ret.data)
                           }
                       }else{
