@@ -27,6 +27,7 @@
 
     .content-name {
       height: 1.02rem;
+      position: relative;
     }
 
     .head-img span,
@@ -64,8 +65,12 @@
       left: -.3rem;
     }
     #address,#sex{
-      width: 70%;
       text-align: right;
+      position: absolute;
+      z-index: 3;
+      width:99%;
+      overflow: hidden;
+      right: .7rem;
     }
   </style>
 </head>
@@ -91,17 +96,13 @@
       </div>
       <div class="content-name" >
         <span>性别</span>
-        <div id="sex">
-          <span class="name">{{sex}}</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" >
-        </div>
+        <span class="name" id="sex">{{sex}}</span>
+        <img src="../../image/my/unfold.png" alt="" class="unfold">
       </div>
       <div class="content-name" >
         <span>所在地</span>
-        <div id="address">
-          <span class="name">{{address}}</span>
-          <img src="../../image/my/unfold.png" alt="" class="unfold" >
-        </div>
+        <span class="name" id="address">{{address}}</span>
+        <img src="../../image/my/unfold.png" alt="" class="unfold">
       </div>
     </div>
     <!-- 对于弹出框来选择男女和所在地 -->
@@ -134,12 +135,6 @@
     });
     // 下拉刷新
     //
-    // api.setRefreshHeaderInfo({
-    //     bgColor: '#fff'
-    // }, function (ret, err) {
-    //     vue.person()
-    //     api.refreshHeaderLoadDone();
-    // });
 
 
     var vue = new Vue({
@@ -155,11 +150,14 @@
           addressId:'',
           pers:'',
           addindex:[],
+          alladdress: [{ 'id': 0, 'value': '男' },{ 'id': 1, 'value': '女' }]
         }
       },
       mounted() {
         // 获取个人信息、
         this.person()
+        this.getmobileSelect2()
+
       },
       methods: {
         // 地址
@@ -172,6 +170,8 @@
           fnGet(interfaces.area, {}, true, function(ret, err) {
               if (ret.code == RESPONSE_OK) {
                   let array = ret.data
+                  vm.alladdress= ret.data
+                  vm.getmobileSelect1()
                   for (var i = 0; i < array.length; i++) {
                       if (array[i].id == arrtreePath[0]) {
                           // console.log(JSON.stringify(array[i]))
@@ -204,8 +204,7 @@
                           }
                       }
                   }
-                  vm.getmobileSelect1(ret.data) //创建选择(ret.data)
-                  vm.getmobileSelect2()
+                //创建选择(ret.data)
               } else {
                   console.log(JSON.stringify(err))
               }
@@ -213,12 +212,12 @@
         },
         getmobileSelect1(array){
           let vm=this
-          var mobileSelect1 = new MobileSelect({
+          var mobileSelect = new MobileSelect({
           trigger: '#address',
           title: '所在地区',
           wheels: [
             {
-              data: array
+              data: vm.alladdress
             }
           ],
           position: vm.addindex,
@@ -229,6 +228,20 @@
                 vm.addressId = data[i].id
             }
             vm.saveperson()
+          },
+          onHide: function () {
+              api.setFrameAttr({
+                  name: 'person_frm',
+                  bounces: true,
+                  scrollEnabled: true
+              });
+          },
+          onShow: function () {
+              api.setFrameAttr({
+                  name: 'person_frm',
+                  bounces: false,
+                  scrollEnabled: false
+              });
           }
         });
       },
@@ -247,7 +260,21 @@
             vm.sex=data[0].value
             vm.sexId=data[0].id
             vm.saveperson()
-          }
+          },
+            onHide: function () {
+                api.setFrameAttr({
+                    name: 'person_frm',
+                    bounces: true,
+                    scrollEnabled: true
+                });
+            },
+            onShow: function () {
+                api.setFrameAttr({
+                    name: 'person_frm',
+                    bounces: false,
+                    scrollEnabled: false
+                });
+            }
         });
       },
         // 个人信息
@@ -327,7 +354,7 @@
             mediaValue: 'pic',
             destinationType: 'base64',
             allowEdit: false,
-            quality: 80,
+            quality: 50,
             targetWidth: 500,
             targetHeight: 500,
             saveToPhotoAlbum: false
@@ -374,9 +401,9 @@
                     duration: 2000,
                     location: 'bottom'
                 });
-                api.sendEvent({
-                    name: 'changeperson',
-                });
+                // api.sendEvent({
+                //     name: 'changeperson',
+                // });
             }else{
               console.log(JSON.stringify(err))
             }

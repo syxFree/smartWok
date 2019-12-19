@@ -58,7 +58,7 @@
     <div class="nickinput-box">
       <p>昵称</p>
       <div class="nickinput">
-        <input type="text" v-model="nickname">
+        <input type="text" v-model="nickname" maxlength="8">
         <img src="../../image/my/del-pic.png" alt="" @click="delname">
       </div>
     </div>
@@ -132,6 +132,9 @@
                  api.sendEvent({
                      name: 'changeperson',
                  });
+                 setTimeout(function() {
+                     api.closeWin()
+                 },500)
              }else{
                console.log(JSON.stringify(err))
              }
