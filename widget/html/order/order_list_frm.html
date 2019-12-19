@@ -256,7 +256,8 @@
                 isLastPage:false,
                 orderTime:[],
                 orderStatus:[],
-                emptyFlag:true
+                emptyFlag:true,
+                image:[],   //对图片进行分割 存放放里边
             },
             created(){
               this.getData()
@@ -300,11 +301,23 @@
                         else{
                           vm.emptyFlag=true
                         }
+                        var list=[],
+                            time=[],
+                            status=[]
                         vm.isLastPage=ret.data.lastPage
-                        console.log(JSON.stringify(vm.orderList))
+                        // console.log(JSON.stringify(vm.orderList))
                         for(var i=0;i<vm.orderList.length;i++){
-                          vm.orderTime.push(vm.timeToDate(vm.orderList[i].createDate))
-                          vm.orderStatus.push(vm.numsToStatus(vm.orderList[i].orderStatus))
+                          console.log(JSON.stringify(vm.orderList[i].orderItems)[0].image)
+                          vm.orderTime=time.push(vm.timeToDate(vm.orderList[i].createDate))
+                          vm.orderStatus=status.push(vm.numsToStatus(vm.orderList[i].orderStatus))
+                          if(vm.orderList[i].orderItems[0].image){
+                              console.log("有图片")
+                              vm.image=list.push(vm.orderList[i].orderItems[0].image.split(',')[0])
+                          }
+                          else {
+                              console.log("无图片")
+                              vm.image=list.push(vm.orderList[i].orderItems[0].image)
+                          }
                         }
                         // console.log(JSON.stringify(vm.orderList))
                       }else{
@@ -455,12 +468,12 @@
                       if( ret.buttonIndex==1 ){
                         fnBodyPut(interfaces.deleteOrder+'/'+index,{},function(ret,err){
                             if(ret.code==RESPONSE_OK){
+                                vm.getData()
                                 api.toast({
                                     msg: '删除成功',
                                     duration: 2000,
                                     location: 'bottom'
                                 });
-                                vm.getData()
                             }else{
                               api.toast({
                                   msg: ret.msg,

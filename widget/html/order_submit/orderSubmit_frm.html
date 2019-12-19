@@ -269,7 +269,7 @@
                     <div v-if="userInfoFlag" class="user-info">
                         <span class="userName">{{userInfo.receiptorName}}</span>
                         <span class="userPhone">{{userInfo.receiptorPhone}}</span>
-                        <p>{{userInfo.address}}</p>
+                        <p>{{userInfo.areaName}}{{ userInfo.address}}</p>
                     </div>
                     <div v-else class="user-info-else">您还没有添加过地址，点击添加</div>
                     <div class="moreAdress">
@@ -545,6 +545,7 @@
                     fnGet(interfaces.getAddressById+'/'+value,{},true,function(ret,err){
                         if(ret.code==RESPONSE_OK){
                           vm.userInfo=ret.data
+                          console.log(JSON.stringify(vm.userInfo))
                         }
                         else{
                           api.toast({
@@ -579,7 +580,7 @@
                       slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
-                          name: 'test'
+                          changeFlag:true
                       }
                   });
 
