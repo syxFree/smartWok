@@ -134,7 +134,7 @@
           </div>
           <div v-show="item.def===false"></div>
           <div class="address-handle">
-            <div @click="editor(item.id)">
+            <div @click.stop="editor(item.id)">
               <img src="../../image/my/editor.png" alt="">
               编辑
             </div>
@@ -177,8 +177,12 @@
       data() {
         return {
           hasaddress: false,
-          addresslist:''
+          addresslist:'',
+          changeFlag:false,  //这个代表从提交订单页来的话状态变化
         }
+      },
+      created(){
+        this.changeFlag=api.pageParam.changeFlag
       },
       mounted(){
         this.getaddress()
@@ -206,14 +210,19 @@
         //     })
         // },
         changeAddress:function(value){
-            api.sendEvent({
-                name: 'changeAddress',
-                extra: {
-                    id:value
-                }
-            });
-            api.closeWin();
-
+            if(this.changeFlag){
+              api.sendEvent({
+                  name: 'changeAddress',
+                  extra: {
+                      id:value
+                  }
+              });
+              this.changeFlag=false
+              api.closeWin();
+            }
+            else{
+              return
+            }
         },
         // 获取收获地址
         getaddress(){
@@ -282,6 +291,7 @@
 
       }
     })
+
   }
   </script>
 

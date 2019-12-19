@@ -31,6 +31,8 @@ var interfaces = {
     informationList:'/sw/news/list',  //咨询列表
     informationBanner:'/sw/news/brand/list',  //咨询轮播图
     informationDetail:'/sw/news',           //咨询详情
+    newsShare:'/sw/share/news',    //咨询分享
+    goodsShare:'/sw/share/goods',  //商品分享
     goodsList:'/sw/shop/list',    //商品列表
     goodsDetails:'/sw/shop/detial',    //商品详情
     goodsCategory:'/sw/shop/category',    //分类列表
@@ -356,7 +358,7 @@ function toLogin() {
       api.closeToWin({
           name: 'root'
       });
-    },300)
+    },600)
 
 }
 

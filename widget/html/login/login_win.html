@@ -24,6 +24,8 @@
     <script src="../../script/vue.min.js"></script>
     <script>
     apiready = function () {
+        console.log(api.winName)
+        $api.rmStorage('accessToken');
         var header = $api.dom('header'); // 获取 header 标签元素
         var footer = $api.dom('footer'); // 获取 footer 标签元素
         api.addEventListener({

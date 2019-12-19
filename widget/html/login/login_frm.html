@@ -368,55 +368,56 @@
                     }
                 },
                 wxLogin:function(){
-                  api.openWin({
-                      name: 'bindPhone',
-                      url: '../wxlogin/bindPhone_win.html',
-                      reload:true,
-                      pageParam: {
-                          // openId:ret.data
-                      }
-                  });
-                    // console.log("触发了微信登录")
-                    // var vm=this
-                    // var wx = api.require('wxPlus');
-                    // wx.isInstalled(function(ret, err) {
-                    //     if (ret.installed) {
-                    //         console.log("安装了")
-                    //         wx.auth({
-                    //             // apiKey: ''
-                    //         }, function(ret, err){
-                    //             if(ret.status){
-                    //                 console.log("======");
-                    //                 console.log(ret.code)
-                    //                 // alert(JSON.stringify(ret));
-                    //                 var params={
-                    //                   code:ret.code
-                    //                 }
-                    //                 console.log()
-                    //                 fnBodyPost(interfaces.wxlogin,params,function(){
-                    //                     if(ret.code==RESPONSE_OK){
-                    //                       console.log("成功")
-                    //                       api.openWin({
-                    //                           name: 'bindPhone',
-                    //                           url: '../register/register_win.html',
-                    //                           reload:true,
-                    //                           pageParam: {
-                    //                               openId:ret.data
-                    //                           }
-                    //                       });
-                    //
-                    //                     }
-                    //                 })
-                    //
-                    //             }else{
-                    //                 console.log("-------")
-                    //                 alert(err.code);
-                    //             }
-                    //         });
-                    //     } else {
-                    //         alert('当前设备未安装微信客户端');
-                    //     }
-                    // });
+                  // api.openWin({
+                  //     name: 'bindPhone',
+                  //     url: '../wxlogin/bindPhone_win.html',
+                  //     reload:true,
+                  //     pageParam: {
+                  //         // openId:ret.data
+                  //     }
+                  // });
+                    console.log("触发了微信登录")
+                    var vm=this
+                    var wx = api.require('wxPlus');
+                    wx.isInstalled(function(ret, err) {
+                        if (ret.installed) {
+                            console.log("安装了")
+                            wx.auth({
+                                // apiKey: ''
+                            }, function(ret, err){
+                                if(ret.status){
+                                    console.log("======");
+                                    console.log(ret.code)
+                                    // alert(JSON.stringify(ret));
+                                    var params={
+                                      code:ret.code
+                                    }
+                                    console.log()
+                                    fnBodyPost(interfaces.wxlogin,params,function(){
+                                        if(ret.code==RESPONSE_OK){
+                                          console.log("成功")
+                                          console.log(JSON.stringify(ret.data))
+                                          api.openWin({
+                                              name: 'bindPhone',
+                                              url: '../wxlogin/bindPhone_win.html',
+                                              reload:true,
+                                              pageParam: {
+                                                  openId:ret.data
+                                              }
+                                          });
+
+                                        }
+                                    })
+
+                                }else{
+                                    console.log("-------")
+                                    alert(err.code);
+                                }
+                            });
+                        } else {
+                            alert('当前设备未安装微信客户端');
+                        }
+                    });
                  },
               },
           })
