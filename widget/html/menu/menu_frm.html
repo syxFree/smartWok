@@ -596,7 +596,7 @@
     </div>
     <div class="hrs mb1"></div>
     <!-- 提交 -->
-    <div class="transfer-box">
+    <div class="transfer-box" ref="transfer">
       <div class="transfer">
         <div class="del" @click="empty">清空</div>
         <div class="fer" @click="handleisbluetooth">传输</div>
@@ -767,12 +767,33 @@
           }
         },
         mounted() {
+          let vm=this
           this.temperaturecon = this.temperature[0]
           this.parametercon = this.parameter[0]
           this.timeHnum= this.timeouth[0]
           this.timeMnum= this.timeoutm[0]
           this.timeSnum= this.timeouts[0]
           this.getFeature();
+          var originalHeight=document.documentElement.clientHeight ||document.body.clientHeight;
+            window.onresize = function(){
+                //键盘弹起与隐藏都会引起窗口的高度发生变化
+                   var resizeHeight=document.documentElement.clientHeight || document.body.clientHeight;
+                    if(resizeHeight < originalHeight){
+                     //当软键盘弹起，在此处操作
+                      console.log(12314)
+                    //  console.log(JSON.stringify(vm.$refs.transfer))
+                    // vm.$refs.transfer.css('position','relative')
+                    //   vm.$refs.transfer.css('color','red')
+
+                     console.log(12314)
+                     }else{
+                       console.log(114141)
+
+                     //当软键盘收起，在此处操作
+                      //  this.$refs.transfer.css('position','fixed')
+                     console.log(114141)
+                     }
+            }
         },
         methods: {
           getFeature(){

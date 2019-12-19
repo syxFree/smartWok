@@ -344,7 +344,7 @@
               if(ret.data !== ""){
                 fnBodyPost(interfaces.upload, formdata, function(ret, err) {
                     if (ret.code == RESPONSE_OK) {
-                      console.log(JSON.stringify(ret.data))
+                      // console.log(JSON.stringify(ret.data))
                         vm.imgs.push(ret.data);
                     } else {
                         if (ret.subMsg || ret.msg) {
