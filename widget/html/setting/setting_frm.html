@@ -134,14 +134,21 @@
                                 url: '../login/login_win.html',
                                 reload: true,
                                 bounces: false,
-                                slidBackEnabled: true,
+                                slidBackEnabled: false,
                             });
                             setTimeout(function(){
+                                // api.closeWidget({});
+                                // api.closeWin({});
+
+
                                 api.closeToWin({
                                     name: 'root'
                                 });
                                 console.log("执行关闭页面")
                             },300)
+                            // api.closeToWin({
+                            //     name: 'login_win',
+                            // });
                         }
                     },
 

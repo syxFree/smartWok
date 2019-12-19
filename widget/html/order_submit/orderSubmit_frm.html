@@ -269,7 +269,7 @@
                     <div v-if="userInfoFlag" class="user-info">
                         <span class="userName">{{userInfo.receiptorName}}</span>
                         <span class="userPhone">{{userInfo.receiptorPhone}}</span>
-                        <p>{{userInfo.address}}</p>
+                        <p>{{userInfo.areaName}}{{ userInfo.address}}</p>
                     </div>
                     <div v-else class="user-info-else">您还没有添加过地址，点击添加</div>
                     <div class="moreAdress">
@@ -419,6 +419,14 @@
                 submit:function(){
                     var vm=this
                     var type=0
+                    if(!vm.userInfoFlag){
+                      api.toast({
+                          msg: '请先完善地址',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      return
+                    }
                     if(vm.chooseFlag){
                       type=0   //0代表支付宝
                       // vm.aliPay()
@@ -517,8 +525,8 @@
                 //获取用户默认地址
                 getAddress:function(){
                     var vm=this
-                    fnGet(interfaces.getAdress,{},true,function(ret,err){
-                        if(ret.code==40071){
+                    fnGet(interfaces.getAddress,{},true,function(ret,err){
+                        if(ret.code==40076){
                             vm.userInfoFlag=false
                             api.toast({
                                 msg: '您还没有设置默认地址',
@@ -529,6 +537,23 @@
                         }else{
                             vm.userInfo=ret.data
                             console.log(JSON.stringify(vm.address))
+                        }
+                    })
+                },
+                //根据id获取地址
+                getAddressById:function(value){
+                    fnGet(interfaces.getAddressById+'/'+value,{},true,function(ret,err){
+                        if(ret.code==RESPONSE_OK){
+                          vm.userInfo=ret.data
+                          console.log(JSON.stringify(vm.userInfo))
+                        }
+                        else{
+                          api.toast({
+                              msg: ret.msg,
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
                         }
                     })
                 },
@@ -555,13 +580,24 @@
                       slidBackEnabled:true,
                       bounces:false,
                       pageParam: {
-                          name: 'test'
+                          changeFlag:true
                       }
                   });
 
                 }
             },
         })
+        api.addEventListener({
+            name: 'changeAddress'
+        }, function(ret, err){
+            if( ret ){
+                vm.userInfoFlag=true
+                vm.getAddressById(ret.value.id)
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+
     }
     </script>
 </body>

@@ -104,7 +104,7 @@
             font-size: .3rem;
         }
         .detail .detail-p{
-            width: 1.2rem;
+            width: 1.25rem;
             height: 0.76rem;
             margin-left: .3rem;
             border-bottom: 4px solid #FF8C46;
@@ -328,7 +328,7 @@
                 <div class="info">{{goods.name}}</div>
                 <div class="goods-price-count">
                     <div class="good-price">￥{{goods.price}}</div>
-                    <div class="good-count">库存：{{goods.stock}}</div>
+                    <div class="good-count">库存：{{goods.stock<0?'0':goods.stock}}</div>
                 </div>
             </div>
             <div class="detail">
@@ -353,7 +353,7 @@
                     <img :src="img[0]" alt="商品图片">
                     <div class="info-price-count">
                         <p>￥{{goods.price}}</p>
-                        <p>库存：{{goods.stock}}</p>
+                        <p>库存：{{goods.stock<0?'0':goods.stock}}</p>
                     </div>
                 </div>
                 <div class="order-count">
@@ -391,6 +391,9 @@
       var id=api.pageParam.id
       //兼容iphonex
       $api.fixTabBar($api.dom('footer'))
+      console.log(JSON.stringify($api.dom('footer')))
+      console.log(JSON.stringify($api.byId('shadeOrder')))
+      console.log(JSON.stringify($api.byId('shade')))
       $api.fixTabBar($api.byId('shadeOrder'))
       $api.fixTabBar($api.byId('shade'))
       console.log(id)
@@ -413,11 +416,17 @@
                 shadeFlag2:false,
                 img:[],
                 currentIndex:0,
-                phone:'123456789123'
+                phone:'123456789123',
+                url:host+interfaces.goodsShare+'/'+id
             },
             created(){
                 this.getData()
                 this.getCall()
+            },
+            mounted(){
+              console.log(JSON.stringify($api.dom('footer')))
+              console.log(JSON.stringify($api.byId('shadeOrder')))
+              console.log(JSON.stringify($api.byId('shade')))
             },
             watch: {
                 //监听数量的加减，改版加减数量按钮的状态
@@ -452,7 +461,9 @@
                       if(vm.orderCount>=vm.goods.stock){
                           vm.incFlag=false
                       }
+                      console.log(vm.goods.images)
                       var bannerList=vm.goods.images.split(',')
+                      console.log(JSON.stringify(bannerList))
                       vm.img=bannerList
                       vm.moveSlide()
                       api.openFrame({
@@ -510,14 +521,16 @@
                 },
                 //分享到微信
                 shareWx:function(){
-                  var wx = api.require('wx');
-                  wx.shareWebpage({
+                  var vm=this
+                  console.log(vm.url)
+                  var wxPlus = api.require('wxPlus');
+                  wxPlus.shareWebpage({
                       apiKey: '',
-                      scene: 'timeline',
-                      title: '测试标题',
+                      scene: 'session',
+                      title: '智能炒锅',
                       description: '分享内容的描述',
                       thumb: 'widget://a.jpg',
-                      contentUrl: 'http://apicloud.com'
+                      contentUrl: vm.url
                   }, function(ret, err) {
                       if (ret.status) {
                           alert('分享成功');
@@ -548,9 +561,19 @@
                 //购买按钮
                 order:function(){
                     //添加禁止页面滚动
-                    this.shadeFlag=true
-                    document.body.addEventListener('touchmove', this.scroll
-                    , {passive:false});
+                    if(this.goods.stock<=0){
+                      api.toast({
+                          msg: '库存不足，再看看其他的吧~',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      return
+                    }
+                    else{
+                      this.shadeFlag=true
+                      document.body.addEventListener('touchmove', this.scroll
+                      , {passive:false});
+                    }
                 },
                 //关闭遮罩层
                 closeShade:function(){

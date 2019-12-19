@@ -19,7 +19,7 @@ var host = 'http://106.15.102.116:9902'    //线
 // var host = "http://whale123.free.idcfengye.com";
 var interfaces = {
     login: '/sw/auth/login',// 登录
-    register:'/sw/auth/register', //注册
+    register:'/sw/auth/register/v2', //注册
     bindPhone:'/sw/auth/bind_phone', //绑定手机号
     setPwd:'/sw/auth/reset_pwd',    //修改密码
     loginId: '/jgj/worker/worker_type', // 判断用户登录身份
@@ -31,11 +31,14 @@ var interfaces = {
     informationList:'/sw/news/list',  //咨询列表
     informationBanner:'/sw/news/brand/list',  //咨询轮播图
     informationDetail:'/sw/news',           //咨询详情
+    newsShare:'/sw/share/news',    //咨询分享
+    goodsShare:'/sw/share/goods',  //商品分享
     goodsList:'/sw/shop/list',    //商品列表
     goodsDetails:'/sw/shop/detial',    //商品详情
     goodsCategory:'/sw/shop/category',    //分类列表
     call:'/sw/shop/phone',    //获取客服电话
-    getAdress:'/sw/info/address/def',  //获取默认地址
+    getAddress:'/sw/info/address/def',  //获取默认地址
+    getAddressById:'/sw/info/address',  //根据id获取地址
     createOrder:'/sw/order/create',  //创建订单
     payNow:'/sw/order/pay_now',    //立即支付
     getOrderList:'/sw/order',     //获取订单
@@ -344,7 +347,7 @@ function toLogin() {
     // $api.rmStorage('accessToken')
     // console.log("跳转到首页")
     api.openWin({
-        name: 'root',
+        name: 'login_win',
         url: '../login/login_win.html',
         reload:true,
         pageParam: {
@@ -355,7 +358,7 @@ function toLogin() {
       api.closeToWin({
           name: 'root'
       });
-    },300)
+    },600)
 
 }
 

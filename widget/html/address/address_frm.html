@@ -120,7 +120,7 @@
 <body>
   <div class="app">
     <!-- 当有收获地址的时候 -->
-    <div v-if="hasaddress" v-for="(item,index) in addresslist">
+    <div v-if="hasaddress" v-for="(item,index) in addresslist" @click="changeAddress(item.id)">
       <div class="address" >
         <div class="address-person">
           <span class="name">{{item.receiptorName}}</span>
@@ -134,11 +134,11 @@
           </div>
           <div v-show="item.def===false"></div>
           <div class="address-handle">
-            <div @click="editor(item.id)">
+            <div @click.stop="editor(item.id)">
               <img src="../../image/my/editor.png" alt="">
               编辑
             </div>
-            <div @click="deleaddress(item,index)">
+            <div @click.stop="deleaddress(item,index)">
               <img src="../../image/my/address-del.png" alt="" >
               删除
             </div>
@@ -177,8 +177,12 @@
       data() {
         return {
           hasaddress: false,
-          addresslist:''
+          addresslist:'',
+          changeFlag:false,  //这个代表从提交订单页来的话状态变化
         }
+      },
+      created(){
+        this.changeFlag=api.pageParam.changeFlag
       },
       mounted(){
         this.getaddress()
@@ -205,6 +209,21 @@
         //       }
         //     })
         // },
+        changeAddress:function(value){
+            if(this.changeFlag){
+              api.sendEvent({
+                  name: 'changeAddress',
+                  extra: {
+                      id:value
+                  }
+              });
+              this.changeFlag=false
+              api.closeWin();
+            }
+            else{
+              return
+            }
+        },
         // 获取收获地址
         getaddress(){
           let vm=this
@@ -247,20 +266,32 @@
         //删除收获地址
         deleaddress(item,index){
           let vm=this
-             let url=interfaces.address+'?id='+item.id
-           fnDelete(url,true, function(ret,err){
-             console.log(JSON.stringify(ret))
-               if(ret.code==RESPONSE_OK){
-                 console.log(JSON.stringify(ret))
-                  vm.addresslist.splice(index,1)
+           let url=interfaces.address+'?id='+item.id
+           api.confirm({
+               msg: '您确认删除吗？',
+               buttons: ['确定', '取消']
+           }, function(ret, err){
+               if( ret.buttonIndex==1 ){
+                 fnDelete(url,true, function(ret,err){
+                   console.log(JSON.stringify(ret))
+                     if(ret.code==RESPONSE_OK){
+                       console.log(JSON.stringify(ret))
+                        vm.addresslist.splice(index,1)
+                     }else{
+                       console.log(JSON.stringify(err))
+                     }
+                 })
                }else{
-                 console.log(JSON.stringify(err))
+                    return
                }
-           })
+           });
+
+
         },
 
       }
     })
+
   }
   </script>
 

@@ -42,7 +42,7 @@
         .info .login-info {
             width: 84%;
             height: 0.8rem;
-            margin: 0 auto;
+            margin: .2rem auto 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -162,14 +162,14 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="text" placeholder="请选择注册类型" v-model="type">
+                    <input type="text" disabled placeholder="请选择注册类型" v-model="type">
                     <img src="../../image/my/unfold.png" alt="" class="unfold" id="type">
                 </div>
                 <div class="login-info">
                     <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
                 </div>
                 <div class="login-info">
-                    <input type="password" @input="codeInput" placeholder="请输入验证码" v-model="code">
+                    <input type="text" @input="codeInput" placeholder="请输入验证码" v-model="code">
                     <div class="code" v-if="sendCodeFlag" @click="changeCodeFlag">获取验证码</div>
                     <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
                 </div>
@@ -216,7 +216,7 @@
                     sendStatus: false, //发送验证码按钮状态
                     checkTCP: false,
                     type: '',
-                    typeid: ''
+                    typeid: 0,
                 },
                 watch: {
                     //监听输入手机号，动态显示删除按钮
@@ -267,6 +267,11 @@
                     },
                     handleto() {
                         let vm = this
+                        var params={
+                          code:this.code,
+                          phone:this.phone,
+                          type:0
+                        }
                         if(vm.phone==''){
                           api.toast({
                               msg: '请先输入手机号',
@@ -292,29 +297,56 @@
                           return
                         }
                         else if (this.typeid === 0 && this.phone && this.code && this.checkTCP) {
-                            api.openWin({
-                                name: 'setPwd_win',
-                                url: 'setPwd_win.html',
-                                reload: true,
-                                bounces: false,
-                                slidBackEnabled: false,
-                                pageParam: {
-                                    username: vm.phone,
-                                    code: vm.code
-                                }
-                            });
-                        } else if(this.typeid === 1 || this.typeid === 2 && this.phone && this.code && this.checkTCP){
-                            api.openWin({
-                                name: 'register_firm_win',
-                                url: 'register_firm_win.html',
-                                reload: true,
-                                bounces: false,
-                                slidBackEnabled: false,
-                                pageParam: {
-                                    username: vm.phone,
-                                    code: vm.code
-                                }
-                            });
+                          fnBodyPost(interfaces.checkCode,params,function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                              api.openWin({
+                                  name: 'setPwd_win',
+                                  url: 'setPwd_win.html',
+                                  reload: true,
+                                  bounces: false,
+                                  slidBackEnabled: true,
+                                  pageParam: {
+                                      username: vm.phone,
+                                      code: vm.code,
+                                      type:vm.typeid,
+                                      flag:false
+                                  }
+                              });
+                            }
+                            else{
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                          })
+                        }
+                        else if(this.typeid === 1 || this.typeid === 2 && this.phone && this.code && this.checkTCP){
+                          fnBodyPost(interfaces.checkCode,params,function(ret,err){
+                            if(ret.code==RESPONSE_OK){
+                              api.openWin({
+                                  name: 'register_firm_win',
+                                  url: 'register_firm_win.html',
+                                  reload: true,
+                                  bounces: false,
+                                  slidBackEnabled: true,
+                                  pageParam: {
+                                      username: vm.phone,
+                                      code: vm.code,
+                                      type:vm.typeid,
+                                      flag:false
+                                  }
+                              });
+                            }
+                            else{
+                              api.toast({
+                                  msg: ret.msg,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                          })
                         }
                     },
                     //手机号输入框失去焦点

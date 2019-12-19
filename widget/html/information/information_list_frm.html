@@ -153,11 +153,13 @@
                   }
               ],
               pageNum:1,
-              pageSize:1,
+              pageSize:10,
               isLastPage:false,
               bottomFlag:false
           },
           created(){
+              // $api.rmStorage('accessToken');
+
               this.getBannerData()
               var params={
                 pageSize:this.pageSize,
@@ -338,7 +340,7 @@
           bgColor: '#fff'
       }, function (ret, err) {
           vm.pageNum = 1;
-          vm.pageSize=1;
+          vm.pageSize=10;
           vm.isLastPage = false;
           vm.list = null;
           var params={
@@ -346,6 +348,7 @@
             pageNum:vm.pageNum,
           }
           vm.getData(params,'refresh')
+          vm.getBannerData()
       });
     }
 

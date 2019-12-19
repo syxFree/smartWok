@@ -115,6 +115,7 @@
     #address input{
       width:80%;
     }
+
   </style>
 </head>
 
@@ -145,8 +146,8 @@
     </div>
     <div class="switch">
       <p>设置默认地址</p>
-      <img src="../../image/my/switch.png" alt="" v-if="switchcase===false" @click="handleswitchcase">
-      <img src="../../image/my/switch-true.png" alt="" v-if="switchcase" @click="handleswitchcase">
+        <img src="../../image/my/switch.png" alt="" v-if="switchcase===false" @click="handleswitchcase">
+        <img src="../../image/my/switch-true.png" alt="" v-if="switchcase" @click="handleswitchcase">
     </div>
     <div style="text-align: center;position: fixed; bottom: .5rem;left:4%;">
       <button class="btn" @click="saveaddress">保存</button>
@@ -288,8 +289,9 @@
               api.sendEvent({
                   name: 'changeaddress',
               });
-              api.closeWin()
-
+              setTimeout(function() {
+                  api.closeWin()
+              },500)
             }else {
               console.log(JSON.stringify(err))
             }
