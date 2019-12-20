@@ -8,6 +8,26 @@
     <link rel="stylesheet" href="../../css/api.css">
     <link rel="stylesheet" href="../../css/mobileSelect.css">
     <style>
+         ::-webkit-input-placeholder {
+            /* WebKit, Blink, Edge */
+            color: #999999;
+        }
+
+         :-moz-placeholder {
+            /* Mozilla Firefox 4 to 18 */
+            color: #999999;
+        }
+
+         ::-moz-placeholder {
+            /* Mozilla Firefox 19+ */
+            color: #999999;
+        }
+
+         :-ms-input-placeholder {
+            /* Internet Explorer 10-11 */
+            color: #999999;
+        }
+
         .btn {
             width: 6.9rem;
             height: .78rem;
@@ -34,8 +54,8 @@
             color: #333333;
         }
 
-        .content input {
-            width: 50%;
+        .content>input {
+          width: 73%;
         }
 
         .unfold {
@@ -45,6 +65,10 @@
         }
 
         .contentflex {
+            position: relative;
+        }
+
+        .contentflex div {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -65,6 +89,8 @@
         .content-detail textarea {
             font-size: .28rem;
             color: #333333;
+            box-sizing: border-box;
+            padding: .1rem;
         }
 
         .switch {
@@ -85,13 +111,19 @@
             width: .9rem;
             height: .55rem;
         }
-        #address{
-          display: flex;
-          justify-content: space-between;
-          width: 75%;
+
+        #address {
+            position: absolute;
+            width: 85%;
+            /*border: 1px solid red;*/
+            top: .35rem;
+            left: 1.76rem;
         }
-        #address input{
-          width:80%;
+
+        .hrs {
+            width: 100%;
+            height: .2rem;
+            background-color: #F7F7F7;
         }
     </style>
 </head>
@@ -101,26 +133,25 @@
         <div class="content-box">
             <div class="content">
                 <span>收货人</span>
-                <input type="text" placeholder="请填写姓名" v-model="name" style="margin-left:.88rem;" maxlength="8">
+                <input type="text" placeholder="请填写姓名" v-model="name" style="margin-left: .8rem;" maxlength="8">
             </div>
             <div class="content">
                 <span>手机号码</span>
-                <input type="tel" placeholder="手机号码" style="margin-left: .60rem;" v-model="phone" maxlength="11">
+                <input type="tel" placeholder="手机号码" style="margin-left: .55rem;" v-model="phone" maxlength="11">
             </div>
             <div class="content contentflex">
                 <div>
                     <span>所在地区</span>
+                    <img src="../../image/my/unfold.png" alt="" class="unfold">
                 </div>
-                <div id="address">
-                  <input type="text" placeholder="请输入"  v-model="address" readonly="readonly" >
-                  <img src="../../image/my/unfold.png" alt="" class="unfold"  >
-                </div>
+                <input type="text" placeholder="请输入" v-model="address" readonly="readonly" id="address">
             </div>
             <div class="content-detail">
                 <span>详细地址</span>
-                <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）" style="margin-top:.05rem" v-model="detail"></textarea>
+                <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）" v-model="detail"></textarea>
             </div>
         </div>
+        <div class="hrs"></div>
         <div class="switch">
             <p>设置默认地址</p>
             <img src="../../image/my/switch.png" alt="" v-if="switchcase===false" @click="handleswitchcase">
@@ -166,11 +197,11 @@
                                 for (var i = 0; i < array.length; i++) {
                                     if (array[i].id === vm.id) {
                                         // 获取选择地址
-                                          vm.name=array[i].receiptorName
-                                          vm.phone=array[i].receiptorPhone
-                                          vm.detail=array[i].address
-                                          vm.address=array[i].areaName
-                                          vm.switchcase=array[i].def
+                                        vm.name = array[i].receiptorName
+                                        vm.phone = array[i].receiptorPhone
+                                        vm.detail = array[i].address
+                                        vm.address = array[i].areaName
+                                        vm.switchcase = array[i].def
                                         vm.changehome(array[i])
                                     }
                                 }
@@ -184,7 +215,7 @@
                     //获取所有地址
                     changehome(item) {
                         let vm = this
-                        // console.log(JSON.stringify(item))
+                            // console.log(JSON.stringify(item))
                         let treePath = item.treePath
                         let arrtreePath = treePath.split(',')
                         arrtreePath.splice(0, 1)
@@ -303,7 +334,7 @@
                             "receiptorPhone": this.phone,
                             "id": this.id,
                         }
-                        console.log( this.id)
+                        console.log(this.id)
                         fnBodyPost(interfaces.address, param, function(ret, err) {
                             console.log(JSON.stringify(ret))
                             if (ret.code == RESPONSE_OK) {
@@ -317,7 +348,7 @@
                                 });
                                 setTimeout(function() {
                                     api.closeWin()
-                                },500)
+                                }, 500)
                             } else {
                                 console.log(JSON.stringify(err))
                             }

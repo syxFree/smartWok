@@ -40,8 +40,8 @@
 
     .head-img .unfold,
     .content-name .unfold {
-      width: 0.15rem;
-      height: 0.25rem;
+      width: 0.36rem;
+      height: 0.36rem;
       margin-left: .2rem;
     }
 
@@ -71,7 +71,7 @@
       z-index: 3;
       width:99%;
       overflow: hidden;
-      right: .7rem;
+      right: .92rem;
     }
   </style>
 </head>
@@ -193,6 +193,7 @@
                                               vm.addindex.push(k)
                                               vm.addressId = area[k].id
                                               vm.address=array[i].value+' '+city[j].value+" "+area[k].value
+                                              console.log(vm.address)
                                           }
                                       }
                                   } else {

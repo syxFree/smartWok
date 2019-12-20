@@ -22,8 +22,11 @@
       width: .4rem;
       height: .4rem;
     }
-
+    header div{
+      width: 33%;
+    }
     header h2 {
+      width: 34%;
       font-size: 0.36rem;
       color: #333333;
       text-align: center;
@@ -41,11 +44,13 @@
 <body>
   <div class="app">
     <header>
-      <img src="../../image/register/black.png" alt="返回" @click="back">
+      <div>
+        <img src="../../image/register/black.png" alt="返回" @click="back">
+      </div>
       <h2>我的菜谱</h2>
-      <div style="display:flex; align-items: center;" @click="gotomenu">
-        <img src="../../image/menu/create-orange.png" alt="" style="width:.32rem;height: .32rem;margin-right: .1rem;">
-        <p>添加</p>
+      <div style="display:flex; align-items: center;justify-content:flex-end;" @click="gotomenu" >
+        <img src="../../image/menu/create-orange.png" alt="" style="width:.32rem;height: .32rem;margin-right: .1rem;" v-if="add">
+        <p v-if="add">添加</p>
       </div>
     </header>
   <script src="../../script/api.js" charset="utf-8"></script>
@@ -63,9 +68,21 @@
       var headerH = $api.fixStatusBar(header);
       // 最新api.js为了适配iPhoneX增加的方法，修复底部Footer部分与iPhoneX的底部虚拟横条键重叠的问题；
       var footerH = $api.fixTabBar(footer);
+      api.addEventListener({
+          name: 'cooklist'
+      }, function(ret, err){
+          if( ret ){
+               goodsvue.add=false
+          }else{
+               alert( JSON.stringify( err ) );
+          }
+      });
+
       var goodsvue = new Vue({
           el: '.app',
-          data: {},
+          data: {
+            add:true,
+          },
           created: function () {
           },
           methods: {
