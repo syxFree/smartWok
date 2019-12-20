@@ -471,8 +471,8 @@
                   console.log(JSON.stringify(params))
                   var wxPayPlus = api.require('wxPayPlus');
                   wxPayPlus.payOrder({
-                      apiKey: 'wxb989b47d3af39aca',
-                      orderId: params.orderId,
+                      apiKey: params.appId,
+                      orderId: params.prepayId,
                       mchId: params.partnerId,
                       nonceStr: params.nonceStr,
                       timeStamp: params.timeStamp,
