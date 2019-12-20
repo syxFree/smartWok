@@ -26,7 +26,7 @@
       height: .6rem;
       background-color: rgba(0, 0, 0, 0.05);
       box-sizing: border-box;
-      padding: 0 .2rem;
+      padding: 0 .2rem 0 .3rem;
       border-radius: .6rem;
       display: flex;
       justify-content: space-between;
@@ -39,6 +39,8 @@
     .search input{
       outline: none;
       width: 90%;
+      height: 45%;
+      /* border: 1px solid; */
       font-size: .26rem;
     }
     .search-history{
@@ -105,11 +107,6 @@
         <div class="search">
             <input type="text" id="search" placeholder="搜索" v-model="searchTxt" @input="showSearch" @focus="inputFocus" @keypress="keypress" ref="search">
             <img v-if="flag" src="../../image/search/selece-inputDel.png" alt="删除" @click="del">
-            <div class="searchContent" v-if="searchFlag">
-              <ul>
-                <li v-for="(item, index) in searchList" :key="index">{{item}}</li>
-              </ul>
-            </div>
         </div>
         <span @click="cancel">取消</span>
       </div>
@@ -152,11 +149,23 @@
       created(){
           var item=$api.getStorage('search')
           this.records=item
-          this.keyCode()
       },
       mounted:function(){
         var vm=this
-        vm.$refs.search.focus()
+        var systemType = api.systemType;
+        if(systemType=='ios'){
+          //这里ios只有获取焦点 默认弹出键盘 要在页面加载完再弹出才不会影响页面加载时 不会闪烁
+          console.log("ios")
+          setTimeout(function(){
+            vm.$refs.search.focus()
+          },400)
+         
+        }
+        else{
+          console.log("andriod")
+          this.$refs.search.focus()
+          this.keyCode()
+        }
       },
       methods: {
         //删除输入框的文本

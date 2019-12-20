@@ -64,6 +64,7 @@
         .item-info .info{
             font-size: .34rem;
             color: #333;
+            font-weight: 700;
             padding-left: .2rem;
         }
         .item-info .detail{
@@ -78,21 +79,32 @@
             overflow: hidden;
         }
         .item-bottom{
-            width: 100%;
+            width: 5.8rem;
+            margin: .3rem auto 0 auto;
             height: .8rem;
             display: flex;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
         }
         .item-bottom span{
-            width: 21%;
+            width: 1.6rem;
             height: 1px;
             background-color: #DDD;
         }
         .item-bottom p{
+            width: 1.96rem;
             font-size: .28rem;
             color: #999;
-
+        }
+        .words{
+            width: 100%;
+            height: .7rem;
+            background-color: rgba(0, 0, 0, .6);
+            color: white;
+            box-sizing: border-box;
+            padding:0 .3rem;
+            font-size: .34rem;
+            line-height: .7rem;
         }
     </style>
 </head>
@@ -107,8 +119,9 @@
                     <span v-if="currentIndex==3">第三节美食大赛实时新闻</span>
                 </div>
             </div> -->
+            <!-- <div class="words">{{word[currentIndex]}}</div> -->
             <div class="food-item">
-                <div class="item" v-for="(item, index) in list" :key="index" @click="goGoodsDetails(item.id)">
+                <div class="item" v-for="(item, index) in list" :key="index" @click="goGoodsDetails(item.id,item.name)">
                     <img :src="item.image" alt="美食图片">
                     <div class="item-info">
                         <p class="info">{{item.name}}</p>
@@ -135,7 +148,7 @@
       var vm=new Vue({
           el:".app",
           data:{
-              currentIndex:1,
+              currentIndex:0,
               bannerList:[],
               list:[
                   {
@@ -157,7 +170,8 @@
               pageNum:1,
               pageSize:10,
               isLastPage:false,
-              bottomFlag:false
+              bottomFlag:false,
+              word:'',
           },
           created(){
               // $api.rmStorage('accessToken');
@@ -228,7 +242,7 @@
               })
             },
             //跳转到商品详情页
-            goGoodsDetails:function(id){
+            goGoodsDetails:function(id,title){
                 api.openWin({
                     name: 'information_detail_win',
                     // url: 'information_detail_win.html',
@@ -237,7 +251,8 @@
                     bounces:false,
                     slidBackEnabled:true,
                     pageParam: {
-                        id: id
+                        id: id,
+                        title:title
                     }
                 });
             },
@@ -248,6 +263,7 @@
               for(var i=0;i<this.bannerList.length;i++){
                   listImage.push(this.bannerList[i].image)
                   wordList.push(this.bannerList[i].name)
+                  vm.word=wordList
               }
               var UIScrollPicture = api.require('UIScrollPicture');
               UIScrollPicture.open({
@@ -255,13 +271,13 @@
                       x: 0,
                       y: 0,
                       w: api.winWidth,
-                      h: api.winHeight/3.5
+                      h: api.winHeight/3.2
                       // h:'3rem'
                   },
                   data: {
                       paths: listImage,
                       //对图片的描述，可写可不写
-                      captions: wordList
+                    //   captions: wordList
                   },
                   //文字样式
                   styles: {
@@ -269,8 +285,9 @@
                           height: 30,
                           color: '#E0FFFF',
                           size: 15,
-                          bgColor: 'rgba(0, 0, 0, .6)',
-                          position: 'bottom'
+                          bgColor: 'rgba(0, 0, 0, 0.60)',
+                          position: 'bottom',
+                          left:30
                       },
                       indicator: {
                       //圆点样式
@@ -294,6 +311,7 @@
                   fixed: false
               }, function(ret, err) {
                   if (ret) {
+                    vm.currentIndex=ret.index
                     // alert(JSON.stringify(ret));
                     if(ret.eventType=='click'){
                         api.openWin({
@@ -314,7 +332,7 @@
       })
       // console.log(document.getElementsByClassName('food-item')[0].style.marginTop)
       //获取轮播图占的高度
-      document.getElementsByClassName('food-item')[0].style.marginTop=(api.winHeight/3.45)+'px'
+      document.getElementsByClassName('food-item')[0].style.marginTop=(api.winHeight/2.9)+'px'
       // 上拉加载
       api.addEventListener({
           name: 'scrolltobottom',
