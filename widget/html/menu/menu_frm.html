@@ -46,7 +46,7 @@
 
 
     .menu-name1 .title {
-      width: 1.36rem;
+      width: 1.4rem;
       height: .48rem;
       font-family: PingFang-SC-Bold;
       font-size: .34rem;
@@ -74,7 +74,7 @@
     }
 
     .menu-name .title {
-      width: 1.36rem;
+      width: 1.4rem;
       height: .48rem;
       font-family: PingFang-SC-Bold;
       font-size: .34rem;
@@ -606,31 +606,31 @@
     <!-- 料盒 -->
     <div class="menu-name menu-magazine">
       <div style="height:.3rem"></div>
-      <div class="title" style="width:.68rem">
+      <div class="title" style="width:.7rem">
         <span>料盒</span>
       </div>
       <div class="name">
         <span>料盒1</span>
-        <input type="text" placeholder="针对料盒内物品命名，如：盐">
+        <input type="text" placeholder="针对料盒内物品命名，如：盐"  v-model="seasoningBox1">
       </div>
       <div class="name">
         <span>料盒2</span>
-        <input type="text">
+        <input type="text" v-model="seasoningBox2">
       </div>
       <div class="name">
         <span>料盒2</span>
-        <input type="text">
+        <input type="text" v-model="seasoningBox3">
       </div>
       <div class="name">
         <span>料盒4</span>
-        <input type="text">
+        <input type="text" v-model="seasoningBox4">
       </div>
     </div>
     <div class="hrs"></div>
     <!--程序  -->
     <div class="menu-name">
       <div style="height:.3rem"></div>
-      <div class="title" style="width:.68rem">
+      <div class="title" style="width:.7rem">
         <span>程序</span>
       </div>
       <div class="cover-box" v-for="(item,index) in stepslist" :key="item.num" >
@@ -692,7 +692,7 @@
         <div>
           <!-- 参数 -->
           <div class="menu-name1">
-            <div class="title" style="width:.68rem">
+            <div class="title" style="width:.69rem">
               <span>参数</span>
             </div>
             <div class="cross-box">
@@ -705,7 +705,7 @@
           </div>
           <!-- 温度 -->
           <div class="menu-name1 temperature">
-            <div class="title" style="width:1.25rem">
+            <div class="title" style="width:1.32rem">
               <span>温度(℃)</span>
             </div>
             <div class="cross-box">
@@ -717,7 +717,7 @@
           </div>
           <!-- 事件 -->
           <div class="menu-name1 timeouth">
-            <div class="title" style="width:.68rem">
+            <div class="title" style="width:.69rem">
               <span>时间</span>
             </div>
             <div class="cross-box">
