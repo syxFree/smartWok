@@ -25,6 +25,7 @@ var interfaces = {
     loginId: '/jgj/worker/worker_type', // 判断用户登录身份
     logout: '/jgj/worker/logout',//退出登录
     wxlogin:'/sw/auth/wx_auth',   //微信登录
+    wxbindJudge:'/sw/auth/check_open_id_to_bind_phone', //检查是否绑定过
     sendCode: '/api/common/send_code',//发送验证码
     checkCode:'/api/common/check_code', //校验验证码
     getTcp:'/static_url/content',   //获取用户协议
@@ -47,6 +48,7 @@ var interfaces = {
     getLogistics:'/sw/info/logistics',  //获取物流信息
     deleteOrder:'/sw/order/delete',   //删除订单
     receiptOrder:'/sw/order/receipt',  // 确认收货
+    invoice:'/sw/invoice',        //申请发票
     cookbookfun:'/sw/cookbook/functions',    //菜谱功能
     cookbookpost:'/sw/cookbook',   //菜谱保存
     feedback:'/sw/info/feedback', //意见反馈

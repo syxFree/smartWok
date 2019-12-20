@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,user-scalable=0, initial-scale=1.0">
+    <meta name = "format-detection" content = "telephone=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <link rel="stylesheet" href="../../css/api.css">
@@ -131,7 +132,7 @@
       name: 'changeperson'
     }, function(ret, err) {
       console.log(JSON.stringify(ret))
-      vue.person()
+      vue.person2()
     });
     // 下拉刷新
     //
@@ -150,14 +151,14 @@
           addressId:'',
           pers:'',
           addindex:[],
-          alladdress: [{ 'id': 0, 'value': '男' },{ 'id': 1, 'value': '女' }]
+          alladdress: [],
+          mobileSelect:''
         }
       },
       mounted() {
         // 获取个人信息、
         this.person()
         this.getmobileSelect2()
-
       },
       methods: {
         // 地址
@@ -205,19 +206,20 @@
                       }
                   }
                 //创建选择(ret.data)
+
               } else {
                   console.log(JSON.stringify(err))
               }
           })
         },
-        getmobileSelect1(array){
+        getmobileSelect1(){
           let vm=this
-          var mobileSelect = new MobileSelect({
+          let mobileSelect = new MobileSelect({
           trigger: '#address',
           title: '所在地区',
           wheels: [
             {
-              data: vm.alladdress
+              data:vm.alladdress
             }
           ],
           position: vm.addindex,
@@ -286,12 +288,31 @@
                 vm.pers=ret.data
                 vm.address=ret.data.areaName
                 vm.sexId=ret.data.sex
+                vm.addressId=ret.data.areaId
                 if(ret.data.sex ==0){
                   vm.sex='男'
                 }else{
                   vm.sex='女'
                 }
                 vm.getaddress(ret.data)
+              }else{
+                console.log(JSON.stringify(err))
+              }
+          })
+        },
+        person2(){
+          let vm=this
+          fnGet(interfaces.info, {}, true, function(ret,err){
+              if(ret.code==RESPONSE_OK){
+                console.log(JSON.stringify(ret.data))
+                vm.pers=ret.data
+                vm.address=ret.data.areaName
+                vm.sexId=ret.data.sex
+                if(ret.data.sex ==0){
+                  vm.sex='男'
+                }else{
+                  vm.sex='女'
+                }
               }else{
                 console.log(JSON.stringify(err))
               }
@@ -401,9 +422,9 @@
                     duration: 2000,
                     location: 'bottom'
                 });
-                // api.sendEvent({
-                //     name: 'changeperson',
-                // });
+                api.sendEvent({
+                    name: 'changeperson',
+                });
             }else{
               console.log(JSON.stringify(err))
             }

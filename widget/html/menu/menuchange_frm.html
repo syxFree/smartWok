@@ -23,6 +23,9 @@
     font-family: PingFang-SC-Medium;
     font-size: .28rem;
     color: #333333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .cover .title img {
@@ -43,22 +46,59 @@
 
 
   .menu-name1 .title {
+    width: 1.36rem;
     height: .48rem;
     font-family: PingFang-SC-Bold;
     font-size: .34rem;
     color: #333333;
+    position: relative;
     margin: 0 .3rem;
-    border-bottom: .1rem solid #FA844A;
   }
 
+  .menu-name1 .title span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
 
+  .menu-name1 .title:after {
+    content: "";
+    display: block;
+    height: 100%;
+    border-bottom: .1rem solid #FA844A;
+    position: absolute;
+    top: -0.13rem;
+    left: 0;
+    width: 100%;
+  }
 
   .menu-name .title {
+    width: 1.36rem;
     height: .48rem;
     font-family: PingFang-SC-Bold;
     font-size: .34rem;
     color: #333333;
+    position: relative;
+  }
+
+  .menu-name .title span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    font-weight:700;
+  }
+
+  .menu-name .title:after {
+    content: "";
+    display: block;
+    height: 100%;
     border-bottom: .1rem solid #FA844A;
+    position: absolute;
+    top: -0.13rem;
+    left: 0;
+    width: 100%;
   }
 
 
@@ -74,7 +114,6 @@
   }
 
   .menu-name .name input {
-    padding-bottom: .2rem;
     width: 100%;
   }
 
@@ -86,12 +125,13 @@
 
   .menu-magazine .name {
     display: flex;
+    align-items:center;
+    padding-bottom:.2rem;
   }
 
   .menu-magazine .name span {
-    display: block;
     width: 15%;
-    padding-bottom: .2rem;
+    padding-bottom: .05rem;
   }
 
   .menu-magazine .name input {
@@ -117,12 +157,11 @@
     width: 80%;
   }
   .cover-box .num {
-    /*width: .42rem;
-    height: .42rem;*/
-    padding: .2rem ;
+    width: .42rem;
+    height: .42rem;
+    line-height: .42rem;
     background: #FF8C46;
-    border-radius: 6px;
-    border-radius: 6px;
+    border-radius:.06rem;
     color: #ffffff;
     text-align: center;
     margin: 0 .1rem 0 .2rem;
@@ -131,7 +170,7 @@
   .cover-box .ncontent {
     font-family: PingFang-SC-Medium;
     font-size: .28rem;
-    color: #999999;
+    color: #333333;
     width: ;
     text-align: left;
 
@@ -172,6 +211,7 @@
     font-family: PingFang-SC-Bold;
     font-size: .32rem;
     color: #333333;
+    font-weight:700;
   }
 
   .transfer .fer {
@@ -185,6 +225,7 @@
     font-family: PingFang-SC-Bold;
     font-size: .32rem;
     color: #ffffff;
+    font-weight:700;
   }
 
   .move {
@@ -246,9 +287,12 @@
     font-size: .3rem;
     color: #333333;
     margin-top: .3rem;
-
+    margin-right:.3rem;
   }
-
+  .timecross{
+    width: 6.2rem;
+    margin-left: .5rem;
+  }
   ::-webkit-scrollbar {
     /*隐藏滚轮*/
     display: none;
@@ -533,192 +577,209 @@
     background: #fff;
     width:7.5rem;
   }
-  </style>
+  .font999{
+    color: #999999 !important;
+  }
+</style>
 </head>
 
 <body>
-  <div class="app">
-    <!-- 上传封面 -->
-    <div class="cover" v-if="imgcover === '' " @click="upload_image">
-      <div class="title">
-        <img src="../../image/menu/upload.png" alt="">
-        上传封面
-      </div>
-      <p class="subtitle">这道菜谱离完美只差一张封面</p>
+<div class="app">
+  <!-- 上传封面 -->
+  <div class="cover" v-if="imgcover === '' " @click="upload_image">
+    <div class="title">
+      <img src="../../image/menu/upload.png" alt="">
+      <p>上传封面</p>
     </div>
-    <div v-if="imgcover != ''" class="covershow" >
-      <img :src="imgcover" alt="" @click="getPutPhoto">
-      <img src="../../image/my/del-pic.png" alt="" class="del-pic" @click="handledelpic">
+    <p class="subtitle">这道菜谱离完美只差一张封面</p>
+  </div>
+  <div v-if="imgcover != ''" class="covershow" >
+    <img :src="imgcover" alt="" @click="getPutPhoto">
+    <img src="../../image/my/del-pic.png" alt="" class="del-pic" @click="handledelpic">
+  </div>
+  <div class="menu-name menu-magazine">
+    <div class="title">
+      <span>菜谱名称</span>
     </div>
-    <div class="menu-name">
-        <span class="title">菜谱名称</span>
-      <div class="name"><input type="text" placeholder="请输入菜谱名字" v-model="name" maxlength="8"></div>
+    <div class="name"><input type="text" placeholder="请输入菜谱名字" v-model="name" maxlength="8" ></div>
+  </div>
+  <div class="hrs"></div>
+  <!-- 料盒 -->
+  <div class="menu-name menu-magazine">
+    <div style="height:.3rem"></div>
+    <div class="title" style="width:.68rem">
+      <span>料盒</span>
     </div>
-    <div class="hrs"></div>
-    <!-- 料盒 -->
-    <div class="menu-name menu-magazine">
-        <span class="title">料盒</span>
-      <div class="name">
-        <span>料盒1</span>
-        <input type="text" placeholder="针对料盒内物品命名，如：盐" v-model="seasoningBox1" maxlength="8">
+    <div class="name">
+      <span>料盒1</span>
+      <input type="text" placeholder="针对料盒内物品命名，如：盐">
+    </div>
+    <div class="name">
+      <span>料盒2</span>
+      <input type="text">
+    </div>
+    <div class="name">
+      <span>料盒2</span>
+      <input type="text">
+    </div>
+    <div class="name">
+      <span>料盒4</span>
+      <input type="text">
+    </div>
+  </div>
+  <div class="hrs"></div>
+  <!--程序  -->
+  <div class="menu-name">
+    <div style="height:.3rem"></div>
+    <div class="title" style="width:.68rem">
+      <span>程序</span>
+    </div>
+    <div class="cover-box" v-for="(item,index) in stepslist" :key="item.num" >
+      <div class="cover-left" @click.prevent="getmove(index+1)">
+        <div class="num">{{index+1}}</div>
+        <div class="ncontent" :class="item=='请选择一个程序'?'font999':''">{{item}}</div>
       </div>
-      <div class="name">
-        <span>料盒2</span>
-        <input type="text" v-model="seasoningBox2" maxlength="8">
+      <img src="../../image/menu/shanchu.png" alt="" class="cover-right"  @click="deleteprocedure(index)">
+    </div>
+    <div class="add-box" @click="addbox">
+      <img src="../../image/menu/create-orange.png" alt="添加">
+      <span>添加程序</span>
+    </div>
+  </div>
+  <div class="hrs mb1"></div>
+  <!-- 提交 -->
+  <div class="transfer-box" ref="transfer">
+    <div class="transfer">
+      <div class="del" @click="empty">清空</div>
+      <div class="fer" @click="handleisbluetooth">传输</div>
+      <div class="save" @click="savemenu">保存</div>
+    </div>
+  </div>
+  <!-- 返回保存 -->
+  <div class="move1" v-if="openbluetooth">
+    <div class="move-box1">
+      <div class="close-box1"><img src="../../image/home/close.png" alt="" class="close"
+          @click.prevent="getopenbluetooth1"></div>
+      <div class="bluetooth-box"><img src="../../image/menu/save.png" alt="" class="bluetooth"></div>
+      <div class="move-title">
+        <b>提示</b>
+        <p>当前菜谱还未保存，是否需要保存？</p>
       </div>
-      <div class="name">
-        <span>料盒2</span>
-        <input type="text" v-model="seasoningBox3" maxlength="8">
-      </div>
-      <div class="name">
-        <span>料盒4</span>
-        <input type="text" v-model="seasoningBox4" maxlength="8">
+      <div class="choose-btn">
+        <p>暂不</p>
+        <p style="border: none; color:#FF8C46">保存</p>
       </div>
     </div>
-    <div class="hrs"></div>
-    <!--程序  -->
-    <div class="menu-name">
-        <span class="title">程序</span>
-      <div class="cover-box" v-for="(item,index) in stepslist" :key="item.num" >
-        <div class="cover-left" @click.prevent="getmove(index+1)">
-          <div class="num">{{index+1}}</div>
-          <div class="ncontent">{{item}}</div>
+  </div>
+  <!-- 点击弹出功能选择 -->
+  <div class="move" v-if="moveshow && movenum !=0">
+    <div class="move-box" v-if="movebox">
+      <div class="close-box">
+        <span style="font-weight:700">功能选择</span>
+        <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
+      </div>
+      <div class="move-content" v-for="(item, index) in contentlist" :key="index" @click.prevent="getcontent(item,index)">
+        {{item.name}}</div>
+    </div>
+    <!-- 选择需要功能后在编辑详情 -->
+    <div class="move-box" v-if="!movebox">
+      <div class="close-box">
+        <div @click="handlemovebox">
+          <img src="../../image/register/black.png" alt="返回">
+          <span style="font-weight:700">{{content}}</span>
         </div>
-        <img src="../../image/menu/shanchu.png" alt="" class="cover-right" v-if="item !== '请选择一个程序'" @click="deleteprocedure(index)">
+        <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
       </div>
-      <div class="add-box" @click="addbox">
-        <img src="../../image/menu/create-orange.png" alt="添加">
-        <span>添加程序</span>
-      </div>
-    </div>
-    <div class="hrs mb1"></div>
-    <!-- 提交 -->
-    <div class="transfer-box">
-      <div class="transfer">
-        <div class="del" @click="empty">删除</div>
-        <div class="fer" @click="handleisbluetooth">传输</div>
-        <div class="save" @click="savemenu">保存</div>
-      </div>
-    </div>
-    <!-- 返回保存 -->
-    <div class="move1" v-if="openbluetooth">
-      <div class="move-box1">
-        <div class="close-box1"><img src="../../image/home/close.png" alt="" class="close"
-            @click.prevent="getopenbluetooth1"></div>
-        <div class="bluetooth-box"><img src="../../image/menu/save.png" alt="" class="bluetooth"></div>
-        <div class="move-title">
-          <b>提示</b>
-          <p>当前菜谱还未保存，是否需要保存？</p>
-        </div>
-        <div class="choose-btn">
-          <p>暂不</p>
-          <p style="border: none; color:#FF8C46">保存</p>
-        </div>
-      </div>
-    </div>
-    <!-- 点击弹出功能选择 -->
-    <div class="move" v-if="moveshow && movenum !=0">
-      <div class="move-box" v-if="movebox">
-        <div class="close-box">
-          <span>功能选择</span>
-          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
-        </div>
-        <div class="move-content" v-for="(item, index) in contentlist" :key="index" @click.prevent="getcontent(item,index)">
-          {{item.name}}</div>
-      </div>
-      <!-- 选择需要功能后在编辑详情 -->
-      <div class="move-box" v-if="!movebox">
-        <div class="close-box">
-          <div @click="handlemovebox">
-            <img src="../../image/register/black.png" alt="返回">
-            <span>{{content}}</span>
+      <div>
+        <!-- 参数 -->
+        <div class="menu-name1">
+          <div class="title" style="width:.68rem">
+            <span>参数</span>
           </div>
-          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="getopenbluetooth">
-        </div>
-        <div>
-          <!-- 参数 -->
-          <div class="menu-name1">
-              <span class="title">参数</span>
-            <div class="cross-box">
-              <div class="cross">
-                <div class="cross-child" :class="parameterBox === index ?'chekcolor':''" @click="handleparameter(index)"
-                  v-for="(item, index) in parameter" :key="index">{{item.optionName}}</div>
-              </div>
+          <div class="cross-box">
+            <div class="cross">
+              <div class="cross-child" :class="parameterBox === index ?'chekcolor':''" @click="handleparameter(index)"
+                v-for="(item, index) in parameter" :key="index">{{item.optionName}}</div>
             </div>
+          </div>
 
+        </div>
+        <!-- 温度 -->
+        <div class="menu-name1 temperature">
+          <div class="title" style="width:1.25rem">
+            <span>温度(℃)</span>
           </div>
-          <!-- 温度 -->
-          <div class="menu-name1 temperature">
-              <span  class="title">温度(℃)</span>
-            <div class="cross-box">
-              <div class="cross">
-                <div class="cross-child" :class="temperatureBox === index ?'chekcolor':''"
-                  @click="handletemperature(index)" v-for="(item, index) in temperature" :key="index">{{item}}</div>
-              </div>
+          <div class="cross-box">
+            <div class="cross">
+              <div class="cross-child" :class="temperatureBox === index ?'chekcolor':''"
+                @click="handletemperature(index)" v-for="(item, index) in temperature" :key="index">{{item}}</div>
             </div>
           </div>
-          <!-- 事件 -->
-          <div class="menu-name1 timeouth">
-              <span  class="title">时间</span>
-            <div class="cross-box">
-              <p>时</p>
-              <div class="cross">
-                <div class="cross-child" :class="timeouthBox === index ?'chekcolor':''" @click="handletimeouth(index)"
-                  v-for="(item, index) in timeouth" :key="index">
-                  {{item}}</div>
-              </div>
-            </div>
-            <div class="cross-box">
-              <p>分</p>
-              <div class="cross">
-                <div class="cross-child" :class="timeoutmBox === index ?'chekcolor':''" @click="handletimeoutm(index)"
-                  v-for="(item, index) in timeoutm" :key="index">
-                  {{item}}</div>
-              </div>
-            </div>
-            <div class="cross-box">
-              <p>秒</p>
-              <div class="cross">
-                <div class="cross-child" :class="timeoutsBox === index ?'chekcolor':''" @click="handletimeouts(index)"
-                  v-for="(item, index) in timeouts" :key="index">
-                  {{item}}</div>
-              </div>
+        </div>
+        <!-- 事件 -->
+        <div class="menu-name1 timeouth">
+          <div class="title" style="width:.68rem">
+            <span>时间</span>
+          </div>
+          <div class="cross-box">
+            <p>时</p>
+            <div class="cross timecross">
+              <div class="cross-child " :class="timeouthBox === index ?'chekcolor':''" @click="handletimeouth(index)"
+                v-for="(item, index) in timeouth" :key="index">
+                {{item}}</div>
             </div>
           </div>
-          <div class="openblue" @click="handlestepslist()">
-            确定
+          <div class="cross-box">
+            <p>分</p>
+            <div class="cross timecross">
+              <div class="cross-child " :class="timeoutmBox === index ?'chekcolor':''" @click="handletimeoutm(index)"
+                v-for="(item, index) in timeoutm" :key="index">
+                {{item}}</div>
+            </div>
           </div>
+          <div class="cross-box">
+            <p>秒</p>
+            <div class="cross timecross">
+              <div class="cross-child " :class="timeoutsBox === index ?'chekcolor':''" @click="handletimeouts(index)"
+                v-for="(item, index) in timeouts" :key="index">
+                {{item}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="openblue" @click="handlestepslist()">
+          确定
         </div>
       </div>
     </div>
-    <!-- 点击传输判断是否已经连接蓝牙 -->
-    <div class="move" v-if="isbluetooth">
-      <div class="move-bluetooth">
-        <div class="close-box">
-          <div class="close-boxtype">
-            <span>设备状态</span>
-            <img src="../../image/home/frame-0.png" alt="等待">
-          </div>
-          <!-- <span style="margin-right: 1.5rem;color:#DD3333;">未连接</span> -->
-          <span style="margin-right: 1.5rem;color: #13C368;">已连接</span>
-          <img src="../../image/home/close.png" alt="" class="close" @click.prevent="handleisbluetooth">
+  </div>
+  <!-- 点击传输判断是否已经连接蓝牙 -->
+  <div class="move" v-if="isbluetooth">
+    <div class="move-bluetooth">
+      <div class="close-box">
+        <div class="close-boxtype">
+          <span>设备状态</span>
+          <img src="../../image/home/frame-0.png" alt="等待">
         </div>
-        <ul>
-          <li class="list-box">
-            <div>
-              <p>智能灶V1.0</p>
-              <span>LY:4564:da</span>
-            </div>
-            <img src="../../image/home/frame-0.png" class="wait" alt="等待">
-            <!-- <img src="../../image/home/success.png" class="success" alt="成功"> -->
-          </li>
-        </ul>
-        <div class="bluesearch">停止扫描</div>
-        <div class="openblue" @click="handletransfer()">
-            确定
-          </div>
+        <!-- <span style="margin-right: 1.5rem;color:#DD3333;">未连接</span> -->
+        <span style="margin-right: 1.5rem;color: #13C368;">已连接</span>
+        <img src="../../image/home/close.png" alt="" class="close" @click.prevent="handleisbluetooth">
       </div>
+      <ul>
+        <li class="list-box">
+          <div>
+            <p>智能灶V1.0</p>
+            <span>LY:4564:da</span>
+          </div>
+          <img src="../../image/home/frame-0.png" class="wait" alt="等待">
+          <!-- <img src="../../image/home/success.png" class="success" alt="成功"> -->
+        </li>
+      </ul>
+      <div class="bluesearch">停止扫描</div>
+      <div class="openblue" @click="handletransfer()">
+          确定
+        </div>
     </div>
+  </div>
     <script src="../../script/api.js" charset="utf-8"></script>
     <script src="../../script/flexible.js" charset="utf-8"></script>
     <script src="../../script/vue.min.js"></script>

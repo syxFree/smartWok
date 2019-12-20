@@ -114,6 +114,18 @@
           height: .2rem;
           background-color: #F7F7F7;
         }
+      .emptyBtn{
+        width: 4rem;
+        height: .95rem;
+        border-radius: .95rem;
+        background-color: #FF8C46;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: .28rem;
+        margin: 0 auto;
+      }
   </style>
 </head>
 
@@ -153,9 +165,10 @@
     <div v-if="hasaddress ===false" class="empty">
       <img src="../../image/my/empty-add.png" alt="">
       <p>当前还没有收货地址</p>
+      <div class="emptyBtn" @click="addnew">新增地址</div>
       <!-- <button class="btn" style="width: 3.8rem;height:.8rem" @click="addnew">新增收货地址</button> -->
     </div>
-    <div style="text-align: center;margin-top:2rem;margin-bottom:1rem">
+    <div v-if="hasaddress" style="text-align: center;margin-top:2rem;margin-bottom:1rem">
       <button class="btn" @click="addnew">新增收货地址</button>
     </div>
   </div>
@@ -182,6 +195,7 @@
         }
       },
       created(){
+        //这是从提交订单页带过来的 为了用这个做判断地址能不能点
         this.changeFlag=api.pageParam.changeFlag
       },
       mounted(){
@@ -277,6 +291,9 @@
                      if(ret.code==RESPONSE_OK){
                        console.log(JSON.stringify(ret))
                         vm.addresslist.splice(index,1)
+                        if(vm.addresslist.length==0){
+                          vm.hasaddress=false
+                        }
                      }else{
                        console.log(JSON.stringify(err))
                      }

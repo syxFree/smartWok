@@ -47,6 +47,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid #D8D8D8;
+            position: relative;
         }
 
         .info .login-info img {
@@ -58,8 +59,8 @@
             outline: none;
             padding-left: 3px;
             color: #333;
+            width: 100%;
         }
-
         .info .forget {
             width: 84%;
             margin: 0 auto;
@@ -102,7 +103,7 @@
         }
 
         .code {
-            width: 1.8rem;
+            width: 2rem;
             height: 0.56rem;
             border-radius: 0.56rem;
             background-color: #FF8C46;
@@ -112,9 +113,8 @@
             align-items: center;
             font-size: .24rem;
         }
-
         .codeDisabled {
-            width: 1.8rem;
+            width: 2.2rem;
             height: 0.56rem;
             border-radius: 0.56rem;
             background-color: #E6E6E6;
@@ -148,7 +148,13 @@
         .unfold {
             width: .15rem;
             height: .25rem;
-            text-align: right;
+            position: absolute;
+            right: 0
+        }
+        .input{
+          width: 100%;
+          padding-left: 3px;
+          color: #666;
         }
     </style>
 </head>
@@ -162,14 +168,15 @@
             </div>
             <div class="info">
                 <div class="login-info">
-                    <input type="text" disabled placeholder="请选择注册类型" v-model="type">
-                    <img src="../../image/my/unfold.png" alt="" class="unfold" id="type">
+                    <!-- <input type="text" disabled placeholder="请选择注册类型" v-model="type" id="type"> -->
+                    <div class="input" id="type">{{type}}</div>
+                    <img src="../../image/my/unfold.png" alt="" class="unfold">
                 </div>
                 <div class="login-info">
-                    <input type="text" @blur="phoneJudge" placeholder="请输入手机号/账号" v-model='phone'>
+                    <input type="number" @blur="phoneJudge" placeholder="请输入手机号" v-model='phone'>
                 </div>
                 <div class="login-info">
-                    <input type="text" @input="codeInput" placeholder="请输入验证码" v-model="code">
+                    <input type="text" @input="codeInput" placeholder="请输入验证码" v-model="code" ref="inputCode">
                     <div class="code" v-if="sendCodeFlag" @click="changeCodeFlag">获取验证码</div>
                     <div class="codeDisabled" v-else>重新发送({{sendCode}})</div>
                 </div>
@@ -215,7 +222,7 @@
                     sendCodeFlag: true, //刚开始验证码的状态
                     sendStatus: false, //发送验证码按钮状态
                     checkTCP: false,
-                    type: '',
+                    type: '请选择注册类型',
                     typeid: 0,
                 },
                 watch: {
@@ -263,7 +270,6 @@
                                 title:value2
                             }
                         });
-
                     },
                     handleto() {
                         let vm = this
@@ -374,11 +380,19 @@
                     //点击获取验证码，改变内容
                     changeCodeFlag: function() {
                         if (this.phone == '') {
-                            alert("请先输入手机号")
-                            return
+                          api.toast({
+                              msg: '请先输入手机号',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+                          return
                         }
                         if (this.phoneFlag == false) {
-                            alert("请输入合法的手机号")
+                            api.toast({
+                                msg: '请输入合法的手机号',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
                             return
                         }
                         let param = {
@@ -390,6 +404,8 @@
                         fnBodyPost(interfaces.sendCode, param, function(ret, err) {
                             if (ret.code == RESPONSE_OK) {
                                 vm.sendCodeFlag = false
+                                // vm.$refs.inputCode.focus()
+                                // vm.keyCode()
                                 console.log(JSON.stringify(ret));
                                 // 发送验证码倒计时
                                 var s = vm.sendCode;
@@ -415,9 +431,13 @@
 
                             }
                         })
-
-                    }
+                    },
+                    keyCode:function(){
+                      var softInput = api.require('softInputMgr');
+                      softInput.toggleKeyboard();
+                    },
                 },
+
                 //点击下一步进入输入面页
                 // goNext:function(){
                 //     //这里做手机号验证，如果手机号填写正确，向后台发送的验证码也正确的话，则进行下一步操作

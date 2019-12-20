@@ -325,7 +325,7 @@
                 </div>
             </div>
             <div class="goods-describe">
-                <div class="info">{{goods.name}}</div>
+                <div class="info">{{goods.briefDesc}}</div>
                 <div class="goods-price-count">
                     <div class="good-price">￥{{goods.price}}</div>
                     <div class="good-count">库存：{{goods.stock<0?'0':goods.stock}}</div>
@@ -386,16 +386,14 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
     apiready=function(){
       var id=api.pageParam.id
       //兼容iphonex
       $api.fixTabBar($api.dom('footer'))
-      console.log(JSON.stringify($api.dom('footer')))
-      console.log(JSON.stringify($api.byId('shadeOrder')))
-      console.log(JSON.stringify($api.byId('shade')))
-      $api.fixTabBar($api.byId('shadeOrder'))
-      $api.fixTabBar($api.byId('shade'))
+      $api.fixTabBar($api.dom('shadeOrder'))
+      $api.fixTabBar($api.dom('shade'))
       console.log(id)
         var vm=new Vue({
             el:'.app',
@@ -424,9 +422,9 @@
                 this.getCall()
             },
             mounted(){
-              console.log(JSON.stringify($api.dom('footer')))
-              console.log(JSON.stringify($api.byId('shadeOrder')))
-              console.log(JSON.stringify($api.byId('shade')))
+              // console.log(JSON.stringify($api.dom('footer')))
+              // console.log(JSON.stringify($api.byId('shadeOrder')))
+              // console.log(JSON.stringify($api.byId('shade')))
             },
             watch: {
                 //监听数量的加减，改版加减数量按钮的状态
@@ -461,6 +459,7 @@
                       if(vm.orderCount>=vm.goods.stock){
                           vm.incFlag=false
                       }
+                      console.log(JSON.stringify(vm.goods))
                       console.log(vm.goods.images)
                       var bannerList=vm.goods.images.split(',')
                       console.log(JSON.stringify(bannerList))
@@ -533,7 +532,12 @@
                       contentUrl: vm.url
                   }, function(ret, err) {
                       if (ret.status) {
-                          alert('分享成功');
+                          api.toast({
+                              msg: '分享成功',
+                              duration: 2000,
+                              location: 'bottom'
+                          });
+
                       } else {
                           alert(err.code);
                       }

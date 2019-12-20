@@ -192,7 +192,7 @@
       <div class="title" style="width:1rem">
         <span>手机号</span>
       </div>
-      <input type="phone" placeholder="我们将及时帮您解决问题" v-model="phonenum" @blur="judgephone">
+      <input type="tel" placeholder="我们将及时帮您解决问题" v-model="phonenum" @blur="judgephone">
     </div>
     <div class="btn-box" >
       <button class="btn" @click="getfeedback">提交</button>
@@ -344,8 +344,8 @@
               if(ret.data !== ""){
                 fnBodyPost(interfaces.upload, formdata, function(ret, err) {
                     if (ret.code == RESPONSE_OK) {
-                      console.log(JSON.stringify(ret.data))
-                        // vm.imgs.push(ret.data);
+                      // console.log(JSON.stringify(ret.data))
+                        vm.imgs.push(ret.data);
                     } else {
                         if (ret.subMsg || ret.msg) {
                             api.toast({
