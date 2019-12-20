@@ -141,6 +141,7 @@
           let vm=this
           fnGet(interfaces.info, {}, true, function(ret,err){
               if(ret.code==RESPONSE_OK){
+                console.log("进入了修改图片")
                  vm.getaddress(ret.data)
               }else{
                 console.log(JSON.stringify(err))

@@ -203,7 +203,9 @@
                       console.log("绑定走了个人")
                       fnBodyPost(interfaces.bindPhone,params,function(ret,err){
                           if(ret.code==RESPONSE_OK){
+                            console.log(JSON.stringify(ret.data))
                             $api.setStorage('accessToken',ret.data)
+                            $api.setStorage('openId',info.openId)
                             api.openWin({
                                 name: 'footer_win',
                                 url: '../footer/footer_win.html',
@@ -226,7 +228,7 @@
                       console.log("绑定走了企业")
                       fnBodyPost(interfaces.bindPhone,params,function(ret,err){
                           if(ret.code==RESPONSE_OK){
-                            $api.setStorage('openId', info.openId);
+                            $api.setStorage('openId',info.openId)
                             api.openWin({
                                 name: 'success',
                                 url: 'successfully_win.html',
@@ -263,7 +265,7 @@
                       fnBodyPost(interfaces.register,params,function(ret,err){
                         console.log(JSON.stringify(ret))
                         if(ret.code==RESPONSE_OK){
-                          $api.setStorage('openId', info.openId);
+                          console.log(JSON.stringify(ret.data))
                           api.toast({
                               msg: '注册成功',
                               duration: 2000,

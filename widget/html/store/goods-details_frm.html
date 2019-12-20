@@ -386,16 +386,14 @@
     <script src="../../script/flexible.js"></script>
     <script src="../../script/vue.min.js"></script>
     <script src="../../script/restful.js" charset="utf-8"></script>
+    <script src="../../script/fastclick.js" charset="utf-8"></script>
     <script>
     apiready=function(){
       var id=api.pageParam.id
       //兼容iphonex
       $api.fixTabBar($api.dom('footer'))
-      // console.log(JSON.stringify($api.dom('footer')))
-      // console.log(JSON.stringify($api.byId('shadeOrder')))
-      // console.log(JSON.stringify($api.byId('shade')))
-      $api.fixTabBar($api.byId('shadeOrder'))
-      $api.fixTabBar($api.byId('shade'))
+      $api.fixTabBar($api.dom('shadeOrder'))
+      $api.fixTabBar($api.dom('shade'))
       console.log(id)
         var vm=new Vue({
             el:'.app',

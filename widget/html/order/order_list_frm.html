@@ -251,7 +251,7 @@
                 ],
                 chooseFlag:false,  //支付按钮的选择状态
                 ticketFlag:false,  //订单按钮选择状态
-                pageSize:4,
+                pageSize:10,
                 pageNum:1,
                 isLastPage:false,
                 orderTime:[],
@@ -560,7 +560,7 @@
             bgColor: '#fff'
         }, function (ret, err) {
             vm.pageNum = 1;
-            vm.pageSize=3;
+            vm.pageSize=10;
             vm.isLastPage = false;
             vm.orderList = null;
             vm.getData('refresh')

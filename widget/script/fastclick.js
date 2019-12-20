@@ -329,6 +329,8 @@
 		if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month' && targetElement.type !== 'email') {
 			length = targetElement.value.length;
 			targetElement.setSelectionRange(length, length);
+			//修复ios11以上键盘失去焦点后不聚焦
+			targetElement.focus();
 		} else {
 			targetElement.focus();
 		}

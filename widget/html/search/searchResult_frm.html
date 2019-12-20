@@ -257,6 +257,8 @@
         api.setRefreshHeaderInfo({
             bgColor: '#fff'
         }, function (ret, err) {
+            text=$api.getStorage('search')[0]
+            console.log(text)
             vm.pageNum = 1;
             vm.pageSize=4;
             vm.isLastPage = false;

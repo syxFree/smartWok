@@ -25,6 +25,7 @@ var interfaces = {
     loginId: '/jgj/worker/worker_type', // 判断用户登录身份
     logout: '/jgj/worker/logout',//退出登录
     wxlogin:'/sw/auth/wx_auth',   //微信登录
+    wxbindJudge:'/sw/auth/check_open_id_to_bind_phone', //检查是否绑定过
     sendCode: '/api/common/send_code',//发送验证码
     checkCode:'/api/common/check_code', //校验验证码
     getTcp:'/static_url/content',   //获取用户协议
