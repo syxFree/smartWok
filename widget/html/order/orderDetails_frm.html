@@ -868,7 +868,7 @@
                   var wxPayPlus = api.require('wxPayPlus');
                   wxPayPlus.payOrder({
                       apiKey: params.appId,
-                      orderId: params.orderId,
+                      orderId: params.prepayId,
                       mchId: params.partnerId,
                       nonceStr: params.nonceStr,
                       timeStamp: params.timeStamp,

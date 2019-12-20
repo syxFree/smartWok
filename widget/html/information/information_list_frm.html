@@ -298,9 +298,10 @@
                     if(ret.eventType=='click'){
                         api.openWin({
                             name: 'detail',
-                            url: vm.bannerList[ret.index].url,
+                            url: 'detail_win.html',
+                            reload:true,
                             pageParam: {
-                                name: 'test'
+                                url:vm.bannerList[ret.index].url
                             }
                         });
                     }
