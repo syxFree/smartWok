@@ -138,6 +138,8 @@
             api.addEventListener({
                 name: 'changemenu'
             }, function(ret, err) {
+                vue.cooklist=[]
+                vue.pageNum=1
                 vue.getdata()
             });
             api.addEventListener({
@@ -168,7 +170,7 @@
                         cooklist: [],
                         ulrightindex: -1,
                         pageNum:1,
-                        pageSize:2,
+                        pageSize:10,
                     }
                 },
                 mounted() {
