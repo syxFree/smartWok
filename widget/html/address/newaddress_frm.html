@@ -54,8 +54,8 @@
       color: #333333;
     }
 
-    .content input {
-     width: 50%;
+    .content>input {
+        width: 73%;
     }
 
     .unfold {
@@ -63,8 +63,10 @@
       height: .25rem;
       text-align: right;
     }
-
-    .contentflex {
+    .contentflex{
+      position: relative;
+    }
+    .contentflex div {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -108,14 +110,17 @@
       height: .55rem;
     }
     #address{
-      display: flex;
-      justify-content: space-between;
-      width: 75%;
+      position:absolute;
+      width: 85%;
+      /*border: 1px solid red;*/
+      top: .35rem;
+      left: 1.76rem;
     }
-    #address input{
-      width:80%;
+    .hrs {
+          width: 100%;
+          height: .2rem;
+          background-color: #F7F7F7;
     }
-
   </style>
 </head>
 
@@ -131,19 +136,18 @@
         <input type="tel" placeholder="手机号码" style="margin-left: .55rem;" v-model="phone" maxlength="11">
       </div>
       <div class="content contentflex" >
-        <div >
+        <div>
           <span>所在地区</span>
-        </div>
-        <div id="address">
-          <input type="text" placeholder="请输入"  v-model="address" readonly="readonly" >
           <img src="../../image/my/unfold.png" alt="" class="unfold"  >
         </div>
+        <input type="text" placeholder="请输入"  v-model="address" readonly="readonly" id="address">
       </div>
       <div class="content-detail">
         <span>详细地址</span>
         <textarea name="" id="" cols="31" rows="3" placeholder="请填写（街道、楼牌号等）"  v-model="detail"></textarea>
       </div>
     </div>
+    <div class="hrs"></div>
     <div class="switch">
       <p>设置默认地址</p>
         <img src="../../image/my/switch.png" alt="" v-if="switchcase===false" @click="handleswitchcase">

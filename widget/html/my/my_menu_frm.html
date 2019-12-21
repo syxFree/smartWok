@@ -13,7 +13,7 @@
             justify-content: space-between;
             align-items: center;
             height: 1.9rem;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 0.01rem solid #e0e0e0;
             padding: 0 .3rem;
         }
 
@@ -49,8 +49,8 @@
         .menu-ulright {
             background: #FFFFFF;
             box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.20);
-            border-radius: 8px;
-            border-radius: 8px;
+            border-radius:.08rem;
+            border-radius: .08rem;
             width: 1.2rem;
             height: 1.52rem;
             position: absolute;
@@ -88,8 +88,8 @@
             width: 6.9rem;
             height: .78rem;
             background: #FF8C46;
-            border-radius: 39px;
-            border-radius: 39px;
+            border-radius: .39rem;
+            border-radius: .39rem;
             font-family: PingFang-SC-Medium;
             font-size: .3rem;
             color: #FFFFFF;
@@ -209,6 +209,12 @@
                                 }
                                 vm.cooklist=vm.cooklist.concat(list)
                               }
+                                if(vm.cooklist.length===0){
+                                  api.sendEvent({
+                                      name: 'cooklist',
+                                  });
+
+                                }
                             } else {
                                 console.log(JSON.stringify(err))
                             }
